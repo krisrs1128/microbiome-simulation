@@ -1,0 +1,230 @@
+---
+title: "Multivariate Simulation Exercises"
+author: Kris Sankaran
+output: rmdformats::readthedown
+---
+
+<script>
+function myFunction(id) {
+    var x = document.getElementById(id);
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<style>
+div .info {
+  margin: auto;
+  background-color: #EAF0FB;
+  width: 95%;
+  padding: 10px;
+}
+</style>
+
+How can we choose sample sizes in more complex bioinformatic workflows, where we
+simultaneously analyze many features (taxa, genes, metaabolites) in concert?
+While traditional, analytical power analysis often breaks down, simulation can
+still be effective. We'll look at a concrete case study where we try to choose a
+good sample size for a PLS-DA analysis of the Type I Diabetes gut microbiome.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+```
+
+First, we'll load the required packages. Relative to session 1, the only
+additional package that we need is `mixOmics`. This can be installed using
+`BiocManager::install('mixOmics')`.
+
+```{r}
+suppressPackageStartupMessages({
+  library(MIGsim)
+  library(SummarizedExperiment)
+  library(gamboostLSS)
+  library(glue)
+  library(mixOmics)
+  library(ggplot2)
+  library(scDesigner)
+})
+set.seed(202406)
+theme_set(theme_classic())
+```
+
+# Interpreting PLS-DA
+
+The T1D dataset below includes measures of 427 metabolites from the gut
+microbiomes of 40 T1D patients and 61 healthy controls. These data were
+originally published in (tk fill in some more explanationa bout the dataset).
+
+```{r}
+data(t1d)
+```
+
+The output that we care about are the PLD-DA scores and loadings. The wrapper
+below directly gives us this output without our having to explicitly set
+hyerparameters, though you can [look here](https://github.com/krisrs1128/intro-to-simulation/blob/main/MIGsim/R/methods.R) 
+to see how the function was defined.
+
+```{r}
+result <- splsda_fit(t1d)
+plotIndiv(result$fit)
+plotVar(result$fit, cutoff = 0.4)
+```
+
+**Exercise**: Discuss the output of `plotIndiv`. How does `plotVar` shape
+your interpretation?
+<button onclick="myFunction(&#39;q0&#39;)">
+Show solution
+</button>
+
+::: {#q0 style="display:none"}
+Placeholder.
+:::
+
+# Estimation
+
+Let's estimate a simulator where every protein is allowed ot vary across T1D
+type. Since the data have already been centered log-ratio transformed, it's okay
+to treat these as Gaussian. 
+
+```{r}
+simulator <- setup_simulator(t1d, link_formula = ~outcome2, family = ~ GaussianLSS()) |>
+  estimate(mstop = 100)
+```
+
+# Evaluation
+
+Last time, we saw how we could visualize marginal simulator quality. How can we
+tell whether a joint simulator is working, though? One simple check is to
+analyze the pairwise correlations. Since the copula model is designed to capture
+second-order moments, it should at the very least effectively capture the
+correlations.
+
+We've written a small helper that visualizes the pairwise protein-protein
+correlations from both the real and the simulated datasets. We seem to be often
+overestimating the correlation strength. This is likely a consequence of the
+high-dimensionality of the problem.
+
+```{r}
+sim_exper <- sample(simulator)
+correlation_hist(t1d, sim_exper)
+```
+
+**Exercise**: To address this, let's try modifying the `copula_def` argument of
+`setup_simulator` to use a more suitable simulator. Generate new correlation
+histograms and comment on the changes you observe.
+
+```{r, eval = FALSE}
+simulator <- setup_simulator(
+  t1d,
+  link_formula = ~outcome2,
+  family = ~ GaussianLSS(),
+  copula_def = # fill this code in
+  ) |>
+  estimate(mstop = 100)
+
+sim_exper <- sample(simulator)
+correlation_hist(t1d, sim_exper)
+```
+
+<button onclick="myFunction(&#39;q1&#39;)">
+Show solution
+</button>
+::: {#q1 style="display:none"}
+```{r}
+simulator <- setup_simulator(
+  t1d,
+  link_formula = ~outcome2,
+  family = ~ GaussianLSS(),
+  copula_def = copula_adaptive(thr = 0.1)
+) |>
+  estimate(mstop = 100)
+
+sim_exper <- sample(simulator)
+correlation_hist(t1d, sim_exper)
+```
+:::
+
+# PLS-DA Power Analysis
+
+Now that we have a simulator, we can run a power analysis. In theory, we could
+look at how any summary from the PLS-DA output varies as the sample size
+increases. The most natural one, though, is simply to see how classifier
+performance improves as we gather more samples. Specifically, we'll measure the
+holdout Area Under the Curve (auc), a measure of how well the trains PLS-DA
+classifier balance precision and recall on new samples.
+
+Moreover, we'll study the effect of sparsity -- what happens when many features
+have no relationship at all with the response? We'll also simulate three
+hypothetical datasets for each sample size and sparsity level. All
+configurations of interest are stored in the `config` matrix below.
+
+```{r, power-analysis-params}
+config <- expand.grid(
+  sample_size = floor(seq(15, 150, length.out = 5)),
+  n_rep = 1:3,
+  n_null = floor(seq(317, 417, length.out = 4)),
+  metrics = NA
+)
+
+data(t1d_order)
+```
+
+**Exercise**: Finally, we're in a position to generate synthetic data and
+evaluate PLS-DA performance. Fill in the block below to update the simulator for
+each `i`. Remember that the original `simulator` defined above assumes that all
+proteins are associated with T1D. You can use `t1d_odrer` to prioritize the
+proteins with the strongest effects in the original data.
+
+```{r power-analysis-loop-setup, eval = FALSE}
+for (i in seq_len(nrow(config))) {
+  simulator <- simulator |>
+    mutate(
+      # fill this in
+    ) |>
+    estimate(mstop = 100)
+
+  config$metrics[i] <- (sample_n(simulator, config$sample_size[i]) |>
+    splsda_fit())[["auc"]]
+  print(glue("run {i}/{nrow(config)}"))
+}
+```
+
+<button onclick="myFunction(&#39;power_loop&#39;)">
+Show solution
+</button>
+::: {#power_loop style="display:none"}
+```{r power-analysis-loop-soln}
+for (i in seq_len(nrow(config))) {
+  if (i == 1 || config$n_null[i] != config$n_null[i - 1]) {
+    simulator <- simulator |>
+      mutate(dplyr::any_of(rev(t1d_order)[1:config$n_null[i]]), link = ~1) |>
+      estimate(mstop = 100)
+  }
+
+  config$metrics[i] <- (sample_n(simulator, config$sample_size[i]) |>
+    splsda_fit())[["auc"]]
+  print(glue("run {i}/{nrow(config)}"))
+}
+```
+:::
+
+We can visualize variation in performance. 
+
+```{r}
+ggplot(config, aes(sample_size, metrics, col = factor(n_null))) +
+  geom_point() +
+  facet_wrap(~n_null)
+```
+
+
+**Discussion**: Interpret the visualization above. How do you think analysis
+like this could help you justify making some experimental investments over
+others?
+
+<button onclick="myFunction(&#39;discussion&#39;)">
+Show solution
+</button>
+::: {#discussion style="display:none"}
+:::

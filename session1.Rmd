@@ -1,0 +1,311 @@
+---
+title: "Marginal Analysis Exercises"
+author: Kris Sankaran
+output: rmdformats::readthedown
+---
+
+<script>
+function myFunction(id) {
+    var x = document.getElementById(id);
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<style>
+div .info {
+  margin: auto;
+  background-color: #EAF0FB;
+  width: 95%;
+  padding: 10px;
+}
+</style>
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+```
+
+**Installation**
+
+If you haven't already installed the packages for this workshop, please run the commands below. 
+
+```{r, eval = FALSE}
+devtools::install_github("krisrs1128/intro-to-simulation/MIGsim")
+devtools::install_github("krisrs1128/scDesigner", auth_token = "paste_token_here")
+```
+
+# Introduction
+
+Before we consider simulating entire microbial communities, with their complex
+correlation structures, let's learn simulators for individual taxa. This is
+already enough to analyze taxon-level differential abundance approaches.  For
+example, at the end of this session, we'll apply a simulator to study the power
+and false discovery rate of limma-voom when applied to microbiome data (as
+opposed to the bulk RNA-seq data for which it was originally proposed).  Also,
+marginal modeling is a first step towards multivariate (community-wide)
+modeling, which we'll explore in the next session.
+
+Let's load the necessary packages. Instructions for `scDesigner` and `MIGsim`
+can be found in the pre-workshop announcement.  `SummarizedExperiment` is on
+Bioconductor, and all other packages are on CRAN.
+
+```{r}
+suppressPackageStartupMessages({
+  library(MIGsim)
+  library(SummarizedExperiment)
+  library(dplyr)
+  library(gamboostLSS)
+  library(ggdist)
+  library(ggplot2)
+  library(glue)
+  library(splines)
+  library(scDesigner)
+})
+set.seed(202406)
+theme_set(theme_classic())
+```
+
+# Using `SummarizedExperiment`
+
+`scDesigner`'s interface is built with `SummarizedExperiment` in mind. These
+data structures simplify manipulation of sequencing experiments. For example,
+they distinguish between molecule counts, which are stored in the `assay` slot,
+and sample descriptors, which are stored in `colData`. At the same time, these
+separate components are nicely synchronized. For example, subsetting samples
+from one of these tables automatically subsets the other.
+
+The line below loads a small subset of genera from the
+[Atlas](https://microbiome.github.io/tutorials/Atlas.html) experiment, which
+profiled the gut microbiomes from 1006 healthy adults in Western Europe.
+
+```{r}
+data(atlas)
+table(rowData(atlas)$Phylum)
+mean(atlas$age)
+
+
+ix <- colData(atlas)$bmi_group == "obese"
+abundances <- assay(atlas)
+rowMeans(abundances[, ix])
+```
+
+**Exercise**: To practice working with `SummarizedExperiment`
+objects, try answering:
+
+* How many genera are available in this experiment object?
+* What was the most common phylum in this dataset?
+* What was the average participant age?
+* What was the average abundance of `Allistipes et rel.` among people in the `obese` BMI group?
+
+_Hint: The most important functions are `assay()`, `rowData()`, and `colData()`._
+
+<button onclick="myFunction(&#39;q0&#39;)">
+Show solution
+</button>
+::: {#q0 style="display:none"}
+```{r}
+nrow(atlas)
+table(rowData(atlas)$Phylum)
+mean(atlas$age)
+
+atlas[, atlas$bmi_group == "obese"] |>
+  assay() |>
+  rowMeans()
+```
+:::
+
+# A Gaussian Example
+
+Here's a toy dataset to illustrate the main idea of GAMLSS. Each panel in the
+plot below represents a different feature (e.g., taxon, gene, metabolite...).
+The abundance varies smoothly over time, and in the first three panels, the
+trends differ by group assignment.
+
+```{r}
+data(exper_ts)
+exper_lineplot(exper_ts)
+```
+
+We can try to approximate these data with a new simulator. The `setup_simulator`
+command takes the template `SummarizedExperiment` object as its first argument.
+The second gives an R formula syntax-style specification of GAMLSS parameters
+(mean and SD, in this case) dependence on sample properties. The last argument
+gives the type of model to fit, in this case, a Gaussian location-shape-scale
+model.
+
+```{r}
+sim <- setup_simulator(exper_ts, ~ ns(time, df = 7) * group, ~ GaussianLSS()) |>
+  estimate(nu = 0.01, mstop = 1000)
+
+sample(sim) |>
+  exper_lineplot()
+```
+
+**Exercise**: Right now, each panel allows for an interaction between the trend and
+group type. Can you define a simulator where the groups have no effect on the 
+trends for the first two panels? This is the basis for defining synthetic
+negative controls.
+
+```{r, eval = FALSE}
+sim <- sim |>
+  scDesigner::mutate(
+    1:2,
+     link = ~ ns(time, df = 7)
+  ) |>
+  estimate(nu = 0.01, mstop = 1000)
+
+sample(sim) |>
+  exper_lineplot()
+```
+
+<button onclick="myFunction(&#39;q1&#39;)">
+Show solution
+</button>
+::: {#q1 style="display:none"}
+We can modify the formula so that it no longer has an interaction with group.
+We just need to remove the `* group` from the original formula in our updated
+link function. To ensure that this only applies to the first two panels, we use
+1:2 in the first argument of `mutate`. This first argument specifies which 
+features to apply the new formula to.
+```{r}
+sim <- sim |>
+  mutate(1:2, link = ~ ns(time, df = 7)) |>
+  estimate(nu = 0.01, mstop = 1000)
+
+sample(sim) |>
+  exper_lineplot()
+```
+:::
+
+# Atlas Estimation
+
+Next, let's train a simulator to fit the Atlas dataset. We'll use two
+covariates. `bmi_group` is the main covariate of interest -- we want to see how
+microbiome composition varies among people with different BMI. The `log_depth`
+term is used to adjust for differential sequencing depths. We found it helpful
+to fixed zero inflation across the population (`nu`), so we have set `nu = ~1`.
+Finally, since we want to eventually evaluate testing methods that are designed
+for count data, we have used the (Z)ero (I)nflated (N)egative (B)inomial
+location-shape-scale model.
+
+```{r}
+data(atlas)
+
+fmla <- list(
+  mu = ~ bmi_group + log_depth,
+  sigma = ~ bmi_group + log_depth,
+  nu = ~1
+)
+sim <- setup_simulator(atlas, fmla, ~ ZINBLSS()) |>
+  estimate(nu = 0.01, mstop = 1000)
+```
+
+# Critique
+
+**Exercise**: The block below combines the real and simulated experiments and
+visualizes their difference. With your neighbors, discuss how well the simulator
+approximates the original template.
+
+```{r, contrast-simulators}
+combined <- bind_rows(
+  real = pivot_experiment(atlas), # real data
+  simulated = pivot_experiment(sample(sim)), # simulated
+  .id = "source"
+)
+
+ggplot(combined) +
+  geom_boxplot(
+    aes(log(1 + value), reorder(feature, value, median), fill = bmi_group)
+  ) +
+  facet_grid(. ~ source)
+```
+
+<button onclick="myFunction(&#39;q_discussion&#39;)">
+Show solution
+</button>
+::: {#q_discussion style="display:none"}
+The clearest difference is that, for these more abundant taxa, there there are
+not many low or zero counts. In contrast, the simulated data tend to have a long
+left tail (the many outlier circles on the left side of the boxplots),
+reflecting the fact that samples from the negative binomial distribution usually
+have support for all counts $\geq 0$.  Nonetheless, the ordering of abundances
+between the groups typically agrees between the real and simulated data. The
+interquartile ranges for each taxon also seem to roughly match.
+:::
+
+# Power Analysis Loop
+
+To run a power analysis, we need to define datasets that have known ground
+truth.  Then, we can run any differential abundance methods we want and see how
+many of the true associations are recovered (and how many nulls are falsely
+rejected). To this end, we'll remove associations from 16 of the original 24
+genera, just like we removed group interactions in our spline fits above. We'll
+choose to remove the 16 that have the weakest associations in the original data.
+This is helpful because, even if we use `bmi_group` in our formula, if in
+reality there is no (or very weak) effect, then even if our simulator considers
+it as a true signal, the difference may be hard to detect. Eventually, our
+package will include functions for modifying these effects directly; at this
+point, though, we can only indirectly modify parameters by re-estimating them
+with new formulas.
+
+```{r, define-null}
+nulls <- differential_analysis(atlas, "LIMMA_voom") |>
+  rownames() |>
+  tail(16)
+
+null_fmla <- list(mu = ~log_depth, sigma = ~log_depth, nu = ~1)
+sim <- sim |>
+  mutate(any_of(nulls), link = null_fmla) |>
+  estimate(nu = 0.01, mstop = 1000)
+```
+
+Now that we have ground truth associations, we'll evaluate LIMMA-voom for
+differential analysis. We consider sample sizes ranging from 50 to 1200, and we
+simulate 10 datasets for each sample size.
+
+```{r, run-loop}
+config <- expand.grid(
+  sample_size = floor(seq(50, 1200, length.out = 5)),
+  n_rep = 1:10
+) |>
+  mutate(run = as.character(row_number()))
+
+results <- list()
+for (i in seq_len(nrow(config))) {
+  atlas_ <- sample_n(sim, config$sample_size[i])
+  results[[i]] <- differential_analysis(atlas_, "LIMMA_voom") |>
+    da_metrics(nulls, level = 0.3)
+  print(glue("{i}/{nrow(config)}"))
+}
+```
+
+**Exercise**: Visualize the results. How would you interpret the results of the
+power analysis? Based on your earlier critique of the simulator, do you think
+the estimated power here is conservative, liberal, or about right?
+
+<button onclick="myFunction(&#39;q_critique&#39;)">
+Show solution
+</button>
+::: {#q_critique style="display:none"}
+We'll use the `stat_pointinterval` function from the `ggdist` package to
+visualize the range of empirical power estimates across sample sizes. We can see
+that the average false discovery proportion is always controlled below 0.3,
+though the variance in this proportion can be quite high. We can also see that
+we would have quite good power with $n \geq 625$ samples, but the worst case
+scenarios can be quite poor for anything with fewer samples.
+
+```{r, visualize-power}
+bind_rows(results, .id = "run") |>
+  left_join(config) |>
+  ggplot() +
+  stat_pointinterval(aes(factor(sample_size), value)) +
+  facet_wrap(~metric, scales = "free")
+```
+
+We expect that this result is somewhat conservative. This is because the
+original data have more symmetric distributions than our simulation, so limma's
+transformation to normality is likely easier to accomplish than in our more 
+highly skewed data.
+:::
