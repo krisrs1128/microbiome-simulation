@@ -1,0 +1,872 @@
+--- 
+title: "Simulation for Microbiome Analysis"
+author: "Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  Examples accompanying our simulation for microbiome analysis review article, available at: 
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+---
+
+This website accompanies the review, 
+[``Leveraging Simulation in Microbiome Data Analysis''](). All examples
+discussed in the case studies there can be reproduced by running the code below,
+and we have also included additional introductory material about some packages
+that simplify our analysis.
+
+## Setup
+
+The `MIGsim` package below provides wrapper functions that we will use
+throughout these book. You can install it by running:
+
+```{r, eval = FALSE}
+devtools::install_github("krisrs1128/intro-to-simulation/MIGsim")
+```
+
+This block loads all packages that will be used in this book.
+
+```{r}
+suppressPackageStartupMessages({
+  library(SummarizedExperiment)
+  library(dplyr)
+  library(gamboostLSS)
+  library(ggdist)
+  library(ggplot2)
+  library(glue)
+  library(mixOmics)
+  library(purrr)
+  library(splines)
+  library(MIGsim)
+  library(scDesigner)
+})
+theme_set(theme_classic())
+```
+
+## Using `SummarizedExperiment`
+
+`scDesigner`'s interface is built with `SummarizedExperiment` in mind. These
+data structures simplify manipulation of sequencing experiments. For example,
+they distinguish between molecule counts, which are stored in the `assay` slot,
+and sample descriptors, which are stored in `colData`. At the same time, these
+separate components are nicely synchronized. For example, subsetting samples
+from one of these tables automatically subsets the other.
+
+The line below loads a small subset of genera from the
+[Atlas](https://microbiome.github.io/tutorials/Atlas.html) experiment, which
+profiled the gut microbiomes from 1006 healthy adults in Western Europe.
+
+```{r}
+data(atlas)
+table(rowData(atlas)$Phylum)
+mean(atlas$age)
+
+
+ix <- colData(atlas)$bmi_group == "obese"
+abundances <- assay(atlas)
+rowMeans(abundances[, ix])
+```
+
+**Exercise**: To practice working with `SummarizedExperiment`
+objects, try answering:
+
+* How many genera are available in this experiment object?
+* What was the most common phylum in this dataset?
+* What was the average participant age?
+* What was the average abundance of `Allistipes et rel.` among people in the `obese` BMI group?
+
+_Hint: The most important functions are `assay()`, `rowData()`, and `colData()`._
+
+**Solution**
+
+```{r}
+nrow(atlas)
+table(rowData(atlas)$Phylum)
+mean(atlas$age)
+
+atlas[, atlas$bmi_group == "obese"] |>
+  assay() |>
+  rowMeans()
+```
+
+## Warm-up: A Gaussian Example
+
+Here's a toy dataset to illustrate the main idea of GAMLSS. Each panel in the
+plot below represents a different feature (e.g., taxon, gene, metabolite...).
+The abundance varies smoothly over time, and in the first three panels, the
+trends differ by group assignment.
+
+```{r}
+data(exper_ts)
+exper_lineplot(exper_ts)
+```
+
+We can try to approximate these data with a new simulator. The `setup_simulator`
+command takes the template `SummarizedExperiment` object as its first argument.
+The second gives an R formula syntax-style specification of GAMLSS parameters
+(mean and SD, in this case) dependence on sample properties. The last argument
+gives the type of model to fit, in this case, a Gaussian location-shape-scale
+model.
+
+```{r}
+sim <- setup_simulator(exper_ts, ~ ns(time, df = 7) * group, ~ GaussianLSS()) |>
+  estimate(nu = 0.01, mstop = 1000)
+
+sample(sim) |>
+  exper_lineplot()
+```
+
+**Exercise**: Right now, each panel allows for an interaction between the trend and
+group type. Can you define a simulator where the groups have no effect on the 
+trends for the first two panels? This is the basis for defining synthetic
+negative controls.
+
+```{r, eval = FALSE}
+sim <- sim |>
+  scDesigner::mutate(
+    1:2,
+     link = ~ ns(time, df = 7)
+  ) |>
+  estimate(nu = 0.01, mstop = 1000)
+
+sample(sim) |>
+  exper_lineplot()
+```
+
+**Solution**: We can modify the formula so that it no longer has an interaction
+with group. We just need to remove the `* group` from the original formula in our updated
+link function. To ensure that this only applies to the first two panels, we use
+1:2 in the first argument of `mutate`. This first argument specifies which 
+features to apply the new formula to.
+```{r}
+sim <- sim |>
+  mutate(1:2, link = ~ ns(time, df = 7)) |>
+  estimate(nu = 0.01, mstop = 1000)
+
+sample(sim) |>
+  exper_lineplot()
+```
+
+```{r}
+sessionInfo()
+```
+
+```{r include=FALSE}
+# automatically create a bib database for R packages
+knitr::write_bib(c(
+  .packages(), 'bookdown', 'knitr', 'rmarkdown'
+), 'packages.bib')
+```
+
+<!--chapter:end:index.Rmd-->
+
+# Simulating Differential Abundance
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+set.seed(202406)
+```
+
+Before we consider simulating entire microbial communities, with their complex
+correlation structures, let's learn simulators for individual taxa. This is
+already enough to analyze taxon-level differential abundance approaches.  For
+example, at the end of this session, we'll apply a simulator to study the power
+and false discovery rate of limma-voom when applied to microbiome data (as
+opposed to the bulk RNA-seq data for which it was originally proposed).  Also,
+marginal modeling is a first step towards multivariate (community-wide)
+modeling, which we'll explore in the next session.
+
+Let's load the necessary packages. Instructions for `scDesigner` and `MIGsim`
+can be found in the pre-workshop announcement.  `SummarizedExperiment` is on
+Bioconductor, and all other packages are on CRAN.
+
+Let's train a simulator to fit the Atlas dataset. We'll use two
+covariates. `bmi_group` is the main covariate of interest -- we want to see how
+microbiome composition varies among people with different BMI. The `log_depth`
+term is used to adjust for differential sequencing depths. We found it helpful
+to fixed zero inflation across the population (`nu`), so we have set `nu = ~1`.
+Finally, since we want to eventually evaluate testing methods that are designed
+for count data, we have used the (Z)ero (I)nflated (N)egative (B)inomial
+location-shape-scale model.
+
+```{r atlas-estimation}
+data(atlas)
+
+fmla <- list(
+  mu = ~ bmi_group + log_depth,
+  sigma = ~ bmi_group + log_depth,
+  nu = ~1
+)
+sim <- setup_simulator(atlas, fmla, ~ ZINBLSS()) |>
+  estimate(nu = 0.01, mstop = 1000)
+```
+
+## Critique
+
+**Exercise**: The block below combines the real and simulated experiments and
+visualizes their difference. With your neighbors, discuss how well the simulator
+approximates the original template.
+
+```{r, contrast-simulators}
+combined <- bind_rows(
+  real = pivot_experiment(atlas), # real data
+  simulated = pivot_experiment(sample(sim)), # simulated
+  .id = "source"
+)
+
+ggplot(combined) +
+  geom_boxplot(
+    aes(log(1 + value), reorder(feature, value, median), fill = bmi_group)
+  ) +
+  facet_grid(. ~ source)
+```
+
+**Solution**: The clearest difference is that, for these more abundant taxa, there there are
+not many low or zero counts. In contrast, the simulated data tend to have a long
+left tail (the many outlier circles on the left side of the boxplots),
+reflecting the fact that samples from the negative binomial distribution usually
+have support for all counts $\geq 0$.  Nonetheless, the ordering of abundances
+between the groups typically agrees between the real and simulated data. The
+interquartile ranges for each taxon also seem to roughly match.
+
+## Power Analysis Loop
+
+To run a power analysis, we need to define datasets that have known ground
+truth.  Then, we can run any differential abundance methods we want and see how
+many of the true associations are recovered (and how many nulls are falsely
+rejected). To this end, we'll remove associations from 16 of the original 24
+genera, just like we removed group interactions in our spline fits above. We'll
+choose to remove the 16 that have the weakest associations in the original data.
+This is helpful because, even if we use `bmi_group` in our formula, if in
+reality there is no (or very weak) effect, then even if our simulator considers
+it as a true signal, the difference may be hard to detect. Eventually, our
+package will include functions for modifying these effects directly; at this
+point, though, we can only indirectly modify parameters by re-estimating them
+with new formulas.
+
+```{r, define-null}
+nulls <- differential_analysis(atlas, "LIMMA_voom") |>
+  rownames() |>
+  tail(16)
+
+null_fmla <- list(mu = ~log_depth, sigma = ~log_depth, nu = ~1)
+sim <- sim |>
+  mutate(any_of(nulls), link = null_fmla) |>
+  estimate(nu = 0.01, mstop = 1000)
+```
+
+Now that we have ground truth associations, we'll evaluate LIMMA-voom for
+differential analysis. We consider sample sizes ranging from 50 to 1200, and we
+simulate 10 datasets for each sample size.
+
+```{r, run-loop, eval = FALSE}
+config <- expand.grid(
+  sample_size = floor(seq(50, 1200, length.out = 5)),
+  n_rep = 1:10
+) |>
+  mutate(run = as.character(row_number()))
+
+results <- list()
+for (i in seq_len(nrow(config))) {
+  atlas_ <- sample_n(sim, config$sample_size[i])
+  results[[i]] <- differential_analysis(atlas_, "LIMMA_voom") |>
+    da_metrics(nulls, level = 0.3)
+  print(glue("{i}/{nrow(config)}"))
+}
+```
+
+**Exercise**: Visualize the results. How would you interpret the results of the
+power analysis? Based on your earlier critique of the simulator, do you think
+the estimated power here is conservative, liberal, or about right?
+
+**Solution**: We'll use the `stat_pointinterval` function from the `ggdist` package to
+visualize the range of empirical power estimates across sample sizes. We can see
+that the average false discovery proportion is always controlled below 0.3,
+though the variance in this proportion can be quite high. We can also see that
+we would have quite good power with $n \geq 625$ samples, but the worst case
+scenarios can be quite poor for anything with fewer samples.
+
+```{r, visualize-da-power, eval = FALSE}
+bind_rows(results, .id = "run") |>
+  left_join(config) |>
+  ggplot() +
+  stat_pointinterval(aes(factor(sample_size), value)) +
+  facet_wrap(~metric, scales = "free")
+```
+
+We expect that this result is somewhat conservative. This is because the
+original data have more symmetric distributions than our simulation, so limma's
+transformation to normality is likely easier to accomplish than in our more 
+highly skewed data.
+
+
+```{r}
+sessionInfo()
+```
+
+<!--chapter:end:01-differential_analysis.Rmd-->
+
+# Multivariate Power Analysis
+
+How can we choose sample sizes in more complex bioinformatic workflows, where we
+simultaneously analyze many features (taxa, genes, metabolites) in concert?
+While traditional, analytical power analysis often breaks down, simulation can
+still be effective. We'll look at a concrete case study where we try to choose a
+good sample size for a sparse partial least squares discriminant analysis
+(sPLS-DA) of the Type I Diabetes (T1D) gut microbiome.
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
+set.seed(202406)
+```
+
+First, we'll load the required packages. Relative to our first session, the only
+additional package that we need is `mixOmics`. This can be installed using
+`BiocManager::install('mixOmics')`.
+
+## Interpreting PLS-DA
+
+The T1D dataset below describes 427 metabolites from the gut microbiomes of 40
+T1D patients and 61 healthy controls. These data were originally gathered by
+[Gavin et al. (2018)](https://doi.org/10.2337/dc18-0777), who were motivated by
+the relationship between the pancreas and intestinal issues often experienced by
+T1D patients. They were especially curious about whether microbime-associated
+proteins might be related to increased risk for T1D development.
+
+```{r}
+data(t1d)
+```
+
+The output that we care about are the PLD-DA scores and loadings. The wrapper
+below directly gives us this output without our having to explicitly set
+hyerparameters, though you can [look here](https://github.com/krisrs1128/intro-to-simulation/blob/main/MIGsim/R/methods.R) 
+to see how the function was defined.
+
+```{r}
+result <- splsda_fit(t1d)
+plotIndiv(result$fit, cex = 10)
+plotVar(result$fit, cutoff = 0.4, cex = 10)
+```
+
+**Exercise**: Discuss the output of `plotIndiv`. How does `plotVar` shape
+your interpretation?
+
+
+**Solution**: The first two dimensions of the sPLS-DA pick on distinctions between the T1D
+(orange) and control (blue) groups. The variance by these first two dimensions
+is relatively small
+-- variation in protein signatures may not be easiliy captured in two dimensions
+or may not generally be correlated with the disease response. Since most of the
+differences between groups are captured by the first dimension, we can look for
+features that are highly correlated with this dimension to see which proteins
+might be driving the difference. For example, we can conclude that T1D samples
+tend to have higher levels of
+[p21333](https://www.uniprot.org/uniprotkb/P21333/entry) and
+[q8wz42](https://www.uniprot.org/uniprotkb/Q8WZ42/entry) compared to the
+controls. 
+
+## Estimation
+
+Let's estimate a simulator where every protein is allowed ot vary across T1D
+type. Since the data have already been centered log-ratio transformed, it's okay
+to treat these as Gaussian. 
+
+```{r}
+simulator <- setup_simulator(t1d, link_formula = ~outcome2, family = ~ GaussianLSS()) |>
+  estimate(mstop = 100)
+```
+
+## Evaluation
+
+Last time, we saw how we could visualize marginal simulator quality. How can we
+tell whether a joint simulator is working, though? One simple check is to
+analyze the pairwise correlations. Since the copula model is designed to capture
+second-order moments, it should at the very least effectively capture the
+correlations.
+
+We've written a small helper that visualizes the pairwise protein-protein
+correlations from both the real and the simulated datasets. We seem to be often
+overestimating the correlation strength. This is likely a consequence of the
+high-dimensionality of the problem.
+
+```{r}
+sim_exper <- sample(simulator)
+correlation_hist(t1d, sim_exper)
+```
+
+**Exercise**: To address this, let's try modifying the `copula_def` argument of
+`setup_simulator` to use a more suitable simulator. Generate new correlation
+histograms and comment on the changes you observe. You only need to modify the
+commented lines (`#`) lines in the block below.
+
+```{r, eval = FALSE}
+simulator <- setup_simulator(
+  t1d,
+  link_formula = ~outcome2,
+  family = ~ GaussianLSS(),
+  copula_def = # fill this code in
+  ) |>
+  estimate(mstop = 100)
+
+sim_exper <- sample(simulator) # and then run these two lines
+correlation_hist(t1d, sim_exper) #
+```
+
+**Solution**: For our coupla, we can use a covariance estimator of [Cai and Liu
+(2011)](https://www.tandfonline.com/doi/abs/10.1198/jasa.2011.tm10560), that is
+suited for high dimensions. Larger values of `thr` will increase the stability
+of our estimates, but at the cost of potentially missing or weakening true
+correlations. In line with this point, our new simulated correlations are more
+concentrated.
+
+```{r}
+simulator <- setup_simulator(
+  t1d,
+  link_formula = ~outcome2,
+  family = ~ GaussianLSS(),
+  copula_def = copula_adaptive(thr = 0.4)
+) |>
+  estimate(mstop = 100)
+
+sim_exper <- sample(simulator)
+correlation_hist(t1d, sim_exper)
+```
+:::
+
+
+```{r}
+MIGsim::contrast_boxplot(t1d, sim_exper, ~ . ~ reorder(outcome2, value))
+#MIGsim::contrast_boxplot
+```
+
+## PLS-DA Power Analysis
+
+Now that we have a simulator, we can run a power analysis. In theory, we could
+look at how any summary from the PLS-DA output varies as the sample size
+increases. The most natural one, though, is simply to see how classifier
+performance improves as we gather more samples. Specifically, we'll measure the
+holdout Area Under the Curve (auc), a measure of how well the trains PLS-DA
+classifier balance precision and recall on new samples.
+
+Moreover, we'll study the effect of sparsity -- what happens when many features
+have no relationship at all with the response? We'll also simulate three
+hypothetical datasets for each sample size and sparsity level. All
+configurations of interest are stored in the `config` matrix below.
+
+```{r, power-analysis-params}
+config <- expand.grid(
+  sample_size = floor(seq(15, 150, length.out = 5)),
+  n_rep = 1:3,
+  n_null = floor(seq(317, 417, length.out = 4)),
+  metrics = NA
+)
+
+data(t1d_order)
+```
+
+**Exercise**: Finally, we're in a position to generate synthetic data and
+evaluate PLS-DA performance. Fill in the block below to update the simulator for
+each `i`. Remember that the original `simulator` defined above assumes that all
+proteins are associated with T1D. You can use `t1d_order` to prioritize the
+proteins with the strongest effects in the original data. As before, you should
+only need to modify the line marked with the comments (`#`).
+
+```{r power-analysis-loop-setup, eval = FALSE}
+for (i in seq_len(nrow(config))) {
+  simulator <- simulator |>
+    mutate(
+      # fill this in
+    ) |>
+    estimate(mstop = 100)
+
+  config$metrics[i] <- (sample_n(simulator, config$sample_size[i]) |>
+    splsda_fit())[["auc"]]
+  print(glue("run {i}/{nrow(config)}"))
+}
+```
+
+**Solution**: To define nulls, we mutate the weakest proteins so that there is no longer any
+association with T1D: `link = ~ 1` instead of `link = ~ outcome2`. To speed up
+the computation, we organized the `mutate` calls so that we don't need to
+re-estimate proteins whose effects were removed in a previous iteration.
+```{r power-analysis-loop-soln, eval = FALSE}
+for (i in seq_len(nrow(config))) {
+  if (i == 1 || config$n_null[i] != config$n_null[i - 1]) {
+    simulator <- simulator |>
+      mutate(any_of(rev(t1d_order)[1:config$n_null[i]]), link = ~1) |>
+      estimate(mstop = 100)
+  }
+
+  config$metrics[i] <- (sample_n(simulator, config$sample_size[i]) |>
+    splsda_fit())[["auc"]]
+  print(glue("run {i}/{nrow(config)}"))
+}
+```
+:::
+
+We can visualize variation in performance. 
+
+```{r, visualize-power, eval = FALSE}
+ggplot(config, aes(sample_size, metrics, col = factor(n_null))) +
+  geom_point() +
+  facet_wrap(~n_null)
+```
+
+**Discussion**: Interpret the visualization above. How do you think analysis
+like this could help you justify making some experimental investments over
+others?
+
+**Solution**: Reading across facets from top left to bottom right, power decreases when the
+number of null proteins increases. It seems that sPLS-DA can benefit from having
+many weakly associated features. While power is sometimes high in low sample
+sizes, the variance can be quite large. In all settings, there is a noticeable
+decrease in variance in power as we go from 15 to 48 samples. If we can assume
+that a moderate fraction (> 15\%) of measured proteins are associated with T1D,
+then we may already achieve good power with ~ 100 samples. However, if we
+imagine our effect might be sparser in our future experiment, then this figure
+would give us good justification for arguing for a larger number of samples, in
+order to ensure we can discover a disease-associated proteomics signature.
+
+```{r}
+sessionInfo()
+```
+
+<!--chapter:end:02-multivariate_power.Rmd-->
+
+# Integrative Simulation
+
+Integration can be a subtle exercise. We need to balance our interest in seeing
+similarities between datasets with the risk of making things seem more similar
+than they really are. Simulation can help navigate this subtlety by letting us
+see how integration methods would behave in situations where we know exactly how
+the different datasets are related. This note will illustrate this perspective
+by showing how simulation can help with both horizontal (across batches) and
+vertical (across assays) integration. We'll have a brief interlude on the `map`
+function in the `purrr`, which is helpful for concisely writing code that would
+otherwise need for loops (e.g., over batches or assays).
+
+As usual, let's load the libraries we'll need. Remember that instructions for
+installing `MIGsim` and `scDesigner` are documented in the repository
+[README](https://github.com/krisrs1128/intro-to-simulation/).
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
+set.seed(20240603)
+```
+
+## Horizontal Integration
+
+The first example is about simultaneously analyzing several batches in a dataset
+about the efficiency of anaerobic digestion (AD) of organic matter. The
+essential problem is that, in this study, the samples could not be collected
+simultaneously. Small differences across separate runs could lead to systematic
+differences in the resulting data, which can obfuscate the more interesting
+between-group variation that the experiment was intended to uncover. For
+example, in the AD dataset, the date of the sequencing run has a global effect
+on measured community composition, which we can see right away from a principal
+components plot:
+
+```{r, pca-anaerobic}
+data(anaerobic)
+pca_batch(anaerobic)
+```
+
+You can learn more about the general microbiome batch effect integration problem
+in [(Wang and Le Cao, 2020)](https://doi.org/10.1093/bib/bbz105), which is where
+this dataset example and the batch effect correction code below comes from. The
+article also reviews mechanisms that could lead to batch effects in microbiome
+data, together with methods for removing these effects and the situations within
+which they are most appropriate.
+
+In batch effect correction, it's important to remove as much of the batch
+variation as possible without accidentally also removing the real biological
+variation that would have been present even if all the samples had been
+sequenced together. This is sometimes called ``overintegration,'' and this is an
+especially high risk if some of the real biological variation is quite subtle,
+e.g., a rare cell type or one that is very similar to a more prominent one.
+Simulation can help us gauge the extent to which different methods may or may
+not overintegrate. Since we get to control the between-batch and and
+between-biological-condition differences, we can see the extent to which
+integration methods can remove the former while preserving the latter.
+
+The block below estimates a candidate simulator. By using the formula `~ batch +
+treatment`, we're allowing for taxon-wise differences due to batch and
+treatment. Note that in principle, we could estimate an interaction between
+batch and treatment (the treatment could appear stronger in some batches than
+others). I encourage you to try estimating that model; however, visually
+analyzing the output suggests that this full model has a tendancy to overfit.
+Since the data have already been centered log-ratio transformed, we can try out
+a Gaussian marginal model. The AD dataset has relatively few samples
+compared to the number of features, so we'll use a copula that's designed for
+this setting.
+
+```{r, anaerobic-simulator}
+simulator <- setup_simulator(
+  anaerobic,
+  ~ batch + treatment,
+  ~ GaussianLSS(),
+  copula = copula_adaptive(thr = .1)
+) |>
+  estimate(nu = 0.05, mstop = 100) # lower nu -> stable training
+```
+
+We can simulate from the fitted model and evaluate the quality of our fit using
+`contrast_boxplot`. This is a light wrapper of the ggplot2 code we used to
+compare experiments from our first session, and you can read its definition
+[here](https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/R/plot.R#L26).
+
+```{r, eval-anaerobic}
+anaerobic_sim <- sample(simulator)
+contrast_boxplot(anaerobic, anaerobic_sim)
+```
+
+**Exercise** Propose and create at least one other visualization that can be
+used to compare and contrast the simulator with real data. What conclusions can
+you draw?
+
+**Solution**: There are many possible answers:
+
+* Boxplots across taxa with different overall abundance levels.
+* Analogous histograms or CDF plots, to show the entire distributions, rather than just summarized quantiles.
+* Pair scatterplots, to see how well the bivariate relationships between taxa are preserved.
+* Dimensionality reduction on the simulated data, to see how well it matches global structure in the original data.
+
+We'll implement the last idea using PCA. This should be contrasted with the PCA
+plot on the original data above. It's okay if the plot seems rotated relative to
+the oiginal plot -- PCA is only unique up to rotation. The main characteristic
+we're looking for is that the relative sizes of the batch and treatment effects
+seem reasonaly well-preserved, since these will be the types of effects that our
+later batch effect integration methods must be able to distinguish.
+
+```{r}
+pca_batch(anaerobic_sim)
+```
+:::
+
+To study the risk for overintegration, let's imagine that there were a third
+treatment group with relatively fewer samples. This is the type of group that a
+correction method might accidentally blend in with the rest, if it's too
+aggressive. We've defined the imaginary experiment using the data.frame below.
+The `treatment` level `1.8` is the new one. We've supposed there are between 1 -
+3 technical replicates (`extraction`) for each biological sample (`sample`), and
+the batch dates are the same as before.
+
+```{r}
+data(imaginary_design)
+summary(imaginary_design)
+```
+
+We can simulate from the new design and look at how different this new treatment
+group seems from the others. It's a subtle effect, definitely smaller than the
+batch effect, but also separate enough that we should be able to preserve it.
+
+```{r}
+anaerobic_sim <- sample(simulator, new_data = imaginary_design)
+pca_batch(anaerobic_sim)
+```
+
+We've defined a `batch_correct` wrapper function that implements either the
+RUV-III or ComBat batch effect correction methods. Their outputs are contrasted
+in the PCAs below. It looks like ComBat might be somewhat too aggressive,
+causing the `1` and `1.8` treatment groups to substantially overlap, while RUV
+is a bit more conservative, keeping the treatment groups nicely separate. As an
+aside, we note that this conclusion can depend on the number of replicates and
+total number of samples available. We've included the code for generating the
+`imaginary_design` data.frame in [a vignette](https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/vignettes/process-integration.Rmd#L76)
+for the `MIGsim` package. Can you find settings that lead either method astray?
+
+```{r}
+pca_batch(batch_correct(anaerobic_sim, "ruv"))
+pca_batch(batch_correct(anaerobic_sim, "combat"))
+```
+
+## Interlude: Using map
+
+In the examples below, we'll find it helpful to use the function `map` in the
+purrr package. This function gives a one-line replacement for simple for-loops;
+it is analogous to list comprehensions in python. It can be useful many places
+besides the topic of this tutorial. For example, if we want to convert the
+vector `c(1, 2, 3)` into `c(1, 4, 9)`, we can use this map:
+```{r}
+map(1:3, ~ .^2)
+```
+The `~` notation is shorthand for defining a function, and the `.` represents
+the current vector element.  More generally, we can apply map to lists. This
+line will update the list so that 1 is added to each element.
+```{r}
+map(list(a = 1, b = 2, c = 3), ~ . + 1)
+```
+
+**Exercise**: To test your understanding, can you write a map that computes the
+*mean for each
+vector in the list `x` below? What about the mean of the 10 smallest elements?
+```{r}
+x <- list(a = rnorm(100), b = rnorm(100, 1))
+```
+
+**Solution**:
+```{r}
+map(x, mean)
+map(x, ~ mean(sort(.)[1:10]))
+```
+
+## Vertical Integration
+
+In horizontal integration, we have many datasets, all with the same features.
+They only differ because they were gathered at different times. In contrast, for
+vertical integration, we instead have many datasets all with the same _samples_.
+They differ because they measure different aspects of those samples. Our goal in
+this situation is not to remove differences across datasets, like it was in
+horizontal integration, but instead to clarify the relationships across sources.
+
+One important question that often arises in vertical integration is -- are the
+data even alignable? That is, in our effort to look for relationships across
+datasets, we might accidentally miss out on interesting variation that exists
+within the individual assays. If the technologies are measuring very different
+things, we might be better off simply analyzing the data separately. To help us
+gauge which setting we might be in, we can simulate data where we know that we
+shouldn't align the sources. If our integration methods are giving similar
+outputs as they give on this simulated data, then we should be more cautious.
+
+There are a few ways in which a dataset might not be ``alignable.'' The most
+general reason is that there may be no latent sources of variation in common
+between the sources. A simpler reason is that something that influenced one
+assay substantially (e.g., disease state) might not influence the other by much.
+Let's see how an integration method might work in this setting.
+
+We'll work with the ICU sepsis dataset previously studied by [Haak et al.
+(2021)](https://doi.org/10.1128/mSystems.01148-20) and documented within a
+[vignette](https://raw.githack.com/bioFAM/MOFA2_tutorials/master/R_tutorials/microbiome_vignette.html#train-mofa-model)
+for the MOFA package. The three datasets here are 16S bacterial, ITS fungal, and
+Virome assays, all applied to different healthy and sepsis patient populations.
+Moreover, some participants were on a course of antibiotics while others were
+not. The question is how either sepsis, antibiotics, or their interaction
+affects the microbiome viewed through these three assays. The data are printed
+below, they have already been filtered and CLR transformed following the MOFA
+vignette.
+
+```{r}
+data(icu)
+icu
+```
+
+We can simultaneously analyze these data sources using block sPLS-DA. This is
+the multi-assay version of the analysis that we saw in the previous session.
+`exper_splsda` is a very light wrapper of a mixOmics function call, which you
+can read
+[here](https://github.com/krisrs1128/intro-to-simulation/blob/9f842ef52fdbe9a137833531147ceb3bc1f7ae81/MIGsim/R/vertical_integration.R#L3).
+The output plot below shows that each assay differs across groups, and this is
+quantitatively summarized by the high estimated weights between each category
+and the estimated PLS directions.
+
+```{r}
+fit <- exper_splsda(icu)
+plotIndiv(fit)
+fit$weights
+```
+
+How would the output have looked if 16S community composition had not been
+related to disease or antibiotics groups? Since integrative analysis prioritizes
+similarities across sources, we expect this to mask some of the real differences
+in the fungal and virus data as well. We can use simulation to gauge the extent
+of this masking.
+
+Our first step is to train a simulator.  We're just learning four different
+setes of parameters for each of the four observed groups. This is not as nuanced
+as learning separate effects for sepsis and antibiotics, but it will be enough
+for illustration. We have used `map` to estimate a simulator for each assay in
+the `icu` list.
+
+```{r}
+simulator <- map(
+  icu,
+  ~ setup_simulator(., ~Category, ~ GaussianLSS()) |>
+    estimate(nu = 0.05)
+)
+```
+
+So far, we haven't tried removing any relationships present in the 16S assay,
+and indeed our integrative analysis output on the simulated data looks
+comparable to that from the original study.
+
+```{r}
+icu_sim <- join_copula(simulator, copula_adaptive()) |>
+  sample() |>
+  split_assays()
+
+fit <- exper_splsda(icu_sim)
+plotIndiv(fit)
+fit$weights
+```
+
+**Exercise**: Modify the simulator above so that the 16S group no longer depends
+on disease cateogry. This will allow us to study how the integrative analysis
+output changes when the data are not alignable.
+
+```{r}
+null_simulator <- simulator
+# fill this in
+# null_simulator[[1]] <- ???
+```
+
+**Solution**: We need to define a new link that no longer depends on `Category`. One solution
+is to modify the existing simulator in place using `mutate`.
+```{r, eval = FALSE}
+null_simulator[[1]] <- simulator[[1]] |>
+  mutate(1:180, link = ~1) |>
+  estimate(nu = 0.05)
+```
+Since we are modifying all taxa, a simpler solution is to just define a
+new simulator from scratch.
+```{r}
+null_simulator[[1]] <- setup_simulator(icu[[1]], ~1, ~ GaussianLSS()) |>
+  estimate(nu = 0.05)
+```
+
+We can rerun the integrative analysis using the modified simulator. Somewhat
+surprisingly, the disease association in the bacteria group hasn't been erased.
+This is an artifact of the integration. The other assays have associations with
+disease group, and since the method encourages outputs across tables to be
+consistent with one another, we have artificially introduced some structure into
+the bacteria visualization (even if it is quite weak.) Nonetheless, we still
+observe a large dropoff in weight for the bacterial table. Further, there seems
+to be a minor deterioration in the group separations for the fungal and virus
+communities, and the component weights are higher when we work with only the
+fungal and virus assays. Altogether, this suggests that we may want to check
+table-level associations with the response variable, especially if any of the
+integration outputs are ambiguous. In this case, we might be able to increase
+power by focusing only on class-associated assays.  Nonetheless, the block
+sPLS-DA also seems relatively robust -- considering the dramatic change in the
+microbiome table, the output for the remaining tables still surfaces interesting
+relationships.
+
+```{r}
+icu_sim <- join_copula(null_simulator, copula_adaptive()) |>
+  sample() |>
+  split_assays()
+fit <- exper_splsda(icu_sim)
+plotIndiv(fit)
+fit$weights
+
+# only fungal and virus
+fit <- exper_splsda(icu_sim[2:3])
+fit$weights
+```
+
+
+```{r}
+sessionInfo()
+```
+
+<!--chapter:end:03-integration.Rmd-->
+
+`r if (knitr::is_html_output()) '
+# References {-}
+'`
+
+<!--chapter:end:07-references.Rmd-->
+

@@ -317,3 +317,8 @@ fit$weights
 fit <- exper_splsda(icu_sim[2:3])
 fit$weights
 ```
+
+
+```{r}
+sessionInfo()
+```

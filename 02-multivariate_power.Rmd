@@ -218,3 +218,7 @@ then we may already achieve good power with ~ 100 samples. However, if we
 imagine our effect might be sparser in our future experiment, then this figure
 would give us good justification for arguing for a larger number of samples, in
 order to ensure we can discover a disease-associated proteomics signature.
+
+```{r}
+sessionInfo()
+```

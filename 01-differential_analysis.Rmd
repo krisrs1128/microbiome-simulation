@@ -136,3 +136,8 @@ We expect that this result is somewhat conservative. This is because the
 original data have more symmetric distributions than our simulation, so limma's
 transformation to normality is likely easier to accomplish than in our more 
 highly skewed data.
+
+
+```{r}
+sessionInfo()
+```
