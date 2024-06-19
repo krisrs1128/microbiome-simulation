@@ -1,0 +1,432 @@
+--- 
+title: "A Minimal Book Example"
+author: "John Doe"
+date: "`r Sys.Date()`"
+site: bookdown::bookdown_site
+documentclass: book
+bibliography: [book.bib, packages.bib]
+# url: your book url like https://bookdown.org/yihui/bookdown
+# cover-image: path to the social sharing image like images/cover.jpg
+description: |
+  This is a minimal example of using the bookdown package to write a book.
+  The HTML output format for this example is bookdown::gitbook,
+  set in the _output.yml file.
+link-citations: yes
+github-repo: rstudio/bookdown-demo
+---
+
+# url: your book url like https://bookdown.org/yihui/bookdown
+
+Placeholder
+
+
+## Usage 
+## Render book
+## Preview book
+
+<!--chapter:end:index.Rmd-->
+
+
+# Introduciton
+
+Placeholder
+
+
+## Installation
+## Using `SummarizedExperiment`
+## Warm-up: A Gaussian Example
+
+<!--chapter:end:01-introduction.Rmd-->
+
+
+# Simulating Differential Abundance
+
+Placeholder
+
+
+## Critique
+## Power Analysis Loop
+
+<!--chapter:end:02-differential_analysis.Rmd-->
+
+
+# Multivariate Power Analysis
+
+Placeholder
+
+
+## Interpreting PLS-DA
+## Estimation
+## Evaluation
+## PLS-DA Power Analysis
+
+<!--chapter:end:03-multivariate_power.Rmd-->
+
+# Integrative Simulation
+<script>
+function myFunction(id) {
+    var x = document.getElementById(id);
+    if (x.style.display === "none") {
+        x.style.display = "block";
+    } else {
+        x.style.display = "none";
+    }
+}
+</script>
+<style>
+div .info {
+  margin: auto;
+  background-color: #EAF0FB;
+  width: 95%;
+  padding: 10px;
+}
+</style>
+
+Integration can be a subtle exercise. We need to balance our interest in seeing
+similarities between datasets with the risk of making things seem more similar
+than they really are. Simulation can help navigate this subtlety by letting us
+see how integration methods would behave in situations where we know exactly how
+the different datasets are related. This note will illustrate this perspective
+by showing how simulation can help with both horizontal (across batches) and
+vertical (across assays) integration. We'll have a brief interlude on the `map`
+function in the `purrr`, which is helpful for concisely writing code that would
+otherwise need for loops (e.g., over batches or assays).
+
+As usual, let's load the libraries we'll need. Remember that instructions for
+installing `MIGsim` and `scDesigner` are documented in the repository
+[README](https://github.com/krisrs1128/intro-to-simulation/).
+
+```{r}
+suppressPackageStartupMessages({
+  library(MIGsim)
+  library(SummarizedExperiment)
+  library(gamboostLSS)
+  library(ggplot2)
+  library(glue)
+  library(mixOmics)
+  library(purrr)
+  library(scDesigner)
+})
+theme_set(theme_classic())
+set.seed(20240603)
+```
+
+## Horizontal Integration
+
+The first example is about simultaneously analyzing several batches in a dataset
+about the efficiency of anaerobic digestion (AD) of organic matter. The
+essential problem is that, in this study, the samples could not be collected
+simultaneously. Small differences across separate runs could lead to systematic
+differences in the resulting data, which can obfuscate the more interesting
+between-group variation that the experiment was intended to uncover. For
+example, in the AD dataset, the date of the sequencing run has a global effect
+on measured community composition, which we can see right away from a principal
+components plot:
+
+```{r, pca-anaerobic}
+data(anaerobic)
+pca_batch(anaerobic)
+```
+
+You can learn more about the general microbiome batch effect integration problem
+in [(Wang and Le Cao, 2020)](https://doi.org/10.1093/bib/bbz105), which is where
+this dataset example and the batch effect correction code below comes from. The
+article also reviews mechanisms that could lead to batch effects in microbiome
+data, together with methods for removing these effects and the situations within
+which they are most appropriate.
+
+In batch effect correction, it's important to remove as much of the batch
+variation as possible without accidentally also removing the real biological
+variation that would have been present even if all the samples had been
+sequenced together. This is sometimes called ``overintegration,'' and this is an
+especially high risk if some of the real biological variation is quite subtle,
+e.g., a rare cell type or one that is very similar to a more prominent one.
+Simulation can help us gauge the extent to which different methods may or may
+not overintegrate. Since we get to control the between-batch and and
+between-biological-condition differences, we can see the extent to which
+integration methods can remove the former while preserving the latter.
+
+The block below estimates a candidate simulator. By using the formula `~ batch +
+treatment`, we're allowing for taxon-wise differences due to batch and
+treatment. Note that in principle, we could estimate an interaction between
+batch and treatment (the treatment could appear stronger in some batches than
+others). I encourage you to try estimating that model; however, visually
+analyzing the output suggests that this full model has a tendancy to overfit.
+Since the data have already been centered log-ratio transformed, we can try out
+a Gaussian marginal model. The AD dataset has relatively few samples
+compared to the number of features, so we'll use a copula that's designed for
+this setting.
+
+```{r, anaerobic-simulator}
+simulator <- setup_simulator(
+  anaerobic,
+  ~ batch + treatment,
+  ~ GaussianLSS(),
+  copula = copula_adaptive(thr = .1)
+) |>
+  estimate(nu = 0.05, mstop = 100) # lower nu -> stable training
+```
+
+We can simulate from the fitted model and evaluate the quality of our fit using
+`contrast_boxplot`. This is a light wrapper of the ggplot2 code we used to
+compare experiments from our first session, and you can read its definition
+[here](https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/R/plot.R#L26).
+
+```{r, eval-anaerobic}
+anaerobic_sim <- sample(simulator)
+contrast_boxplot(anaerobic, anaerobic_sim)
+```
+
+**Exercise** Propose and create at least one other visualization that can be
+used to compare and contrast the simulator with real data. What conclusions can
+you draw?
+
+<button onclick="myFunction(&#39;q-vis&#39;)">
+Show solution
+</button>
+::: {#q-vis style="display:none"}
+There are many possible answers:
+
+* Boxplots across taxa with different overall abundance levels.
+* Analogous histograms or CDF plots, to show the entire distributions, rather than just summarized quantiles.
+* Pair scatterplots, to see how well the bivariate relationships between taxa are preserved.
+* Dimensionality reduction on the simulated data, to see how well it matches global structure in the original data.
+
+We'll implement the last idea using PCA. This should be contrasted with the PCA
+plot on the original data above. It's okay if the plot seems rotated relative to
+the oiginal plot -- PCA is only unique up to rotation. The main characteristic
+we're looking for is that the relative sizes of the batch and treatment effects
+seem reasonaly well-preserved, since these will be the types of effects that our
+later batch effect integration methods must be able to distinguish.
+
+```{r}
+pca_batch(anaerobic_sim)
+```
+:::
+
+To study the risk for overintegration, let's imagine that there were a third
+treatment group with relatively fewer samples. This is the type of group that a
+correction method might accidentally blend in with the rest, if it's too
+aggressive. We've defined the imaginary experiment using the data.frame below.
+The `treatment` level `1.8` is the new one. We've supposed there are between 1 -
+3 technical replicates (`extraction`) for each biological sample (`sample`), and
+the batch dates are the same as before.
+
+```{r}
+data(imaginary_design)
+summary(imaginary_design)
+```
+
+We can simulate from the new design and look at how different this new treatment
+group seems from the others. It's a subtle effect, definitely smaller than the
+batch effect, but also separate enough that we should be able to preserve it.
+
+```{r}
+anaerobic_sim <- sample(simulator, new_data = imaginary_design)
+pca_batch(anaerobic_sim)
+```
+
+We've defined a `batch_correct` wrapper function that implements either the
+RUV-III or ComBat batch effect correction methods. Their outputs are contrasted
+in the PCAs below. It looks like ComBat might be somewhat too aggressive,
+causing the `1` and `1.8` treatment groups to substantially overlap, while RUV
+is a bit more conservative, keeping the treatment groups nicely separate. As an
+aside, we note that this conclusion can depend on the number of replicates and
+total number of samples available. We've included the code for generating the
+`imaginary_design` data.frame in [a vignette](https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/vignettes/process-integration.Rmd#L76)
+for the `MIGsim` package. Can you find settings that lead either method astray?
+
+```{r}
+pca_batch(batch_correct(anaerobic_sim, "ruv"))
+pca_batch(batch_correct(anaerobic_sim, "combat"))
+```
+
+## Interlude: Using map
+
+In the examples below, we'll find it helpful to use the function `map` in the
+purrr package. This function gives a one-line replacement for simple for-loops;
+it is analogous to list comprehensions in python. It can be useful many places
+besides the topic of this tutorial. For example, if we want to convert the
+vector `c(1, 2, 3)` into `c(1, 4, 9)`, we can use this map:
+```{r}
+map(1:3, ~ .^2)
+```
+The `~` notation is shorthand for defining a function, and the `.` represents
+the current vector element.  More generally, we can apply map to lists. This
+line will update the list so that 1 is added to each element.
+```{r}
+map(list(a = 1, b = 2, c = 3), ~ . + 1)
+```
+
+**Exercise**: To test your understanding, can you write a map that computes the
+*mean for each
+vector in the list `x` below? What about the mean of the 10 smallest elements?
+```{r}
+x <- list(a = rnorm(100), b = rnorm(100, 1))
+```
+<button onclick="myFunction(&#39;q-map&#39;)">
+Show solution
+</button>
+::: {#q-map style="display:none"}
+```{r}
+map(x, mean)
+map(x, ~ mean(sort(.)[1:10]))
+```
+:::
+
+## Vertical Integration
+
+In horizontal integration, we have many datasets, all with the same features.
+They only differ because they were gathered at different times. In contrast, for
+vertical integration, we instead have many datasets all with the same _samples_.
+They differ because they measure different aspects of those samples. Our goal in
+this situation is not to remove differences across datasets, like it was in
+horizontal integration, but instead to clarify the relationships across sources.
+
+One important question that often arises in vertical integration is -- are the
+data even alignable? That is, in our effort to look for relationships across
+datasets, we might accidentally miss out on interesting variation that exists
+within the individual assays. If the technologies are measuring very different
+things, we might be better off simply analyzing the data separately. To help us
+gauge which setting we might be in, we can simulate data where we know that we
+shouldn't align the sources. If our integration methods are giving similar
+outputs as they give on this simulated data, then we should be more cautious.
+
+There are a few ways in which a dataset might not be ``alignable.'' The most
+general reason is that there may be no latent sources of variation in common
+between the sources. A simpler reason is that something that influenced one
+assay substantially (e.g., disease state) might not influence the other by much.
+Let's see how an integration method might work in this setting.
+
+We'll work with the ICU sepsis dataset previously studied by [Haak et al.
+(2021)](https://doi.org/10.1128/mSystems.01148-20) and documented within a
+[vignette](https://raw.githack.com/bioFAM/MOFA2_tutorials/master/R_tutorials/microbiome_vignette.html#train-mofa-model)
+for the MOFA package. The three datasets here are 16S bacterial, ITS fungal, and
+Virome assays, all applied to different healthy and sepsis patient populations.
+Moreover, some participants were on a course of antibiotics while others were
+not. The question is how either sepsis, antibiotics, or their interaction
+affects the microbiome viewed through these three assays. The data are printed
+below, they have already been filtered and CLR transformed following the MOFA
+vignette.
+
+```{r}
+data(icu)
+icu
+```
+
+We can simultaneously analyze these data sources using block sPLS-DA. This is
+the multi-assay version of the analysis that we saw in the previous session.
+`exper_splsda` is a very light wrapper of a mixOmics function call, which you
+can read
+[here](https://github.com/krisrs1128/intro-to-simulation/blob/9f842ef52fdbe9a137833531147ceb3bc1f7ae81/MIGsim/R/vertical_integration.R#L3).
+The output plot below shows that each assay differs across groups, and this is
+quantitatively summarized by the high estimated weights between each category
+and the estimated PLS directions.
+
+```{r}
+fit <- exper_splsda(icu)
+plotIndiv(fit)
+fit$weights
+```
+
+How would the output have looked if 16S community composition had not been
+related to disease or antibiotics groups? Since integrative analysis prioritizes
+similarities across sources, we expect this to mask some of the real differences
+in the fungal and virus data as well. We can use simulation to gauge the extent
+of this masking.
+
+Our first step is to train a simulator.  We're just learning four different
+setes of parameters for each of the four observed groups. This is not as nuanced
+as learning separate effects for sepsis and antibiotics, but it will be enough
+for illustration. We have used `map` to estimate a simulator for each assay in
+the `icu` list.
+
+```{r}
+simulator <- map(
+  icu,
+  ~ setup_simulator(., ~Category, ~ GaussianLSS()) |>
+    estimate(nu = 0.05)
+)
+```
+
+So far, we haven't tried removing any relationships present in the 16S assay,
+and indeed our integrative analysis output on the simulated data looks
+comparable to that from the original study.
+
+```{r}
+icu_sim <- join_copula(simulator, copula_adaptive()) |>
+  sample() |>
+  split_assays()
+
+fit <- exper_splsda(icu_sim)
+plotIndiv(fit)
+fit$weights
+```
+
+**Exercise**: Modify the simulator above so that the 16S group no longer depends
+on disease cateogry. This will allow us to study how the integrative analysis
+output changes when the data are not alignable.
+
+```{r}
+null_simulator <- simulator
+# fill this in
+# null_simulator[[1]] <- ???
+```
+
+<button onclick="myFunction(&#39;q-spls&#39;)">
+Show solution
+</button>
+::: {#q-spls style="display:none"}
+We need to define a new link that no longer depends on `Category`. One solution
+is to modify the existing simulator in place using `mutate`.
+```{r, eval = FALSE}
+null_simulator[[1]] <- simulator[[1]] |>
+  mutate(1:180, link = ~1) |>
+  estimate(nu = 0.05)
+```
+Since we are modifying all taxa, a simpler solution is to just define a
+new simulator from scratch.
+```{r}
+null_simulator[[1]] <- setup_simulator(icu[[1]], ~1, ~ GaussianLSS()) |>
+  estimate(nu = 0.05)
+```
+:::
+
+We can rerun the integrative analysis using the modified simulator. Somewhat
+surprisingly, the disease association in the bacteria group hasn't been erased.
+This is an artifact of the integration. The other assays have associations with
+disease group, and since the method encourages outputs across tables to be
+consistent with one another, we have artificially introduced some structure into
+the bacteria visualization (even if it is quite weak.) Nonetheless, we still
+observe a large dropoff in weight for the bacterial table. Further, there seems
+to be a minor deterioration in the group separations for the fungal and virus
+communities, and the component weights are higher when we work with only the
+fungal and virus assays. Altogether, this suggests that we may want to check
+table-level associations with the response variable, especially if any of the
+integration outputs are ambiguous. In this case, we might be able to increase
+power by focusing only on class-associated assays.  Nonetheless, the block
+sPLS-DA also seems relatively robust -- considering the dramatic change in the
+microbiome table, the output for the remaining tables still surfaces interesting
+relationships.
+
+```{r}
+icu_sim <- join_copula(null_simulator, copula_adaptive()) |>
+  sample() |>
+  split_assays()
+fit <- exper_splsda(icu_sim)
+plotIndiv(fit)
+fit$weights
+
+# only fungal and virus
+fit <- exper_splsda(icu_sim[2:3])
+fit$weights
+```
+
+<!--chapter:end:05-integration.Rmd-->
+
+`r if (knitr::is_html_output()) '
+# References {-}
+'`
+
+<!--chapter:end:07-references.Rmd-->
+

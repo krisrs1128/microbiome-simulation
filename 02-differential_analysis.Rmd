@@ -1,8 +1,4 @@
----
-title: "Marginal Analysis Exercises"
-author: Kris Sankaran
-output: rmdformats::readthedown
----
+# Simulating Differential Abundance
 
 <script>
 function myFunction(id) {
@@ -26,17 +22,6 @@ div .info {
 ```{r, include = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 ```
-
-**Installation**
-
-If you haven't already installed the packages for this workshop, please run the commands below. 
-
-```{r, eval = FALSE}
-devtools::install_github("krisrs1128/intro-to-simulation/MIGsim")
-devtools::install_github("krisrs1128/scDesigner", auth_token = "paste_token_here")
-```
-
-# Introduction
 
 Before we consider simulating entire microbial communities, with their complex
 correlation structures, let's learn simulators for individual taxa. This is
@@ -67,121 +52,7 @@ set.seed(202406)
 theme_set(theme_classic())
 ```
 
-# Using `SummarizedExperiment`
-
-`scDesigner`'s interface is built with `SummarizedExperiment` in mind. These
-data structures simplify manipulation of sequencing experiments. For example,
-they distinguish between molecule counts, which are stored in the `assay` slot,
-and sample descriptors, which are stored in `colData`. At the same time, these
-separate components are nicely synchronized. For example, subsetting samples
-from one of these tables automatically subsets the other.
-
-The line below loads a small subset of genera from the
-[Atlas](https://microbiome.github.io/tutorials/Atlas.html) experiment, which
-profiled the gut microbiomes from 1006 healthy adults in Western Europe.
-
-```{r}
-data(atlas)
-table(rowData(atlas)$Phylum)
-mean(atlas$age)
-
-
-ix <- colData(atlas)$bmi_group == "obese"
-abundances <- assay(atlas)
-rowMeans(abundances[, ix])
-```
-
-**Exercise**: To practice working with `SummarizedExperiment`
-objects, try answering:
-
-* How many genera are available in this experiment object?
-* What was the most common phylum in this dataset?
-* What was the average participant age?
-* What was the average abundance of `Allistipes et rel.` among people in the `obese` BMI group?
-
-_Hint: The most important functions are `assay()`, `rowData()`, and `colData()`._
-
-<button onclick="myFunction(&#39;q0&#39;)">
-Show solution
-</button>
-::: {#q0 style="display:none"}
-```{r}
-nrow(atlas)
-table(rowData(atlas)$Phylum)
-mean(atlas$age)
-
-atlas[, atlas$bmi_group == "obese"] |>
-  assay() |>
-  rowMeans()
-```
-:::
-
-# A Gaussian Example
-
-Here's a toy dataset to illustrate the main idea of GAMLSS. Each panel in the
-plot below represents a different feature (e.g., taxon, gene, metabolite...).
-The abundance varies smoothly over time, and in the first three panels, the
-trends differ by group assignment.
-
-```{r}
-data(exper_ts)
-exper_lineplot(exper_ts)
-```
-
-We can try to approximate these data with a new simulator. The `setup_simulator`
-command takes the template `SummarizedExperiment` object as its first argument.
-The second gives an R formula syntax-style specification of GAMLSS parameters
-(mean and SD, in this case) dependence on sample properties. The last argument
-gives the type of model to fit, in this case, a Gaussian location-shape-scale
-model.
-
-```{r}
-sim <- setup_simulator(exper_ts, ~ ns(time, df = 7) * group, ~ GaussianLSS()) |>
-  estimate(nu = 0.01, mstop = 1000)
-
-sample(sim) |>
-  exper_lineplot()
-```
-
-**Exercise**: Right now, each panel allows for an interaction between the trend and
-group type. Can you define a simulator where the groups have no effect on the 
-trends for the first two panels? This is the basis for defining synthetic
-negative controls.
-
-```{r, eval = FALSE}
-sim <- sim |>
-  scDesigner::mutate(
-    1:2,
-     link = ~ ns(time, df = 7)
-  ) |>
-  estimate(nu = 0.01, mstop = 1000)
-
-sample(sim) |>
-  exper_lineplot()
-```
-
-<button onclick="myFunction(&#39;q1&#39;)">
-Show solution
-</button>
-::: {#q1 style="display:none"}
-We can modify the formula so that it no longer has an interaction with group.
-We just need to remove the `* group` from the original formula in our updated
-link function. To ensure that this only applies to the first two panels, we use
-1:2 in the first argument of `mutate`. This first argument specifies which 
-features to apply the new formula to.
-```{r}
-sim <- sim |>
-  mutate(1:2, link = ~ ns(time, df = 7)) |>
-  estimate(nu = 0.01, mstop = 1000)
-
-sample(sim) |>
-  exper_lineplot()
-```
-:::
-
-# Atlas Estimation
-
-Next, let's train a simulator to fit the Atlas dataset. We'll use two
+Let's train a simulator to fit the Atlas dataset. We'll use two
 covariates. `bmi_group` is the main covariate of interest -- we want to see how
 microbiome composition varies among people with different BMI. The `log_depth`
 term is used to adjust for differential sequencing depths. We found it helpful
@@ -190,7 +61,7 @@ Finally, since we want to eventually evaluate testing methods that are designed
 for count data, we have used the (Z)ero (I)nflated (N)egative (B)inomial
 location-shape-scale model.
 
-```{r}
+```{r atlas-estimation}
 data(atlas)
 
 fmla <- list(
@@ -202,7 +73,7 @@ sim <- setup_simulator(atlas, fmla, ~ ZINBLSS()) |>
   estimate(nu = 0.01, mstop = 1000)
 ```
 
-# Critique
+## Critique
 
 **Exercise**: The block below combines the real and simulated experiments and
 visualizes their difference. With your neighbors, discuss how well the simulator
@@ -235,7 +106,7 @@ between the groups typically agrees between the real and simulated data. The
 interquartile ranges for each taxon also seem to roughly match.
 :::
 
-# Power Analysis Loop
+## Power Analysis Loop
 
 To run a power analysis, we need to define datasets that have known ground
 truth.  Then, we can run any differential abundance methods we want and see how
@@ -265,7 +136,7 @@ Now that we have ground truth associations, we'll evaluate LIMMA-voom for
 differential analysis. We consider sample sizes ranging from 50 to 1200, and we
 simulate 10 datasets for each sample size.
 
-```{r, run-loop}
+```{r, run-loop, eval = FALSE}
 config <- expand.grid(
   sample_size = floor(seq(50, 1200, length.out = 5)),
   n_rep = 1:10
@@ -296,7 +167,7 @@ though the variance in this proportion can be quite high. We can also see that
 we would have quite good power with $n \geq 625$ samples, but the worst case
 scenarios can be quite poor for anything with fewer samples.
 
-```{r, visualize-power}
+```{r, visualize-power, eval = FALSE}
 bind_rows(results, .id = "run") |>
   left_join(config) |>
   ggplot() +

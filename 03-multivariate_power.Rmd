@@ -1,8 +1,4 @@
----
-title: "Multivariate Simulation Exercises"
-author: Kris Sankaran
-output: rmdformats::readthedown
----
+# Multivariate Power Analysis
 
 <script>
 function myFunction(id) {
@@ -24,38 +20,43 @@ div .info {
 </style>
 
 How can we choose sample sizes in more complex bioinformatic workflows, where we
-simultaneously analyze many features (taxa, genes, metaabolites) in concert?
+simultaneously analyze many features (taxa, genes, metabolites) in concert?
 While traditional, analytical power analysis often breaks down, simulation can
 still be effective. We'll look at a concrete case study where we try to choose a
-good sample size for a PLS-DA analysis of the Type I Diabetes gut microbiome.
+good sample size for a sparse partial least squares discriminant analysis
+(sPLS-DA) of the Type I Diabetes (T1D) gut microbiome.
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
 ```
 
-First, we'll load the required packages. Relative to session 1, the only
+First, we'll load the required packages. Relative to our first session, the only
 additional package that we need is `mixOmics`. This can be installed using
 `BiocManager::install('mixOmics')`.
 
 ```{r}
 suppressPackageStartupMessages({
-  library(MIGsim)
   library(SummarizedExperiment)
+  library(dplyr)
   library(gamboostLSS)
   library(glue)
   library(mixOmics)
   library(ggplot2)
+  library(MIGsim)
   library(scDesigner)
 })
 set.seed(202406)
 theme_set(theme_classic())
 ```
 
-# Interpreting PLS-DA
+## Interpreting PLS-DA
 
-The T1D dataset below includes measures of 427 metabolites from the gut
-microbiomes of 40 T1D patients and 61 healthy controls. These data were
-originally published in (tk fill in some more explanationa bout the dataset).
+The T1D dataset below describes 427 metabolites from the gut microbiomes of 40
+T1D patients and 61 healthy controls. These data were originally gathered by
+[Gavin et al. (2018)](https://doi.org/10.2337/dc18-0777), who were motivated by
+the relationship between the pancreas and intestinal issues often experienced by
+T1D patients. They were especially curious about whether microbime-associated
+proteins might be related to increased risk for T1D development.
 
 ```{r}
 data(t1d)
@@ -68,21 +69,33 @@ to see how the function was defined.
 
 ```{r}
 result <- splsda_fit(t1d)
-plotIndiv(result$fit)
-plotVar(result$fit, cutoff = 0.4)
+plotIndiv(result$fit, cex = 10)
+plotVar(result$fit, cutoff = 0.4, cex = 10)
 ```
 
 **Exercise**: Discuss the output of `plotIndiv`. How does `plotVar` shape
 your interpretation?
+
 <button onclick="myFunction(&#39;q0&#39;)">
 Show solution
 </button>
 
 ::: {#q0 style="display:none"}
-Placeholder.
+The first two dimensions of the sPLS-DA pick on distinctions between the T1D
+(orange) and control (blue) groups. The variance by these first two dimensions
+is relatively small
+-- variation in protein signatures may not be easiliy captured in two dimensions
+or may not generally be correlated with the disease response. Since most of the
+differences between groups are captured by the first dimension, we can look for
+features that are highly correlated with this dimension to see which proteins
+might be driving the difference. For example, we can conclude that T1D samples
+tend to have higher levels of
+[p21333](https://www.uniprot.org/uniprotkb/P21333/entry) and
+[q8wz42](https://www.uniprot.org/uniprotkb/Q8WZ42/entry) compared to the
+controls. 
 :::
 
-# Estimation
+## Estimation
 
 Let's estimate a simulator where every protein is allowed ot vary across T1D
 type. Since the data have already been centered log-ratio transformed, it's okay
@@ -93,7 +106,7 @@ simulator <- setup_simulator(t1d, link_formula = ~outcome2, family = ~ GaussianL
   estimate(mstop = 100)
 ```
 
-# Evaluation
+## Evaluation
 
 Last time, we saw how we could visualize marginal simulator quality. How can we
 tell whether a joint simulator is working, though? One simple check is to
@@ -113,7 +126,8 @@ correlation_hist(t1d, sim_exper)
 
 **Exercise**: To address this, let's try modifying the `copula_def` argument of
 `setup_simulator` to use a more suitable simulator. Generate new correlation
-histograms and comment on the changes you observe.
+histograms and comment on the changes you observe. You only need to modify the
+commented lines (`#`) lines in the block below.
 
 ```{r, eval = FALSE}
 simulator <- setup_simulator(
@@ -124,20 +138,27 @@ simulator <- setup_simulator(
   ) |>
   estimate(mstop = 100)
 
-sim_exper <- sample(simulator)
-correlation_hist(t1d, sim_exper)
+sim_exper <- sample(simulator) # and then run these two lines
+correlation_hist(t1d, sim_exper) #
 ```
 
 <button onclick="myFunction(&#39;q1&#39;)">
 Show solution
 </button>
+
 ::: {#q1 style="display:none"}
+For our coupla, we can use a covariance estimator of [Cai and Liu
+(2011)](https://www.tandfonline.com/doi/abs/10.1198/jasa.2011.tm10560), that is
+suited for high dimensions. Larger values of `thr` will increase the stability
+of our estimates, but at the cost of potentially missing or weakening true
+correlations. In line with this point, our new simulated correlations are more
+concentrated.
 ```{r}
 simulator <- setup_simulator(
   t1d,
   link_formula = ~outcome2,
   family = ~ GaussianLSS(),
-  copula_def = copula_adaptive(thr = 0.1)
+  copula_def = copula_adaptive(thr = 0.4)
 ) |>
   estimate(mstop = 100)
 
@@ -146,7 +167,13 @@ correlation_hist(t1d, sim_exper)
 ```
 :::
 
-# PLS-DA Power Analysis
+
+```{r}
+MIGsim::contrast_boxplot(t1d, sim_exper, ~ . ~ reorder(outcome2, value))
+#MIGsim::contrast_boxplot
+```
+
+## PLS-DA Power Analysis
 
 Now that we have a simulator, we can run a power analysis. In theory, we could
 look at how any summary from the PLS-DA output varies as the sample size
@@ -174,8 +201,9 @@ data(t1d_order)
 **Exercise**: Finally, we're in a position to generate synthetic data and
 evaluate PLS-DA performance. Fill in the block below to update the simulator for
 each `i`. Remember that the original `simulator` defined above assumes that all
-proteins are associated with T1D. You can use `t1d_odrer` to prioritize the
-proteins with the strongest effects in the original data.
+proteins are associated with T1D. You can use `t1d_order` to prioritize the
+proteins with the strongest effects in the original data. As before, you should
+only need to modify the line marked with the comments (`#`).
 
 ```{r power-analysis-loop-setup, eval = FALSE}
 for (i in seq_len(nrow(config))) {
@@ -195,11 +223,15 @@ for (i in seq_len(nrow(config))) {
 Show solution
 </button>
 ::: {#power_loop style="display:none"}
-```{r power-analysis-loop-soln}
+To define nulls, we mutate the weakest proteins so that there is no longer any
+association with T1D: `link = ~ 1` instead of `link = ~ outcome2`. To speed up
+the computation, we organized the `mutate` calls so that we don't need to
+re-estimate proteins whose effects were removed in a previous iteration.
+```{r power-analysis-loop-soln, eval = FALSE}
 for (i in seq_len(nrow(config))) {
   if (i == 1 || config$n_null[i] != config$n_null[i - 1]) {
     simulator <- simulator |>
-      mutate(dplyr::any_of(rev(t1d_order)[1:config$n_null[i]]), link = ~1) |>
+      mutate(any_of(rev(t1d_order)[1:config$n_null[i]]), link = ~1) |>
       estimate(mstop = 100)
   }
 
@@ -212,12 +244,11 @@ for (i in seq_len(nrow(config))) {
 
 We can visualize variation in performance. 
 
-```{r}
+```{r, visualize-power, eval = FALSE}
 ggplot(config, aes(sample_size, metrics, col = factor(n_null))) +
   geom_point() +
   facet_wrap(~n_null)
 ```
-
 
 **Discussion**: Interpret the visualization above. How do you think analysis
 like this could help you justify making some experimental investments over
@@ -226,5 +257,16 @@ others?
 <button onclick="myFunction(&#39;discussion&#39;)">
 Show solution
 </button>
+
 ::: {#discussion style="display:none"}
+Reading across facets from top left to bottom right, power decreases when the
+number of null proteins increases. It seems that sPLS-DA can benefit from having
+many weakly associated features. While power is sometimes high in low sample
+sizes, the variance can be quite large. In all settings, there is a noticeable
+decrease in variance in power as we go from 15 to 48 samples. If we can assume
+that a moderate fraction (> 15\%) of measured proteins are associated with T1D,
+then we may already achieve good power with ~ 100 samples. However, if we
+imagine our effect might be sparser in our future experiment, then this figure
+would give us good justification for arguing for a larger number of samples, in
+order to ensure we can discover a disease-associated proteomics signature.
 :::

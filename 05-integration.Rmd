@@ -1,9 +1,4 @@
----
-title: "Integrative Simulation Exercises"
-author: Kris Sankaran
-output: rmdformats::readthedown
----
-
+# Integrative Simulation
 <script>
 function myFunction(id) {
     var x = document.getElementById(id);
@@ -52,7 +47,7 @@ theme_set(theme_classic())
 set.seed(20240603)
 ```
 
-# Horizontal Integration
+## Horizontal Integration
 
 The first example is about simultaneously analyzing several batches in a dataset
 about the efficiency of anaerobic digestion (AD) of organic matter. The
@@ -64,7 +59,7 @@ example, in the AD dataset, the date of the sequencing run has a global effect
 on measured community composition, which we can see right away from a principal
 components plot:
 
-```{r}
+```{r, pca-anaerobic}
 data(anaerobic)
 pca_batch(anaerobic)
 ```
@@ -98,7 +93,7 @@ a Gaussian marginal model. The AD dataset has relatively few samples
 compared to the number of features, so we'll use a copula that's designed for
 this setting.
 
-```{r}
+```{r, anaerobic-simulator}
 simulator <- setup_simulator(
   anaerobic,
   ~ batch + treatment,
@@ -113,7 +108,7 @@ We can simulate from the fitted model and evaluate the quality of our fit using
 compare experiments from our first session, and you can read its definition
 [here](https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/R/plot.R#L26).
 
-```{r}
+```{r, eval-anaerobic}
 anaerobic_sim <- sample(simulator)
 contrast_boxplot(anaerobic, anaerobic_sim)
 ```
@@ -182,7 +177,7 @@ pca_batch(batch_correct(anaerobic_sim, "ruv"))
 pca_batch(batch_correct(anaerobic_sim, "combat"))
 ```
 
-# Interlude: Using map
+## Interlude: Using map
 
 In the examples below, we'll find it helpful to use the function `map` in the
 purrr package. This function gives a one-line replacement for simple for-loops;
@@ -215,7 +210,7 @@ map(x, ~ mean(sort(.)[1:10]))
 ```
 :::
 
-# Vertical Integration
+## Vertical Integration
 
 In horizontal integration, we have many datasets, all with the same features.
 They only differ because they were gathered at different times. In contrast, for
