@@ -32,6 +32,8 @@ This block loads all packages that will be used in this book.
 
 ```{r}
 suppressPackageStartupMessages({
+  library(CovTools)
+  library(SpiecEasi)
   library(SummarizedExperiment)
   library(dplyr)
   library(gamboostLSS)
@@ -39,8 +41,12 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(glue)
   library(mixOmics)
+  library(patchwork)
   library(purrr)
+  library(scico)
   library(splines)
+  library(tibble)
+  library(tidyr)
   library(MIGsim)
   library(scDesigner)
 })
@@ -64,7 +70,6 @@ profiled the gut microbiomes from 1006 healthy adults in Western Europe.
 data(atlas)
 table(rowData(atlas)$Phylum)
 mean(atlas$age)
-
 
 ix <- colData(atlas)$bmi_group == "obese"
 abundances <- assay(atlas)

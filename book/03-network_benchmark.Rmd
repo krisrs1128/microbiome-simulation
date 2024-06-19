@@ -22,14 +22,8 @@ simulate data with known correlation structure and taxa-level marginals
 estimated from the study data. The block below reads in the data.
 
 ```{r, read-data}
-counts <- read_csv("https://go.wisc.edu/kj2twy") |>
-  column_to_rownames("taxon")
-metadata <- read_csv("https://go.wisc.edu/gi9rb6")
-
-exper <- SummarizedExperiment(
-  assays = SimpleList(counts = as.matrix(counts)),
-  colData = metadata
-)
+data(amgut)
+amgut
 ```
 
 We've estimated a zero-inflated negative binomial location-shape-scale
@@ -42,7 +36,7 @@ particular features.
 
 ```{r, example-sim}
 sim <- setup_simulator(
-  exper,
+  amgut,
   ~ log(sequencing_depth) + BMI,
   ~ ZINBLSS()
 ) |>
@@ -73,7 +67,7 @@ binomials for these poorly fitted taxa.
 
 ```{r, histogram-critique, fig.width = 9, fig.height = 5}
 bind_rows(
-  real = pivot_experiment(exper),
+  real = pivot_experiment(amgut),
   simulated = pivot_experiment(simulated),
   .id = "source"
 ) |>
@@ -94,7 +88,7 @@ potentially leading to quite different predictions). To remove this artifact, we
 can assume that all samples had exactly the same sequencing depth.
 
 ```{r, bmi-scatter, fig.width = 12, fig.height = 4}
-new_data <- colData(exper) |>
+new_data <- colData(amgut) |>
   as_tibble() |>
   mutate(sequencing_depth = 2e4)
 plot(sim, "BMI", sample(sim, new_data = new_data), new_data = new_data)
@@ -116,16 +110,16 @@ the selection with the commented out line to see what one of the anticorrelated
 pairs of taxa looks like.
 
 ```{r correlation_pairs, fig.width = 5, fig.height = 5}
-#taxa <- rownames(exper)[c(33, 43)]
-taxa <- rownames(exper)[c(14, 25)]
-pivot_experiment(exper) |>
+#taxa <- rownames(amgut)[c(33, 43)]
+taxa <- rownames(amgut)[c(14, 25)]
+pivot_experiment(amgut) |>
   filter(feature %in% taxa) |>
   tidyr::pivot_wider(names_from = feature) |>
   ggplot() +
   geom_point(aes(log(1 + .data[[taxa[1]]]), log(1 + .data[[taxa[2]]])))
 ```
 
-# Block Covariance
+## Block Covariance
 
 Let's replace the current copula correlation structure with one from a block
 diagonal matrix. In this example, the off-diagonal correlations are 0.6. We can
@@ -161,7 +155,7 @@ rho_se <- spiec.easi(x, nlambda = 10, pulsar.params = list(rep.num = 1)) |>
 heatmap(rho_se)
 ```
 
-Let's instead use the Ledoit-Wolfe estimator on the log-transformed data. The
+Let's instead use the Ledoit-Wolf estimator on the log-transformed data. The
 results make much more sense.
 
 ```{r lw}
@@ -189,64 +183,74 @@ several network regimes. For example, the block below defines correlation
 matrices associated with scale-free and banded structures.
 
 ```{r}
-# will move this into MIGsim
-library(rags2ridges)
-N <- 1000
-rho <- list(block = rho)
-rho[["scale_free"]] <- createS(n = N, p = 45, topology = "scale-free", precision = TRUE) |>
-  solve() |>
-  cov2cor()
-rho[["banded"]] <- createS(n = N, p = 45, topology = "banded", banded.n = 5, precision = TRUE) |>
-  solve() |>
-  cov2cor()
-
-# dimnames(rho[["scale_free"]]) <- NULL
-# dimnames(rho[["banded"]]) <- NULL
-```
-
-```{r}
+data(example_rho)
 rho_hat <- list()
-
-for (r in seq_along(rho)) {
+for (r in seq_along(example_rho)) {
   x <- sim |>
-    mutate_correlation(rho[[r]]) |>
+    mutate_correlation(example_rho[[r]]) |>
     scDesigner::sample() |>
-    assay() |>
-    t()
+    assay()
 
-  rho_se <- spiec.easi(x, nlambda = 10, pulsar.params = list(rep.num = 1)) |>  
+  rho_se <- spiec.easi(t(x), nlambda = 10, pulsar.params = list(rep.num = 1)) |>  
     getOptCov() |>
     as.matrix() |>
     cov2cor()
-  rho_lw <- CovEst.2003LW(log(1 + x))$S |>
+  rho_lw <- CovEst.2003LW(log(1 + t(x)))$S |>
     cov2cor()
-  rho_hat[[names(rho)[r]]] <- list(se = rho_se, lw = rho_lw)
+  rho_hat[[names(example_rho)[r]]] <- list(se = rho_se, lw = rho_lw)
 }
 ```
 
-```{r}
-# will move this into the MIGsim package
-comparison <- data.frame(
-  truth = map_dfr(rho, ~ c(.), .id = "source"),
-  banded = map_dfr(rho_hat[["banded"]], ~ c(.), .id = "source"),
-  block = map_dfr(rho_hat[["block"]], ~ c(.), .id = "source"),
-  scale_free = map_dfr(rho_hat[["scale_free"]], ~ c(.), .id = "source")
-)
-colnames(comparison)[1:3] <- c("block.truth", "scale_free.truth", "banded.truth")
-
-comparison <- comparison |>
-  pivot_longer(everything()) |>
-  separate(name, c("structure", "estimator"), sep = "\\.") |>
-  group_by(estimator) |>
-  arrange(structure) |>
-  mutate(ix = row_number()) |>
-  pivot_wider(names_from = "estimator") |>
-  pivot_longer(se:lw, names_to = "method")
-
-ggplot(comparison) +
+```{r, visualize-difference, echo = FALSE}
+p1 <- reshape_correlations(rho_hat) |>
+  filter(value < 1) |>
+  ggplot() +
   geom_jitter(aes(truth, value, col = method), width = 0.05, size = 0.8, alpha = 0.7) +
   geom_abline(slope = 1) +
-  facet_wrap(~ structure, scales = "free")
+  facet_wrap(~ reorder(structure, truth), scales = "free", ncol = 5) +
+  guides(col = guide_legend(override.aes = list(size = 5, alpha = 1))) +
+  scale_color_brewer(palette = "Set2") +
+  labs(
+    x = "True Correlation",
+    y = "Estimated Correlation",
+    col = "Method",
+    title = "(B)"
+  )
+
+p2 <- map_dfr(example_rho, ~ {
+  data.frame(.) |>
+    mutate(i = row_number()) |>
+    pivot_longer(-i) |>
+    mutate(j = as.integer(stringr::str_extract(name, "[0-9]+")))
+}, .id = "structure") |>
+    mutate(
+      structure = case_when(
+        structure == "banded" ~ "Banded",
+        structure == "block" ~ "Block",
+        structure == "erdos_renyi" ~ "Erdos Renyi",
+        structure == "scale_free" ~ "Scale-Free",
+        structure == "small_world" ~ "Small-World"
+      )
+    ) |>
+  filter(value < 1) |>
+  ggplot() +
+  geom_tile(aes(
+    i, j,
+    col = value,
+    fill = value
+  )) +
+  scale_x_discrete(expand = c(0, 0)) +
+  labs(x = NULL, y = NULL, title = "(A)") +
+  scale_y_discrete(expand = c(0, 0)) +
+  scale_fill_scico(palette = "vik", direction = -1) +
+  scale_color_scico(palette = "vik", direction = -1) +
+  coord_fixed() +
+  facet_wrap(~ reorder(structure, value), ncol = 5)
+
+(p2 / p1)  +
+  plot_layout(heights = c(1, 2))
+
+ggsave("~/Downloads/network_comparison.png", height = 6, width = 9)
 ```
 
 
