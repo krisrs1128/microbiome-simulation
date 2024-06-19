@@ -1,4 +1,4 @@
-# Introduciton
+# Introduction
 
 ## Installation
 
@@ -7,6 +7,26 @@ If you haven't already installed the packages for this workshop, please run the 
 ```{r, eval = FALSE}
 devtools::install_github("krisrs1128/intro-to-simulation/MIGsim")
 ```
+
+The following block loads packages for all the examples in this book.
+
+```{r}
+suppressPackageStartupMessages({
+  library(SummarizedExperiment)
+  library(dplyr)
+  library(gamboostLSS)
+  library(ggdist)
+  library(ggplot2)
+  library(glue)
+  library(mixOmics)
+  library(purrr)
+  library(splines)
+  library(MIGsim)
+  library(scDesigner)
+})
+theme_set(theme_classic())
+```
+
 
 ## Using `SummarizedExperiment`
 
@@ -42,10 +62,8 @@ objects, try answering:
 
 _Hint: The most important functions are `assay()`, `rowData()`, and `colData()`._
 
-<button onclick="myFunction(&#39;q0&#39;)">
-Show solution
-</button>
-::: {#q0 style="display:none"}
+**Solution**
+
 ```{r}
 nrow(atlas)
 table(rowData(atlas)$Phylum)
@@ -55,7 +73,6 @@ atlas[, atlas$bmi_group == "obese"] |>
   assay() |>
   rowMeans()
 ```
-:::
 
 ## Warm-up: A Gaussian Example
 
@@ -101,12 +118,8 @@ sample(sim) |>
   exper_lineplot()
 ```
 
-<button onclick="myFunction(&#39;q1&#39;)">
-Show solution
-</button>
-::: {#q1 style="display:none"}
-We can modify the formula so that it no longer has an interaction with group.
-We just need to remove the `* group` from the original formula in our updated
+**Solution**: We can modify the formula so that it no longer has an interaction
+with group. We just need to remove the `* group` from the original formula in our updated
 link function. To ensure that this only applies to the first two panels, we use
 1:2 in the first argument of `mutate`. This first argument specifies which 
 features to apply the new formula to.
@@ -118,4 +131,3 @@ sim <- sim |>
 sample(sim) |>
   exper_lineplot()
 ```
-:::

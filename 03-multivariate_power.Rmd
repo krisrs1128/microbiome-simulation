@@ -1,24 +1,5 @@
 # Multivariate Power Analysis
 
-<script>
-function myFunction(id) {
-    var x = document.getElementById(id);
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-</script>
-<style>
-div .info {
-  margin: auto;
-  background-color: #EAF0FB;
-  width: 95%;
-  padding: 10px;
-}
-</style>
-
 How can we choose sample sizes in more complex bioinformatic workflows, where we
 simultaneously analyze many features (taxa, genes, metabolites) in concert?
 While traditional, analytical power analysis often breaks down, simulation can
@@ -28,26 +9,12 @@ good sample size for a sparse partial least squares discriminant analysis
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
+set.seed(202406)
 ```
 
 First, we'll load the required packages. Relative to our first session, the only
 additional package that we need is `mixOmics`. This can be installed using
 `BiocManager::install('mixOmics')`.
-
-```{r}
-suppressPackageStartupMessages({
-  library(SummarizedExperiment)
-  library(dplyr)
-  library(gamboostLSS)
-  library(glue)
-  library(mixOmics)
-  library(ggplot2)
-  library(MIGsim)
-  library(scDesigner)
-})
-set.seed(202406)
-theme_set(theme_classic())
-```
 
 ## Interpreting PLS-DA
 
@@ -76,12 +43,8 @@ plotVar(result$fit, cutoff = 0.4, cex = 10)
 **Exercise**: Discuss the output of `plotIndiv`. How does `plotVar` shape
 your interpretation?
 
-<button onclick="myFunction(&#39;q0&#39;)">
-Show solution
-</button>
 
-::: {#q0 style="display:none"}
-The first two dimensions of the sPLS-DA pick on distinctions between the T1D
+**Solution**: The first two dimensions of the sPLS-DA pick on distinctions between the T1D
 (orange) and control (blue) groups. The variance by these first two dimensions
 is relatively small
 -- variation in protein signatures may not be easiliy captured in two dimensions
@@ -93,7 +56,6 @@ tend to have higher levels of
 [p21333](https://www.uniprot.org/uniprotkb/P21333/entry) and
 [q8wz42](https://www.uniprot.org/uniprotkb/Q8WZ42/entry) compared to the
 controls. 
-:::
 
 ## Estimation
 
@@ -142,17 +104,13 @@ sim_exper <- sample(simulator) # and then run these two lines
 correlation_hist(t1d, sim_exper) #
 ```
 
-<button onclick="myFunction(&#39;q1&#39;)">
-Show solution
-</button>
-
-::: {#q1 style="display:none"}
-For our coupla, we can use a covariance estimator of [Cai and Liu
+**Solution**: For our coupla, we can use a covariance estimator of [Cai and Liu
 (2011)](https://www.tandfonline.com/doi/abs/10.1198/jasa.2011.tm10560), that is
 suited for high dimensions. Larger values of `thr` will increase the stability
 of our estimates, but at the cost of potentially missing or weakening true
 correlations. In line with this point, our new simulated correlations are more
 concentrated.
+
 ```{r}
 simulator <- setup_simulator(
   t1d,
@@ -219,11 +177,7 @@ for (i in seq_len(nrow(config))) {
 }
 ```
 
-<button onclick="myFunction(&#39;power_loop&#39;)">
-Show solution
-</button>
-::: {#power_loop style="display:none"}
-To define nulls, we mutate the weakest proteins so that there is no longer any
+**Solution**: To define nulls, we mutate the weakest proteins so that there is no longer any
 association with T1D: `link = ~ 1` instead of `link = ~ outcome2`. To speed up
 the computation, we organized the `mutate` calls so that we don't need to
 re-estimate proteins whose effects were removed in a previous iteration.
@@ -254,12 +208,7 @@ ggplot(config, aes(sample_size, metrics, col = factor(n_null))) +
 like this could help you justify making some experimental investments over
 others?
 
-<button onclick="myFunction(&#39;discussion&#39;)">
-Show solution
-</button>
-
-::: {#discussion style="display:none"}
-Reading across facets from top left to bottom right, power decreases when the
+**Solution**: Reading across facets from top left to bottom right, power decreases when the
 number of null proteins increases. It seems that sPLS-DA can benefit from having
 many weakly associated features. While power is sometimes high in low sample
 sizes, the variance can be quite large. In all settings, there is a noticeable
@@ -269,4 +218,3 @@ then we may already achieve good power with ~ 100 samples. However, if we
 imagine our effect might be sparser in our future experiment, then this figure
 would give us good justification for arguing for a larger number of samples, in
 order to ensure we can discover a disease-associated proteomics signature.
-:::

@@ -1,26 +1,8 @@
 # Simulating Differential Abundance
 
-<script>
-function myFunction(id) {
-    var x = document.getElementById(id);
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-</script>
-<style>
-div .info {
-  margin: auto;
-  background-color: #EAF0FB;
-  width: 95%;
-  padding: 10px;
-}
-</style>
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+set.seed(202406)
 ```
 
 Before we consider simulating entire microbial communities, with their complex
@@ -35,22 +17,6 @@ modeling, which we'll explore in the next session.
 Let's load the necessary packages. Instructions for `scDesigner` and `MIGsim`
 can be found in the pre-workshop announcement.  `SummarizedExperiment` is on
 Bioconductor, and all other packages are on CRAN.
-
-```{r}
-suppressPackageStartupMessages({
-  library(MIGsim)
-  library(SummarizedExperiment)
-  library(dplyr)
-  library(gamboostLSS)
-  library(ggdist)
-  library(ggplot2)
-  library(glue)
-  library(splines)
-  library(scDesigner)
-})
-set.seed(202406)
-theme_set(theme_classic())
-```
 
 Let's train a simulator to fit the Atlas dataset. We'll use two
 covariates. `bmi_group` is the main covariate of interest -- we want to see how
@@ -93,18 +59,13 @@ ggplot(combined) +
   facet_grid(. ~ source)
 ```
 
-<button onclick="myFunction(&#39;q_discussion&#39;)">
-Show solution
-</button>
-::: {#q_discussion style="display:none"}
-The clearest difference is that, for these more abundant taxa, there there are
+**Solution**: The clearest difference is that, for these more abundant taxa, there there are
 not many low or zero counts. In contrast, the simulated data tend to have a long
 left tail (the many outlier circles on the left side of the boxplots),
 reflecting the fact that samples from the negative binomial distribution usually
 have support for all counts $\geq 0$.  Nonetheless, the ordering of abundances
 between the groups typically agrees between the real and simulated data. The
 interquartile ranges for each taxon also seem to roughly match.
-:::
 
 ## Power Analysis Loop
 
@@ -156,18 +117,14 @@ for (i in seq_len(nrow(config))) {
 power analysis? Based on your earlier critique of the simulator, do you think
 the estimated power here is conservative, liberal, or about right?
 
-<button onclick="myFunction(&#39;q_critique&#39;)">
-Show solution
-</button>
-::: {#q_critique style="display:none"}
-We'll use the `stat_pointinterval` function from the `ggdist` package to
+**Solution**: We'll use the `stat_pointinterval` function from the `ggdist` package to
 visualize the range of empirical power estimates across sample sizes. We can see
 that the average false discovery proportion is always controlled below 0.3,
 though the variance in this proportion can be quite high. We can also see that
 we would have quite good power with $n \geq 625$ samples, but the worst case
 scenarios can be quite poor for anything with fewer samples.
 
-```{r, visualize-power, eval = FALSE}
+```{r, visualize-da-power, eval = FALSE}
 bind_rows(results, .id = "run") |>
   left_join(config) |>
   ggplot() +
@@ -179,4 +136,3 @@ We expect that this result is somewhat conservative. This is because the
 original data have more symmetric distributions than our simulation, so limma's
 transformation to normality is likely easier to accomplish than in our more 
 highly skewed data.
-:::

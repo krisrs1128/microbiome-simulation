@@ -1,22 +1,4 @@
 # Integrative Simulation
-<script>
-function myFunction(id) {
-    var x = document.getElementById(id);
-    if (x.style.display === "none") {
-        x.style.display = "block";
-    } else {
-        x.style.display = "none";
-    }
-}
-</script>
-<style>
-div .info {
-  margin: auto;
-  background-color: #EAF0FB;
-  width: 95%;
-  padding: 10px;
-}
-</style>
 
 Integration can be a subtle exercise. We need to balance our interest in seeing
 similarities between datasets with the risk of making things seem more similar
@@ -32,18 +14,8 @@ As usual, let's load the libraries we'll need. Remember that instructions for
 installing `MIGsim` and `scDesigner` are documented in the repository
 [README](https://github.com/krisrs1128/intro-to-simulation/).
 
-```{r}
-suppressPackageStartupMessages({
-  library(MIGsim)
-  library(SummarizedExperiment)
-  library(gamboostLSS)
-  library(ggplot2)
-  library(glue)
-  library(mixOmics)
-  library(purrr)
-  library(scDesigner)
-})
-theme_set(theme_classic())
+```{r, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
 set.seed(20240603)
 ```
 
@@ -117,11 +89,7 @@ contrast_boxplot(anaerobic, anaerobic_sim)
 used to compare and contrast the simulator with real data. What conclusions can
 you draw?
 
-<button onclick="myFunction(&#39;q-vis&#39;)">
-Show solution
-</button>
-::: {#q-vis style="display:none"}
-There are many possible answers:
+**Solution**: There are many possible answers:
 
 * Boxplots across taxa with different overall abundance levels.
 * Analogous histograms or CDF plots, to show the entire distributions, rather than just summarized quantiles.
@@ -200,15 +168,12 @@ vector in the list `x` below? What about the mean of the 10 smallest elements?
 ```{r}
 x <- list(a = rnorm(100), b = rnorm(100, 1))
 ```
-<button onclick="myFunction(&#39;q-map&#39;)">
-Show solution
-</button>
-::: {#q-map style="display:none"}
+
+**Solution**:
 ```{r}
 map(x, mean)
 map(x, ~ mean(sort(.)[1:10]))
 ```
-:::
 
 ## Vertical Integration
 
@@ -309,11 +274,7 @@ null_simulator <- simulator
 # null_simulator[[1]] <- ???
 ```
 
-<button onclick="myFunction(&#39;q-spls&#39;)">
-Show solution
-</button>
-::: {#q-spls style="display:none"}
-We need to define a new link that no longer depends on `Category`. One solution
+**Solution**: We need to define a new link that no longer depends on `Category`. One solution
 is to modify the existing simulator in place using `mutate`.
 ```{r, eval = FALSE}
 null_simulator[[1]] <- simulator[[1]] |>
@@ -326,7 +287,6 @@ new simulator from scratch.
 null_simulator[[1]] <- setup_simulator(icu[[1]], ~1, ~ GaussianLSS()) |>
   estimate(nu = 0.05)
 ```
-:::
 
 We can rerun the integrative analysis using the modified simulator. Somewhat
 surprisingly, the disease association in the bacteria group hasn't been erased.
