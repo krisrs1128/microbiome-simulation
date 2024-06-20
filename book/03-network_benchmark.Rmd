@@ -114,7 +114,7 @@ pairs of taxa looks like.
 taxa <- rownames(amgut)[c(14, 25)]
 pivot_experiment(amgut) |>
   filter(feature %in% taxa) |>
-  tidyr::pivot_wider(names_from = feature) |>
+  pivot_wider(names_from = feature) |>
   ggplot() +
   geom_point(aes(log(1 + .data[[taxa[1]]]), log(1 + .data[[taxa[2]]])))
 ```
@@ -205,8 +205,8 @@ for (r in seq_along(example_rho)) {
 p1 <- reshape_correlations(rho_hat) |>
   filter(value < 1) |>
   ggplot() +
-  geom_jitter(aes(truth, value, col = method), width = 0.05, size = 0.8, alpha = 0.7) +
   geom_abline(slope = 1) +
+  geom_jitter(aes(truth, value, col = method), width = 0.05, size = 0.5, alpha = 0.5) +
   facet_wrap(~ reorder(structure, truth), scales = "free", ncol = 5) +
   guides(col = guide_legend(override.aes = list(size = 5, alpha = 1))) +
   scale_color_brewer(palette = "Set2") +
@@ -240,7 +240,7 @@ p2 <- map_dfr(example_rho, ~ {
     fill = value
   )) +
   scale_x_discrete(expand = c(0, 0)) +
-  labs(x = NULL, y = NULL, title = "(A)") +
+  labs(x = NULL, y = NULL, title = "(A)", fill = "Correlation", col = "Correlation") +
   scale_y_discrete(expand = c(0, 0)) +
   scale_fill_scico(palette = "vik", direction = -1) +
   scale_color_scico(palette = "vik", direction = -1) +
@@ -250,7 +250,7 @@ p2 <- map_dfr(example_rho, ~ {
 (p2 / p1)  +
   plot_layout(heights = c(1, 2))
 
-ggsave("~/Downloads/network_comparison.png", height = 6, width = 9)
+ggsave("~/Downloads/network_comparison.png", height = 4, width = 9)
 ```
 
 

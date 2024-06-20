@@ -33,7 +33,12 @@ components plot:
 
 ```{r, pca-anaerobic}
 data(anaerobic)
-pca_batch(anaerobic)
+pca_batch(anaerobic, facet = FALSE) +
+  scale_color_manual(values = c("#191C59", "#bc0c3c")) +
+  labs(col = "Treatment", shape = "Batch")
+```
+```{r, echo = FALSE, eval = FALSE}
+ggsave("~/Downloads/original_batch_effects.png", width = 5, height = 3)
 ```
 
 You can learn more about the general microbiome batch effect integration problem
@@ -126,8 +131,9 @@ group seems from the others. It's a subtle effect, definitely smaller than the
 batch effect, but also separate enough that we should be able to preserve it.
 
 ```{r}
+p <- list()
 anaerobic_sim <- sample(simulator, new_data = imaginary_design)
-pca_batch(anaerobic_sim)
+p[["sim"]] <- pca_batch(anaerobic_sim)
 ```
 
 We've defined a `batch_correct` wrapper function that implements either the
@@ -141,8 +147,33 @@ total number of samples available. We've included the code for generating the
 for the `MIGsim` package. Can you find settings that lead either method astray?
 
 ```{r}
-pca_batch(batch_correct(anaerobic_sim, "ruv"))
-pca_batch(batch_correct(anaerobic_sim, "combat"))
+p[["ruv"]] <- pca_batch(batch_correct(anaerobic_sim, "ruv"))
+p[["combat"]] <- pca_batch(batch_correct(anaerobic_sim, "combat"))
+```
+
+```{r, echo = FALSE}
+map_dfr(p, ~ .$data, .id = "source") |>
+  mutate(
+    source = forcats::fct_recode(source, ComBat = "combat", `RUV-III` = "ruv", Simulation = "sim"),
+    source = factor(source, levels = c("Simulation", "RUV-III", "ComBat"))
+    ) |>
+  ggplot(aes(col = factor(treatment))) +
+  geom_vline(xintercept =  0) +
+  geom_hline(yintercept =  0) +
+  geom_point(aes(PC1, PC2)) +
+  scale_color_manual(values = c("#191C59", "#f20732", "#04B2D9")) +
+  labs(col = "Treatment") +
+  facet_grid(source ~ reorder(batch, PC1))
+ggsave("~/Downloads/batch_corrected.png", width = 8, height = 3, dpi=400)
+```
+
+```{r}
+prediction_errors <- function(df, source_) {
+  y_hat <- predict(lda(treatment ~ PC1 + PC2, data = df), type = "response")$class
+  table(current$treatment, y_hat)
+}
+
+map(p, ~ prediction_errors(.$data))
 ```
 
 ## Interlude: Using map
