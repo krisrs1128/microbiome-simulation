@@ -170,7 +170,7 @@ ggsave("~/Downloads/batch_corrected.png", width = 8, height = 3, dpi=400)
 ```{r}
 prediction_errors <- function(df, source_) {
   y_hat <- predict(lda(treatment ~ PC1 + PC2, data = df), type = "response")$class
-  table(current$treatment, y_hat)
+  table(df$treatment, y_hat)
 }
 
 map(p, ~ prediction_errors(.$data))
@@ -290,8 +290,8 @@ icu_sim <- join_copula(simulator, copula_adaptive()) |>
   sample() |>
   split_assays()
 
-fit <- exper_splsda(icu_sim)
-plotIndiv(fit)
+fit_sim <- exper_splsda(icu_sim)
+plotIndiv(fit_sim)
 fit$weights
 ```
 
@@ -340,15 +340,34 @@ relationships.
 icu_sim <- join_copula(null_simulator, copula_adaptive()) |>
   sample() |>
   split_assays()
-fit <- exper_splsda(icu_sim)
+fit_null <- exper_splsda(icu_sim)
 plotIndiv(fit)
-fit$weights
-
-# only fungal and virus
-fit <- exper_splsda(icu_sim[2:3])
-fit$weights
+fit_null$weights
 ```
 
+```{r, echo = FALSE}
+bind_rows(
+  "Original Data" = plotIndiv(fit)$graph$data |> rownames_to_column("Sample"),
+  "Full Simulation" = plotIndiv(fit_sim)$graph$data |> rownames_to_column("Sample"),
+  "No Effect on Bacteria" = plotIndiv(fit_null)$graph$data |> rownames_to_column("Sample"),
+  .id = "source"
+) |>
+  mutate(source = factor(source, levels = c("Original Data", "Full Simulation", "No Effect on Bacteria"))) |>
+  ggplot() +
+    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0) +
+    geom_point(aes(x, y, col = group), size = 0.8) +
+    scale_color_manual(values = c("#F28241", "#038C7F", "#D96CB3", "#3097BF")) +
+    facet_grid(source ~ Block) +
+    guides(col = guide_legend(nrow = 2, override.aes = list(size = 2))) +
+    labs(col = "Group", x = "multiblock sPLS-DA Dim. 1", y = "multiblock sPLS-DA Dim. 2") +
+    theme(
+      panel.border = element_rect(fill = NA), 
+      legend.position = "bottom",
+      strip.text.y = element_text(angle = 0)
+    )
+ggsave("~/Downloads/multiblock_calibration.png", width = 6, height = 4)
+```
 
 ```{r}
 sessionInfo()

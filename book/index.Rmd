@@ -36,6 +36,7 @@ suppressPackageStartupMessages({
   library(SpiecEasi)
   library(SummarizedExperiment)
   library(dplyr)
+  library(forcats)
   library(gamboostLSS)
   library(ggdist)
   library(ggplot2)
