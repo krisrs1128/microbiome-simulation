@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Simulation for Microbiome Analysis</title>
+  <meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="generator" content="bookdown 0.39.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Simulation for Microbiome Analysis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Simulation for Microbiome Analysis" />
+  
+  <meta name="twitter:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
+
+
+<meta name="date" content="2024-06-21" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+
+<link rel="next" href="simulating-differential-abundance.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Simulation for Microbiome Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#setup"><i class="fa fa-check"></i><b>1.1</b> Setup</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#using-summarizedexperiment"><i class="fa fa-check"></i><b>1.2</b> Using <code>SummarizedExperiment</code></a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#warm-up-a-gaussian-example"><i class="fa fa-check"></i><b>1.3</b> Warm-up: A Gaussian Example</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html"><i class="fa fa-check"></i><b>2</b> Simulating Differential Abundance</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#critique"><i class="fa fa-check"></i><b>2.1</b> Critique</a></li>
+<li class="chapter" data-level="2.2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#power-analysis-loop"><i class="fa fa-check"></i><b>2.2</b> Power Analysis Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html"><i class="fa fa-check"></i><b>3</b> Multivariate Power Analysis</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#interpreting-pls-da"><i class="fa fa-check"></i><b>3.1</b> Interpreting PLS-DA</a></li>
+<li class="chapter" data-level="3.2" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#estimation"><i class="fa fa-check"></i><b>3.2</b> Estimation</a></li>
+<li class="chapter" data-level="3.3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#evaluation"><i class="fa fa-check"></i><b>3.3</b> Evaluation</a></li>
+<li class="chapter" data-level="3.4" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#pls-da-power-analysis"><i class="fa fa-check"></i><b>3.4</b> PLS-DA Power Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="microbiome-networks.html"><a href="microbiome-networks.html"><i class="fa fa-check"></i><b>4</b> Microbiome Networks</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="microbiome-networks.html"><a href="microbiome-networks.html#estimation-1"><i class="fa fa-check"></i><b>4.1</b> Estimation</a></li>
+<li class="chapter" data-level="4.2" data-path="microbiome-networks.html"><a href="microbiome-networks.html#evaluation-1"><i class="fa fa-check"></i><b>4.2</b> Evaluation</a></li>
+<li class="chapter" data-level="4.3" data-path="microbiome-networks.html"><a href="microbiome-networks.html#block-covariance"><i class="fa fa-check"></i><b>4.3</b> Block Covariance</a></li>
+<li class="chapter" data-level="4.4" data-path="microbiome-networks.html"><a href="microbiome-networks.html#generalization"><i class="fa fa-check"></i><b>4.4</b> Generalization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="integrative-simulation.html"><a href="integrative-simulation.html"><i class="fa fa-check"></i><b>5</b> Integrative Simulation</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="integrative-simulation.html"><a href="integrative-simulation.html#horizontal-integration"><i class="fa fa-check"></i><b>5.1</b> Horizontal Integration</a></li>
+<li class="chapter" data-level="5.2" data-path="integrative-simulation.html"><a href="integrative-simulation.html#interlude-using-map"><i class="fa fa-check"></i><b>5.2</b> Interlude: Using map</a></li>
+<li class="chapter" data-level="5.3" data-path="integrative-simulation.html"><a href="integrative-simulation.html#vertical-integration"><i class="fa fa-check"></i><b>5.3</b> Vertical Integration</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Simulation for Microbiome Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="header">
+<h1 class="title">Simulation for Microbiome Analysis</h1>
+<p class="author"><em>Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao</em></p>
+<p class="date"><em>2024-06-21</em></p>
+</div>
+<div id="introduction" class="section level1 hasAnchor" number="1">
+<h1><span class="header-section-number">Chapter 1</span> Introduction<a href="index.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>This website accompanies the review,
+<a href="">``Leveraging Simulation in Microbiome Data Analysis’’</a>. All examples
+discussed in the case studies there can be reproduced by running the code below,
+and we have also included additional introductory material about some packages
+that simplify our analysis.</p>
+<div id="setup" class="section level2 hasAnchor" number="1.1">
+<h2><span class="header-section-number">1.1</span> Setup<a href="index.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The <code>MIGsim</code> package below provides wrapper functions that we will use
+throughout these book. You can install it by running:</p>
+<div class="sourceCode" id="cb1"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb1-1"><a href="index.html#cb1-1" tabindex="-1"></a>devtools<span class="sc">::</span><span class="fu">install_github</span>(<span class="st">&quot;krisrs1128/intro-to-simulation/MIGsim&quot;</span>)</span></code></pre></div>
+<p>This block loads all packages that will be used in this book.</p>
+<div class="sourceCode" id="cb2"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb2-1"><a href="index.html#cb2-1" tabindex="-1"></a><span class="fu">suppressPackageStartupMessages</span>({</span>
+<span id="cb2-2"><a href="index.html#cb2-2" tabindex="-1"></a>  <span class="fu">library</span>(CovTools)</span>
+<span id="cb2-3"><a href="index.html#cb2-3" tabindex="-1"></a>  <span class="fu">library</span>(SpiecEasi)</span>
+<span id="cb2-4"><a href="index.html#cb2-4" tabindex="-1"></a>  <span class="fu">library</span>(SummarizedExperiment)</span>
+<span id="cb2-5"><a href="index.html#cb2-5" tabindex="-1"></a>  <span class="fu">library</span>(dplyr)</span>
+<span id="cb2-6"><a href="index.html#cb2-6" tabindex="-1"></a>  <span class="fu">library</span>(forcats)</span>
+<span id="cb2-7"><a href="index.html#cb2-7" tabindex="-1"></a>  <span class="fu">library</span>(gamboostLSS)</span>
+<span id="cb2-8"><a href="index.html#cb2-8" tabindex="-1"></a>  <span class="fu">library</span>(ggdist)</span>
+<span id="cb2-9"><a href="index.html#cb2-9" tabindex="-1"></a>  <span class="fu">library</span>(ggplot2)</span>
+<span id="cb2-10"><a href="index.html#cb2-10" tabindex="-1"></a>  <span class="fu">library</span>(glue)</span>
+<span id="cb2-11"><a href="index.html#cb2-11" tabindex="-1"></a>  <span class="fu">library</span>(mixOmics)</span>
+<span id="cb2-12"><a href="index.html#cb2-12" tabindex="-1"></a>  <span class="fu">library</span>(patchwork)</span>
+<span id="cb2-13"><a href="index.html#cb2-13" tabindex="-1"></a>  <span class="fu">library</span>(purrr)</span>
+<span id="cb2-14"><a href="index.html#cb2-14" tabindex="-1"></a>  <span class="fu">library</span>(scico)</span>
+<span id="cb2-15"><a href="index.html#cb2-15" tabindex="-1"></a>  <span class="fu">library</span>(splines)</span>
+<span id="cb2-16"><a href="index.html#cb2-16" tabindex="-1"></a>  <span class="fu">library</span>(tibble)</span>
+<span id="cb2-17"><a href="index.html#cb2-17" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)</span>
+<span id="cb2-18"><a href="index.html#cb2-18" tabindex="-1"></a>  <span class="fu">library</span>(MIGsim)</span>
+<span id="cb2-19"><a href="index.html#cb2-19" tabindex="-1"></a>  <span class="fu">library</span>(scDesigner)</span>
+<span id="cb2-20"><a href="index.html#cb2-20" tabindex="-1"></a>})</span>
+<span id="cb2-21"><a href="index.html#cb2-21" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span></code></pre></div>
+</div>
+<div id="using-summarizedexperiment" class="section level2 hasAnchor" number="1.2">
+<h2><span class="header-section-number">1.2</span> Using <code>SummarizedExperiment</code><a href="index.html#using-summarizedexperiment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p><code>scDesigner</code>’s interface is built with <code>SummarizedExperiment</code> in mind. These
+data structures simplify manipulation of sequencing experiments. For example,
+they distinguish between molecule counts, which are stored in the <code>assay</code> slot,
+and sample descriptors, which are stored in <code>colData</code>. At the same time, these
+separate components are nicely synchronized. For example, subsetting samples
+from one of these tables automatically subsets the other.</p>
+<p>The line below loads a small subset of genera from the
+<a href="https://microbiome.github.io/tutorials/Atlas.html">Atlas</a> experiment, which
+profiled the gut microbiomes from 1006 healthy adults in Western Europe.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" tabindex="-1"></a><span class="fu">data</span>(atlas)</span>
+<span id="cb3-2"><a href="index.html#cb3-2" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rowData</span>(atlas)<span class="sc">$</span>Phylum)</span></code></pre></div>
+<pre><code>## 
+## Actinobacteria  Bacteroidetes     Firmicutes 
+##              1              2             21</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" tabindex="-1"></a><span class="fu">mean</span>(atlas<span class="sc">$</span>age)</span></code></pre></div>
+<pre><code>## [1] 45.15629</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="index.html#cb7-1" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">colData</span>(atlas)<span class="sc">$</span>bmi_group <span class="sc">==</span> <span class="st">&quot;obese&quot;</span></span>
+<span id="cb7-2"><a href="index.html#cb7-2" tabindex="-1"></a>abundances <span class="ot">&lt;-</span> <span class="fu">assay</span>(atlas)</span>
+<span id="cb7-3"><a href="index.html#cb7-3" tabindex="-1"></a><span class="fu">rowMeans</span>(abundances[, ix])</span></code></pre></div>
+<pre><code>##                   Allistipes et rel.          Anaerostipes caccae et rel.         Bacteroides vulgatus et rel. 
+##                            289.85263                            123.84211                           1235.44211 
+##                      Bifidobacterium     Bryantella formatexigens et rel.       Butyrivibrio crossotus et rel. 
+##                            120.72982                            137.74737                            188.54035 
+##        Clostridium cellulosi et rel.           Clostridium leptum et rel.           Clostridium nexile et rel. 
+##                            437.13684                            129.88070                             73.69474 
+##     Clostridium orbiscindens et rel.       Clostridium sphenoides et rel.        Clostridium symbiosum et rel. 
+##                            231.82807                            139.35439                            331.90175 
+##         Coprococcus eutactus et rel.        Dorea formicigenerans et rel.    Lachnospira pectinoschiza et rel. 
+##                            222.15088                            176.07368                            127.75439 
+##   Oscillospira guillermondii et rel. Outgrouping clostridium cluster XIVa          Ruminococcus bromii et rel. 
+##                           1560.27368                             91.93684                            100.09123 
+##        Ruminococcus callidus et rel.           Ruminococcus obeum et rel.       Sporobacter termitidis et rel. 
+##                            103.61754                            449.28421                            423.71579 
+##     Subdoligranulum variable at rel.           Uncultured Clostridiales I          Uncultured Clostridiales II 
+##                            442.34737                            191.28772                            152.83509</code></pre>
+<p><strong>Exercise</strong>: To practice working with <code>SummarizedExperiment</code>
+objects, try answering:</p>
+<ul>
+<li>How many genera are available in this experiment object?</li>
+<li>What was the most common phylum in this dataset?</li>
+<li>What was the average participant age?</li>
+<li>What was the average abundance of <code>Allistipes et rel.</code> among people in the <code>obese</code> BMI group?</li>
+</ul>
+<p><em>Hint: The most important functions are <code>assay()</code>, <code>rowData()</code>, and <code>colData()</code>.</em></p>
+<p><strong>Solution</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="index.html#cb9-1" tabindex="-1"></a><span class="fu">nrow</span>(atlas)</span></code></pre></div>
+<pre><code>## [1] 24</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="index.html#cb11-1" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rowData</span>(atlas)<span class="sc">$</span>Phylum)</span></code></pre></div>
+<pre><code>## 
+## Actinobacteria  Bacteroidetes     Firmicutes 
+##              1              2             21</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="index.html#cb13-1" tabindex="-1"></a><span class="fu">mean</span>(atlas<span class="sc">$</span>age)</span></code></pre></div>
+<pre><code>## [1] 45.15629</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="index.html#cb15-1" tabindex="-1"></a>atlas[, atlas<span class="sc">$</span>bmi_group <span class="sc">==</span> <span class="st">&quot;obese&quot;</span>] <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="index.html#cb15-2" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="index.html#cb15-3" tabindex="-1"></a>  <span class="fu">rowMeans</span>()</span></code></pre></div>
+<pre><code>##                   Allistipes et rel.          Anaerostipes caccae et rel.         Bacteroides vulgatus et rel. 
+##                            289.85263                            123.84211                           1235.44211 
+##                      Bifidobacterium     Bryantella formatexigens et rel.       Butyrivibrio crossotus et rel. 
+##                            120.72982                            137.74737                            188.54035 
+##        Clostridium cellulosi et rel.           Clostridium leptum et rel.           Clostridium nexile et rel. 
+##                            437.13684                            129.88070                             73.69474 
+##     Clostridium orbiscindens et rel.       Clostridium sphenoides et rel.        Clostridium symbiosum et rel. 
+##                            231.82807                            139.35439                            331.90175 
+##         Coprococcus eutactus et rel.        Dorea formicigenerans et rel.    Lachnospira pectinoschiza et rel. 
+##                            222.15088                            176.07368                            127.75439 
+##   Oscillospira guillermondii et rel. Outgrouping clostridium cluster XIVa          Ruminococcus bromii et rel. 
+##                           1560.27368                             91.93684                            100.09123 
+##        Ruminococcus callidus et rel.           Ruminococcus obeum et rel.       Sporobacter termitidis et rel. 
+##                            103.61754                            449.28421                            423.71579 
+##     Subdoligranulum variable at rel.           Uncultured Clostridiales I          Uncultured Clostridiales II 
+##                            442.34737                            191.28772                            152.83509</code></pre>
+</div>
+<div id="warm-up-a-gaussian-example" class="section level2 hasAnchor" number="1.3">
+<h2><span class="header-section-number">1.3</span> Warm-up: A Gaussian Example<a href="index.html#warm-up-a-gaussian-example" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>Here’s a toy dataset to illustrate the main idea of GAMLSS. Each panel in the
+plot below represents a different feature (e.g., taxon, gene, metabolite…).
+The abundance varies smoothly over time, and in the first three panels, the
+trends differ by group assignment.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="index.html#cb17-1" tabindex="-1"></a><span class="fu">data</span>(exper_ts)</span>
+<span id="cb17-2"><a href="index.html#cb17-2" tabindex="-1"></a><span class="fu">exper_lineplot</span>(exper_ts)</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
+<pre><code>## Warning: Removed 12 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>We can try to approximate these data with a new simulator. The <code>setup_simulator</code>
+command takes the template <code>SummarizedExperiment</code> object as its first argument.
+The second gives an R formula syntax-style specification of GAMLSS parameters
+(mean and SD, in this case) dependence on sample properties. The last argument
+gives the type of model to fit, in this case, a Gaussian location-shape-scale
+model.</p>
+<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="index.html#cb20-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(exper_ts, <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>) <span class="sc">*</span> group, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb20-2"><a href="index.html#cb20-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<pre><code>## [===============================================================&gt;----------------------------------------------------------------] 3/6 ETA:
+## 0s[====================================================================================&gt;-------------------------------------------] 4/6 ETA:
+## 0s[==========================================================================================================&gt;---------------------] 5/6 ETA:
+## 0s[================================================================================================================================] 6/6 ETA: 0s</code></pre>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="index.html#cb22-1" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="index.html#cb22-2" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
+<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
+<p><strong>Exercise</strong>: Right now, each panel allows for an interaction between the trend and
+group type. Can you define a simulator where the groups have no effect on the
+trends for the first two panels? This is the basis for defining synthetic
+negative controls.</p>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="index.html#cb25-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb25-2"><a href="index.html#cb25-2" tabindex="-1"></a>  scDesigner<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb25-3"><a href="index.html#cb25-3" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb25-4"><a href="index.html#cb25-4" tabindex="-1"></a>     <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)</span>
+<span id="cb25-5"><a href="index.html#cb25-5" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb25-6"><a href="index.html#cb25-6" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
+<span id="cb25-7"><a href="index.html#cb25-7" tabindex="-1"></a></span>
+<span id="cb25-8"><a href="index.html#cb25-8" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb25-9"><a href="index.html#cb25-9" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<p><strong>Solution</strong>: We can modify the formula so that it no longer has an interaction
+with group. We just need to remove the <code>* group</code> from the original formula in our updated
+link function. To ensure that this only applies to the first two panels, we use
+1:2 in the first argument of <code>mutate</code>. This first argument specifies which
+features to apply the new formula to.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="index.html#cb26-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb26-2"><a href="index.html#cb26-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="index.html#cb26-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
+<span id="cb26-4"><a href="index.html#cb26-4" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="index.html#cb26-5" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb26-6"><a href="index.html#cb26-6" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
+<pre><code>## Warning: Removed 6 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="index.html#cb29-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.4.0 (2024-04-24)
+## Platform: aarch64-apple-darwin20
+## Running under: macOS Ventura 13.4
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: Australia/Melbourne
+## tzcode source: internal
+## 
+## attached base packages:
+##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1               XVector_0.44.0                  SingleCellExperiment_1.26.0    
+##  [5] scDesigner_0.0.0.9000           MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                   
+##  [9] scico_1.5.0                     purrr_1.0.2                     patchwork_1.2.0                 mixOmics_6.28.0                
+## [13] lattice_0.22-6                  MASS_7.3-60.2                   glue_1.7.0                      ggplot2_3.5.1                  
+## [17] ggdist_3.3.2                    gamboostLSS_2.0-7               mboost_2.9-10                   stabs_0.6-4                    
+## [21] forcats_1.0.0                   dplyr_1.1.4                     SummarizedExperiment_1.34.0     Biobase_2.64.0                 
+## [25] GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                  S4Vectors_0.42.0               
+## [29] BiocGenerics_0.50.0             MatrixGenerics_1.16.0           matrixStats_1.3.0               SpiecEasi_1.1.3                
+## [33] CovTools_0.5.4                 
+## 
+## loaded via a namespace (and not attached):
+##   [1] libcoin_1.0-10          RColorBrewer_1.1-3      rstudioapi_0.16.0       jsonlite_1.8.8          shape_1.4.6.1          
+##   [6] magrittr_2.0.3          farver_2.1.2            rmarkdown_2.27          fs_1.6.4                zlibbioc_1.50.0        
+##  [11] vctrs_0.6.5             memoise_2.0.1           base64enc_0.1-3         progress_1.2.3          htmltools_0.5.8.1      
+##  [16] S4Arrays_1.4.1          distributional_0.4.0    SparseArray_1.4.8       Formula_1.2-5           sass_0.4.9             
+##  [21] pracma_2.4.4            bslib_0.7.0.9000        htmlwidgets_1.6.4       plyr_1.8.9              copula_1.1-3           
+##  [26] cachem_1.1.0            igraph_2.0.3            lifecycle_1.0.4         minpack.lm_1.2-4        iterators_1.0.14       
+##  [31] pkgconfig_2.0.3         Matrix_1.7-0            R6_2.5.1                fastmap_1.2.0           GenomeInfoDbData_1.2.12
+##  [36] rbibutils_2.2.16        numDeriv_2016.8-1.1     digest_0.6.35           colorspace_2.1-0        rARPACK_0.11-0         
+##  [41] RSpectra_0.16-1         kde1d_1.0.7             ellipse_0.5.0           labeling_0.4.3          pspline_1.0-20         
+##  [46] fansi_1.0.6             nnls_1.5                httr_1.4.7              abind_1.4-5             compiler_4.4.0         
+##  [51] gsl_2.1-8               withr_3.0.0             doParallel_1.0.17       BiocParallel_1.38.0     highr_0.11             
+##  [56] DelayedArray_0.30.1     corpcor_1.6.10          scatterplot3d_0.3-44    tools_4.4.0             ape_5.8                
+##  [61] quadprog_1.5-8          stabledist_0.7-1        nlme_3.1-164            inum_1.0-5              grid_4.4.0             
+##  [66] reshape2_1.4.4          generics_0.1.3          gtable_0.3.5            flare_1.7.0.1           hms_1.1.3              
+##  [71] huge_1.3.5              utf8_1.2.4              ggrepel_0.9.5           foreach_1.5.2           pillar_1.9.0           
+##  [76] stringr_1.5.1           yulab.utils_0.1.4       limma_3.60.2            partykit_1.2-20         treeio_1.28.0          
+##  [81] survival_3.7-0          tidyselect_1.2.1        ADGofTest_0.3           locfit_1.5-9.9          knitr_1.47             
+##  [86] gridExtra_2.3           bookdown_0.39.1         edgeR_4.2.0             xfun_0.44               expm_0.999-9           
+##  [91] statmod_1.5.0           geigen_2.3              stringi_1.8.4           VGAM_1.1-11             UCSC.utils_1.0.0       
+##  [96] lazyeval_0.2.2          yaml_2.3.8              evaluate_0.23           codetools_0.2-20        SHT_0.1.8              
+## [101] cli_3.6.2               rpart_4.1.23            Rdpack_2.6              munsell_0.5.1           jquerylib_0.1.4        
+## [106] pulsar_0.3.11           Rcpp_1.0.12             rngWELL_0.10-9          randtoolbox_2.0.4       assertthat_0.2.1       
+## [111] rgl_1.3.1               prettyunits_1.2.0       gamlss.dist_6.1-1       glmnet_4.1-8            tidytree_0.4.6         
+## [116] mvtnorm_1.2-5           scales_1.3.0            pcaPP_2.0-4             insight_0.20.1          crayon_1.5.2           
+## [121] shapes_1.2.7            rlang_1.1.4             rvinecopulib_0.6.3.1.1</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+
+<a href="simulating-differential-abundance.html" class="navigation navigation-next navigation-unique" aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/index.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["simulation_for_microbiome.pdf", "simulation_for_microbiome.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>
