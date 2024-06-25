@@ -235,8 +235,8 @@ not. The question is how either sepsis, antibiotics, or their interaction
 affects the microbiome viewed through these three assays. The data are printed
 below, they have already been filtered and CLR transformed following the MOFA
 vignette.</p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="vertical-integration.html#cb82-1" tabindex="-1"></a><span class="fu">data</span>(icu)</span>
-<span id="cb82-2"><a href="vertical-integration.html#cb82-2" tabindex="-1"></a>icu</span></code></pre></div>
+<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="vertical-integration.html#cb79-1" tabindex="-1"></a><span class="fu">data</span>(icu)</span>
+<span id="cb79-2"><a href="vertical-integration.html#cb79-2" tabindex="-1"></a>icu</span></code></pre></div>
 <pre><code>## $Bacteria
 ## class: SummarizedExperiment 
 ## dim: 180 57 
@@ -274,10 +274,10 @@ can read
 The output plot below shows that each assay differs across groups, and this is
 quantitatively summarized by the high estimated weights between each category
 and the estimated PLS directions.</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="vertical-integration.html#cb84-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu)</span>
-<span id="cb84-2"><a href="vertical-integration.html#cb84-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
+<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="vertical-integration.html#cb81-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu)</span>
+<span id="cb81-2"><a href="vertical-integration.html#cb81-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
-<div class="sourceCode" id="cb85"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb85-1"><a href="vertical-integration.html#cb85-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
+<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="vertical-integration.html#cb82-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
 <pre><code>##              comp1     comp2
 ## Bacteria 0.8580402 0.8191458
 ## Fungi    0.6513668 0.4845247

@@ -227,15 +227,15 @@ between-group variation that the experiment was intended to uncover. For
 example, in the AD dataset, the date of the sequencing run has a global effect
 on measured community composition, which we can see right away from a principal
 components plot:</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="batch-effect-correction.html#cb70-1" tabindex="-1"></a><span class="fu">data</span>(anaerobic)</span>
-<span id="cb70-2"><a href="batch-effect-correction.html#cb70-2" tabindex="-1"></a><span class="fu">pca_batch</span>(anaerobic, <span class="at">facet =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
-<span id="cb70-3"><a href="batch-effect-correction.html#cb70-3" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#191C59&quot;</span>, <span class="st">&quot;#bc0c3c&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb70-4"><a href="batch-effect-correction.html#cb70-4" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
-<span id="cb70-5"><a href="batch-effect-correction.html#cb70-5" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">&quot;Treatment&quot;</span>,</span>
-<span id="cb70-6"><a href="batch-effect-correction.html#cb70-6" tabindex="-1"></a>    <span class="at">shape =</span> <span class="st">&quot;Batch&quot;</span>,</span>
-<span id="cb70-7"><a href="batch-effect-correction.html#cb70-7" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;PC1 [25.2% Variance Explained]&quot;</span>,</span>
-<span id="cb70-8"><a href="batch-effect-correction.html#cb70-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;PC2 [16.2% Varianced Explained]&quot;</span></span>
-<span id="cb70-9"><a href="batch-effect-correction.html#cb70-9" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="batch-effect-correction.html#cb67-1" tabindex="-1"></a><span class="fu">data</span>(anaerobic)</span>
+<span id="cb67-2"><a href="batch-effect-correction.html#cb67-2" tabindex="-1"></a><span class="fu">pca_batch</span>(anaerobic, <span class="at">facet =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb67-3"><a href="batch-effect-correction.html#cb67-3" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#191C59&quot;</span>, <span class="st">&quot;#bc0c3c&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb67-4"><a href="batch-effect-correction.html#cb67-4" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb67-5"><a href="batch-effect-correction.html#cb67-5" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">&quot;Treatment&quot;</span>,</span>
+<span id="cb67-6"><a href="batch-effect-correction.html#cb67-6" tabindex="-1"></a>    <span class="at">shape =</span> <span class="st">&quot;Batch&quot;</span>,</span>
+<span id="cb67-7"><a href="batch-effect-correction.html#cb67-7" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;PC1 [25.2% Variance Explained]&quot;</span>,</span>
+<span id="cb67-8"><a href="batch-effect-correction.html#cb67-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;PC2 [16.2% Varianced Explained]&quot;</span></span>
+<span id="cb67-9"><a href="batch-effect-correction.html#cb67-9" tabindex="-1"></a>  )</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/pca-anaerobic-1.png" width="672" /></p>
 <p>You can learn more about the general microbiome batch effect integration problem
 in <a href="https://doi.org/10.1093/bib/bbz105">(Wang and Le Cao, 2020)</a>, which is where
@@ -265,19 +265,19 @@ Since the data have already been centered log-ratio transformed, we can try out
 a Gaussian marginal model. The AD dataset has relatively few samples
 compared to the number of features, so we’ll use a copula that’s designed for
 this setting.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="batch-effect-correction.html#cb71-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
-<span id="cb71-2"><a href="batch-effect-correction.html#cb71-2" tabindex="-1"></a>  anaerobic,</span>
-<span id="cb71-3"><a href="batch-effect-correction.html#cb71-3" tabindex="-1"></a>  <span class="sc">~</span> batch <span class="sc">+</span> treatment,</span>
-<span id="cb71-4"><a href="batch-effect-correction.html#cb71-4" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
-<span id="cb71-5"><a href="batch-effect-correction.html#cb71-5" tabindex="-1"></a>  <span class="at">copula =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> .<span class="dv">1</span>)</span>
-<span id="cb71-6"><a href="batch-effect-correction.html#cb71-6" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb71-7"><a href="batch-effect-correction.html#cb71-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>, <span class="at">mstop =</span> <span class="dv">100</span>) <span class="co"># lower nu -&gt; stable training</span></span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="batch-effect-correction.html#cb68-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb68-2"><a href="batch-effect-correction.html#cb68-2" tabindex="-1"></a>  anaerobic,</span>
+<span id="cb68-3"><a href="batch-effect-correction.html#cb68-3" tabindex="-1"></a>  <span class="sc">~</span> batch <span class="sc">+</span> treatment,</span>
+<span id="cb68-4"><a href="batch-effect-correction.html#cb68-4" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb68-5"><a href="batch-effect-correction.html#cb68-5" tabindex="-1"></a>  <span class="at">copula =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> .<span class="dv">1</span>)</span>
+<span id="cb68-6"><a href="batch-effect-correction.html#cb68-6" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb68-7"><a href="batch-effect-correction.html#cb68-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>, <span class="at">mstop =</span> <span class="dv">100</span>) <span class="co"># lower nu -&gt; stable training</span></span></code></pre></div>
 <p>We can simulate from the fitted model and evaluate the quality of our fit using
 <code>contrast_boxplot</code>. This is a light wrapper of the ggplot2 code we used to
 compare experiments from our first session, and you can read its definition
 <a href="https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/R/plot.R#L26">here</a>.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="batch-effect-correction.html#cb72-1" tabindex="-1"></a>anaerobic_sim <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
-<span id="cb72-2"><a href="batch-effect-correction.html#cb72-2" tabindex="-1"></a><span class="fu">contrast_boxplot</span>(anaerobic, anaerobic_sim)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="batch-effect-correction.html#cb69-1" tabindex="-1"></a>anaerobic_sim <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
+<span id="cb69-2"><a href="batch-effect-correction.html#cb69-2" tabindex="-1"></a><span class="fu">contrast_boxplot</span>(anaerobic, anaerobic_sim)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/eval-anaerobic-1.png" width="672" /></p>
 <p><strong>Exercise</strong> Propose and create at least one other visualization that can be
 used to compare and contrast the simulator with real data. What conclusions can
@@ -295,7 +295,7 @@ the oiginal plot – PCA is only unique up to rotation. The main characteristic
 we’re looking for is that the relative sizes of the batch and treatment effects
 seem reasonaly well-preserved, since these will be the types of effects that our
 later batch effect integration methods must be able to distinguish.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="batch-effect-correction.html#cb73-1" tabindex="-1"></a><span class="fu">pca_batch</span>(anaerobic_sim)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="batch-effect-correction.html#cb70-1" tabindex="-1"></a><span class="fu">pca_batch</span>(anaerobic_sim)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-26-1.png" width="672" />
 :::</p>
 <p>To study the risk for overintegration, let’s imagine that there were a third
@@ -305,8 +305,8 @@ aggressive. We’ve defined the imaginary experiment using the data.frame below.
 The <code>treatment</code> level <code>1.8</code> is the new one. We’ve supposed there are between 1 -
 3 technical replicates (<code>extraction</code>) for each biological sample (<code>sample</code>), and
 the batch dates are the same as before.</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="batch-effect-correction.html#cb74-1" tabindex="-1"></a><span class="fu">data</span>(imaginary_design)</span>
-<span id="cb74-2"><a href="batch-effect-correction.html#cb74-2" tabindex="-1"></a><span class="fu">summary</span>(imaginary_design)</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="batch-effect-correction.html#cb71-1" tabindex="-1"></a><span class="fu">data</span>(imaginary_design)</span>
+<span id="cb71-2"><a href="batch-effect-correction.html#cb71-2" tabindex="-1"></a><span class="fu">summary</span>(imaginary_design)</span></code></pre></div>
 <pre><code>##    extraction        batch      treatment           rep           sample   
 ##  Min.   :1    09/04/2015:36   Min.   :0.0000   Min.   :1.00   1      :  2  
 ##  1st Qu.:1    14/04/2016:36   1st Qu.:0.0000   1st Qu.:1.75   2      :  2  
@@ -318,9 +318,9 @@ the batch dates are the same as before.</p>
 <p>We can simulate from the new design and look at how different this new treatment
 group seems from the others. It’s a subtle effect, definitely smaller than the
 batch effect, but also separate enough that we should be able to preserve it.</p>
-<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="batch-effect-correction.html#cb76-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb76-2"><a href="batch-effect-correction.html#cb76-2" tabindex="-1"></a>anaerobic_sim <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator, <span class="at">new_data =</span> imaginary_design)</span>
-<span id="cb76-3"><a href="batch-effect-correction.html#cb76-3" tabindex="-1"></a>p[[<span class="st">&quot;sim&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(anaerobic_sim)</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="batch-effect-correction.html#cb73-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb73-2"><a href="batch-effect-correction.html#cb73-2" tabindex="-1"></a>anaerobic_sim <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator, <span class="at">new_data =</span> imaginary_design)</span>
+<span id="cb73-3"><a href="batch-effect-correction.html#cb73-3" tabindex="-1"></a>p[[<span class="st">&quot;sim&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(anaerobic_sim)</span></code></pre></div>
 </div>
 <div id="benchmarking" class="section level2 hasAnchor" number="5.3">
 <h2><span class="header-section-number">5.3</span> Benchmarking<a href="batch-effect-correction.html#benchmarking" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -333,15 +333,15 @@ aside, we note that this conclusion can depend on the number of replicates and
 total number of samples available. We’ve included the code for generating the
 <code>imaginary_design</code> data.frame in <a href="https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/vignettes/process-integration.Rmd#L76">a vignette</a>
 for the <code>MIGsim</code> package. Can you find settings that lead either method astray?</p>
-<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="batch-effect-correction.html#cb77-1" tabindex="-1"></a>p[[<span class="st">&quot;ruv&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(<span class="fu">batch_correct</span>(anaerobic_sim, <span class="st">&quot;ruv&quot;</span>))</span>
-<span id="cb77-2"><a href="batch-effect-correction.html#cb77-2" tabindex="-1"></a>p[[<span class="st">&quot;combat&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(<span class="fu">batch_correct</span>(anaerobic_sim, <span class="st">&quot;combat&quot;</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="batch-effect-correction.html#cb74-1" tabindex="-1"></a>p[[<span class="st">&quot;ruv&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(<span class="fu">batch_correct</span>(anaerobic_sim, <span class="st">&quot;ruv&quot;</span>))</span>
+<span id="cb74-2"><a href="batch-effect-correction.html#cb74-2" tabindex="-1"></a>p[[<span class="st">&quot;combat&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(<span class="fu">batch_correct</span>(anaerobic_sim, <span class="st">&quot;combat&quot;</span>))</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/batch-correction-vis-1.png" width="672" /></p>
-<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="batch-effect-correction.html#cb78-1" tabindex="-1"></a>prediction_errors <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
-<span id="cb78-2"><a href="batch-effect-correction.html#cb78-2" tabindex="-1"></a>  y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">lda</span>(treatment <span class="sc">~</span> PC1 <span class="sc">+</span> PC2, <span class="at">data =</span> df), <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)<span class="sc">$</span>class</span>
-<span id="cb78-3"><a href="batch-effect-correction.html#cb78-3" tabindex="-1"></a>  <span class="fu">table</span>(df<span class="sc">$</span>treatment, y_hat)</span>
-<span id="cb78-4"><a href="batch-effect-correction.html#cb78-4" tabindex="-1"></a>}</span>
-<span id="cb78-5"><a href="batch-effect-correction.html#cb78-5" tabindex="-1"></a></span>
-<span id="cb78-6"><a href="batch-effect-correction.html#cb78-6" tabindex="-1"></a><span class="fu">map</span>(p, <span class="sc">~</span> <span class="fu">prediction_errors</span>(.<span class="sc">$</span>data))</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="batch-effect-correction.html#cb75-1" tabindex="-1"></a>prediction_errors <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb75-2"><a href="batch-effect-correction.html#cb75-2" tabindex="-1"></a>  y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">lda</span>(treatment <span class="sc">~</span> PC1 <span class="sc">+</span> PC2, <span class="at">data =</span> df), <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)<span class="sc">$</span>class</span>
+<span id="cb75-3"><a href="batch-effect-correction.html#cb75-3" tabindex="-1"></a>  <span class="fu">table</span>(df<span class="sc">$</span>treatment, y_hat)</span>
+<span id="cb75-4"><a href="batch-effect-correction.html#cb75-4" tabindex="-1"></a>}</span>
+<span id="cb75-5"><a href="batch-effect-correction.html#cb75-5" tabindex="-1"></a></span>
+<span id="cb75-6"><a href="batch-effect-correction.html#cb75-6" tabindex="-1"></a><span class="fu">map</span>(p, <span class="sc">~</span> <span class="fu">prediction_errors</span>(.<span class="sc">$</span>data))</span></code></pre></div>
 <pre><code>## $sim
 ##      y_hat
 ##        0  1 1.8
@@ -362,7 +362,7 @@ for the <code>MIGsim</code> package. Can you find settings that lead either meth
 ##   0   65 10   0
 ##   1   12 59   4
 ##   1.8  1 12  17</code></pre>
-<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="batch-effect-correction.html#cb80-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="batch-effect-correction.html#cb77-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4

@@ -336,9 +336,8 @@ gives the type of model to fit, in this case, a Gaussian location-shape-scale
 model.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="index.html#cb20-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(exper_ts, <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>) <span class="sc">*</span> group, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
 <span id="cb20-2"><a href="index.html#cb20-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
-<pre><code>## [=========================================&gt;------------------------------------------------------------------------------------] 2/6 ETA:
-## 1s[==============================================================&gt;---------------------------------------------------------------] 3/6 ETA:
-## 1s[===================================================================================&gt;------------------------------------------] 4/6 ETA:
+<pre><code>## [==============================================================&gt;---------------------------------------------------------------] 3/6 ETA:
+## 0s[===================================================================================&gt;------------------------------------------] 4/6 ETA:
 ## 0s[========================================================================================================&gt;---------------------] 5/6 ETA:
 ## 0s[==============================================================================================================================] 6/6 ETA: 0s</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="index.html#cb22-1" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
@@ -366,14 +365,14 @@ link function. To ensure that this only applies to the first two panels, we use
 features to apply the new formula to.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="index.html#cb26-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
 <span id="cb26-2"><a href="index.html#cb26-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="index.html#cb26-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
-<pre><code>## [==============================================================================================================================] 2/2 ETA: 0s</code></pre>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="index.html#cb28-1" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="index.html#cb28-2" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<span id="cb26-3"><a href="index.html#cb26-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
+<span id="cb26-4"><a href="index.html#cb26-4" tabindex="-1"></a></span>
+<span id="cb26-5"><a href="index.html#cb26-5" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb26-6"><a href="index.html#cb26-6" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
 <pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
-<pre><code>## Warning: Removed 5 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 1 row containing missing values or values outside the scale range (`geom_point()`).</code></pre>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="index.html#cb31-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="index.html#cb29-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
