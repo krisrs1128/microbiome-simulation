@@ -15,11 +15,11 @@ github-repo: rstudio/bookdown-demo
 
 # Introduction
 
-This website accompanies the review, 
-[``Leveraging Simulation in Microbiome Data Analysis''](). All examples
-discussed in the case studies there can be reproduced by running the code below,
-and we have also included additional introductory material about some packages
-that simplify our analysis.
+This website accompanies the review 
+[Leveraging Simulation in Microbiome Data Analysis](). All examples discussed in
+the case studies there can be reproduced by running the code below, and we have
+also included additional introductory material about some packages that simplify
+our analysis.
 
 ## Setup
 
@@ -45,12 +45,12 @@ suppressPackageStartupMessages({
   library(glue)
   library(mixOmics)
   library(patchwork)
-  library(purrr)
   library(scico)
   library(splines)
   library(tibble)
   library(tidyr)
   library(MIGsim)
+  library(purrr)
   library(scDesigner)
 })
 theme_set(theme_classic())

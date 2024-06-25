@@ -1,0 +1,297 @@
+# Vertical Integration
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
+set.seed(20240603)
+```
+
+In horizontal integration, we have many datasets, all with the same features.
+They only differ because they were gathered at different times. In contrast, for
+vertical integration, we instead have many datasets all with the same _samples_.
+They differ because they measure different aspects of those samples. Our goal in
+this situation is not to remove differences across datasets, like it was in
+horizontal integration, but instead to clarify the relationships across sources.
+
+One important question that often arises in vertical integration is -- are the
+data even alignable? That is, in our effort to look for relationships across
+datasets, we might accidentally miss out on interesting variation that exists
+within the individual assays. If the technologies are measuring very different
+things, we might be better off simply analyzing the data separately. To help us
+gauge which setting we might be in, we can simulate data where we know that we
+shouldn't align the sources. If our integration methods are giving similar
+outputs as they give on this simulated data, then we should be more cautious.
+
+There are a few ways in which a dataset might not be ``alignable.'' The most
+general reason is that there may be no latent sources of variation in common
+between the sources. A simpler reason is that something that influenced one
+assay substantially (e.g., disease state) might not influence the other by much.
+Let's see how an integration method might work in this setting.
+
+## ICU Dataset
+
+We'll work with the ICU sepsis dataset previously studied by [Haak et al.
+(2021)](https://doi.org/10.1128/mSystems.01148-20) and documented within a
+[vignette](https://raw.githack.com/bioFAM/MOFA2_tutorials/master/R_tutorials/microbiome_vignette.html#train-mofa-model)
+for the MOFA package. The three datasets here are 16S bacterial, ITS fungal, and
+Virome assays, all applied to different healthy and sepsis patient populations.
+Moreover, some participants were on a course of antibiotics while others were
+not. The question is how either sepsis, antibiotics, or their interaction
+affects the microbiome viewed through these three assays. The data are printed
+below, they have already been filtered and CLR transformed following the MOFA
+vignette.
+
+```{r}
+data(icu)
+icu
+```
+
+We can simultaneously analyze these data sources using block sPLS-DA. This is
+the multi-assay version of the analysis that we saw in the previous session.
+`exper_splsda` is a very light wrapper of a mixOmics function call, which you
+can read
+[here](https://github.com/krisrs1128/intro-to-simulation/blob/9f842ef52fdbe9a137833531147ceb3bc1f7ae81/MIGsim/R/vertical_integration.R#L3).
+The output plot below shows that each assay differs across groups, and this is
+quantitatively summarized by the high estimated weights between each category
+and the estimated PLS directions.
+
+```{r}
+fit <- exper_splsda(icu)
+plotIndiv(fit)
+fit$weights
+```
+
+# Interlude: Using map
+
+In the examples below, we'll find it helpful to use the function `map` in the
+purrr package. This function gives a one-line replacement for simple for-loops;
+it is analogous to list comprehensions in python. It can be useful many places
+besides the topic of this tutorial. For example, if we want to convert the
+vector `c(1, 2, 3)` into `c(1, 4, 9)`, we can use this map:
+```{r}
+map(1:3, ~ .^2)
+```
+The `~` notation is shorthand for defining a function, and the `.` represents
+the current vector element.  More generally, we can apply map to lists. This
+line will update the list so that 1 is added to each element.
+```{r}
+map(list(a = 1, b = 2, c = 3), ~ . + 1)
+```
+
+**Exercise**: To test your understanding, can you write a map that computes the
+*mean for each
+vector in the list `x` below? What about the mean of the 10 smallest elements?
+```{r}
+x <- list(a = rnorm(100), b = rnorm(100, 1))
+```
+<button onclick="myFunction(&#39;q-map&#39;)">
+Show solution
+</button>
+::: {#q-map style="display:none"}
+```{r}
+map(x, mean)
+map(x, ~ mean(sort(.)[1:10]))
+```
+:::
+
+## Simulation Question
+
+How would the output have looked if 16S community composition had not been
+related to disease or antibiotics groups? Since integrative analysis prioritizes
+similarities across sources, we expect this to mask some of the real differences
+in the fungal and virus data as well. We can use simulation to gauge the extent
+of this masking.
+
+Our first step is to train a simulator.  We're just learning four different
+setes of parameters for each of the four observed groups. This is not as nuanced
+as learning separate effects for sepsis and antibiotics, but it will be enough
+for illustration. We have used `map` to estimate a simulator for each assay in
+the `icu` list.
+
+```{r}
+simulator <- map(
+  icu,
+  ~ setup_simulator(., ~Category, ~ GaussianLSS()) |>
+    estimate(nu = 0.05)
+)
+```
+
+So far, we haven't tried removing any relationships present in the 16S assay,
+and indeed our integrative analysis output on the simulated data looks
+comparable to that from the original study.
+
+```{r}
+icu_sim <- join_copula(simulator, copula_adaptive()) |>
+  sample() |>
+  split_assays()
+
+fit_sim <- exper_splsda(icu_sim)
+plotIndiv(fit_sim)
+fit$weights
+```
+
+**Exercise**: Modify the simulator above so that the 16S group no longer depends
+on disease cateogry. This will allow us to study how the integrative analysis
+output changes when the data are not alignable.
+
+```{r}
+null_simulator <- simulator
+# fill this in
+# null_simulator[[1]] <- ???
+```
+
+**Solution**: We need to define a new link that no longer depends on `Category`. One solution
+is to modify the existing simulator in place using `mutate`.
+```{r, eval = FALSE}
+null_simulator[[1]] <- simulator[[1]] |>
+  mutate(1:180, link = ~1) |>
+  estimate(nu = 0.05)
+```
+Since we are modifying all taxa, a simpler solution is to just define a
+new simulator from scratch.
+```{r}
+null_simulator[[1]] <- setup_simulator(icu[[1]], ~1, ~ GaussianLSS()) |>
+  estimate(nu = 0.05)
+```
+
+## Simulation Results
+
+We can rerun the integrative analysis using the modified simulator. Somewhat
+surprisingly, the disease association in the bacteria group hasn't been erased.
+This is an artifact of the integration. The other assays have associations with
+disease group, and since the method encourages outputs across tables to be
+consistent with one another, we have artificially introduced some structure into
+the bacteria visualization (even if it is quite weak.) Nonetheless, we still
+observe a large dropoff in weight for the bacterial table. Further, there seems
+to be a minor deterioration in the group separations for the fungal and virus
+communities, and the component weights are higher when we work with only the
+fungal and virus assays. Altogether, this suggests that we may want to check
+table-level associations with the response variable, especially if any of the
+integration outputs are ambiguous. In this case, we might be able to increase
+power by focusing only on class-associated assays.  Nonetheless, the block
+sPLS-DA also seems relatively robust -- considering the dramatic change in the
+microbiome table, the output for the remaining tables still surfaces interesting
+relationships.
+
+```{r}
+icu_sim <- join_copula(null_simulator, copula_adaptive()) |>
+  sample() |>
+  split_assays()
+fit_null <- exper_splsda(icu_sim)
+plotIndiv(fit)
+fit_null$weights
+```
+
+```{r, echo = FALSE}
+bind_rows(
+  "Original Data" = plotIndiv(fit)$graph$data |> rownames_to_column("Sample"),
+  "Full Simulation" = plotIndiv(fit_sim)$graph$data |> rownames_to_column("Sample"),
+  "No Effect on Bacteria" = plotIndiv(fit_null)$graph$data |> rownames_to_column("Sample"),
+  .id = "source"
+) |>
+  mutate(source = factor(source, levels = c("Original Data", "Full Simulation", "No Effect on Bacteria"))) |>
+  ggplot() +
+    geom_vline(xintercept = 0) +
+    geom_hline(yintercept = 0) +
+    geom_point(aes(x, y, col = group), size = 0.8) +
+    scale_color_manual(values = c("#F28241", "#038C7F", "#D96CB3", "#3097BF")) +
+    facet_grid(source ~ Block) +
+    guides(col = guide_legend(nrow = 2, override.aes = list(size = 2))) +
+    labs(col = "Group", x = "multiblock sPLS-DA Dim. 1", y = "multiblock sPLS-DA Dim. 2") +
+    theme(
+      panel.border = element_rect(fill = NA), 
+      legend.position = "bottom",
+      strip.text.y = element_text(angle = 0)
+    )
+ggsave("~/Downloads/multiblock_calibration.png", width = 6, height = 4)
+```
+
+## Alignability
+
+How do the canonical correlations compare between the real data and a reference
+null? First, we can compute the CCA canonical correlations using the real
+Bacteria and Virus data.
+
+```{r}
+merged <- simulator[c(1, 3)] |>
+  join_copula(copula_adaptive(thr = 0.01))
+
+xy <- sample(merged) |>
+  assay() |>
+  t()
+ix <- map(icu, rownames)
+cca_result <- rcc(xy[, ix[[1]]], xy[, ix[[3]]], method = "shrinkage")
+```
+
+Next, we define a reference null and compute canonical correlations on ten
+replicates from this null. To define the reference null, we zero out any
+correlations across tables. We then draw 100 samples from the resulting
+distribution and compute canonical correlations for each.
+
+```{r reference-null}
+rho_null <- copula_parameters(merged)
+dimnames(rho_null) <- list(colnames(xy), colnames(xy))
+rho_null[ix[[1]], ix[[3]]] <- 0
+rho_null[ix[[3]], ix[[1]]] <- 0
+
+null_cancor <- merged |>
+  mutate_correlation(rho_null)
+
+B <- 100
+cancors <- list()
+for (b in seq_len(B)) {
+  xy_null <- sample(null_cancor) |>
+    assay() |>
+    t()
+
+  cancors[[glue("sim_{b}")]] <- rcc(xy_null[, ix[[1]]], xy_null[, ix[[3]]], method = "shrinkage")$cor
+}
+```
+
+To help with later visualization, we combine both the real and reference
+canonical correlations into a tidy data.frame. These are visualized in a hidden
+chunk below -- if you want to see the source code, you can review it
+[here](https://github.com/krisrs1128/microbiome-simulation/blob/main/book/04-integration.Rmd).
+
+```{r cancor-contrast}
+cancors[["true"]] <- cca_result$cor
+contrast_data <- bind_rows(cancors, .id = "rep") |>
+  pivot_longer(-rep, names_to = "loading") |>
+  mutate(
+    source = grepl("true", rep),
+    loading = as.integer(loading)
+  )
+head(contrast_data)
+```
+
+```{r contrast-vis, echo = FALSE}
+ggplot(contrast_data, aes(loading, value)) +
+  geom_jitter(
+    data = filter(contrast_data, !source),
+    height = 0,
+    size = 0.3, 
+    alpha = 0.5,
+    col = "#D9C8B4"
+  ) +
+  geom_point(
+    data = filter(contrast_data, source),
+    size = 2,
+    col = "#BF4E83"
+  ) +
+  labs(
+    x = expression("Dimension"~k),
+    y = expression("Canonical Correlation"~rho[k]),
+    col = "Source"
+  ) +
+  scale_x_continuous(expand = c(0, 0)) +
+  scale_y_continuous(expand = c(0, 0, 0, 0.1)) +
+  theme(
+    axis.text.x = element_text(size = 9),
+    axis.text.y = element_text(size = 9),
+    axis.title = element_text(size = 12)
+  )
+ggsave("~/Downloads/cancor_comparison.png", width = 4, height = 4)
+```
+
+```{r}
+sessionInfo()
+```
