@@ -23,7 +23,7 @@
 <meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
 
 
-<meta name="date" content="2024-06-21" />
+<meta name="date" content="2024-06-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -165,11 +165,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3" data-path="microbiome-networks.html"><a href="microbiome-networks.html#block-covariance"><i class="fa fa-check"></i><b>4.3</b> Block Covariance</a></li>
 <li class="chapter" data-level="4.4" data-path="microbiome-networks.html"><a href="microbiome-networks.html#generalization"><i class="fa fa-check"></i><b>4.4</b> Generalization</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="integrative-simulation.html"><a href="integrative-simulation.html"><i class="fa fa-check"></i><b>5</b> Integrative Simulation</a>
+<li class="chapter" data-level="5" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>5</b> Batch Effect Correction</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="integrative-simulation.html"><a href="integrative-simulation.html#horizontal-integration"><i class="fa fa-check"></i><b>5.1</b> Horizontal Integration</a></li>
-<li class="chapter" data-level="5.2" data-path="integrative-simulation.html"><a href="integrative-simulation.html#interlude-using-map"><i class="fa fa-check"></i><b>5.2</b> Interlude: Using map</a></li>
-<li class="chapter" data-level="5.3" data-path="integrative-simulation.html"><a href="integrative-simulation.html#vertical-integration"><i class="fa fa-check"></i><b>5.3</b> Vertical Integration</a></li>
+<li class="chapter" data-level="5.1" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#anaerobic-digestion-data"><i class="fa fa-check"></i><b>5.1</b> Anaerobic Digestion Data</a></li>
+<li class="chapter" data-level="5.2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#simulation-design"><i class="fa fa-check"></i><b>5.2</b> Simulation Design</a></li>
+<li class="chapter" data-level="5.3" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#benchmarking"><i class="fa fa-check"></i><b>5.3</b> Benchmarking</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="vertical-integration.html"><a href="vertical-integration.html"><i class="fa fa-check"></i><b>6</b> Vertical Integration</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="vertical-integration.html"><a href="vertical-integration.html#icu-dataset"><i class="fa fa-check"></i><b>6.1</b> ICU Dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="interlude-using-map.html"><a href="interlude-using-map.html"><i class="fa fa-check"></i><b>7</b> Interlude: Using map</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="interlude-using-map.html"><a href="interlude-using-map.html#simulation-question"><i class="fa fa-check"></i><b>7.1</b> Simulation Question</a></li>
+<li class="chapter" data-level="7.2" data-path="interlude-using-map.html"><a href="interlude-using-map.html#simulation-results"><i class="fa fa-check"></i><b>7.2</b> Simulation Results</a></li>
+<li class="chapter" data-level="7.3" data-path="interlude-using-map.html"><a href="interlude-using-map.html#alignability"><i class="fa fa-check"></i><b>7.3</b> Alignability</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -195,15 +205,15 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Simulation for Microbiome Analysis</h1>
 <p class="author"><em>Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao</em></p>
-<p class="date"><em>2024-06-21</em></p>
+<p class="date"><em>2024-06-25</em></p>
 </div>
 <div id="introduction" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction<a href="index.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
-<p>This website accompanies the review,
-<a href="">``Leveraging Simulation in Microbiome Data Analysis’’</a>. All examples
-discussed in the case studies there can be reproduced by running the code below,
-and we have also included additional introductory material about some packages
-that simplify our analysis.</p>
+<p>This website accompanies the review
+<a href="">Leveraging Simulation in Microbiome Data Analysis</a>. All examples discussed in
+the case studies there can be reproduced by running the code below, and we have
+also included additional introductory material about some packages that simplify
+our analysis.</p>
 <div id="setup" class="section level2 hasAnchor" number="1.1">
 <h2><span class="header-section-number">1.1</span> Setup<a href="index.html#setup" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p>The <code>MIGsim</code> package below provides wrapper functions that we will use
@@ -222,12 +232,12 @@ throughout these book. You can install it by running:</p>
 <span id="cb2-10"><a href="index.html#cb2-10" tabindex="-1"></a>  <span class="fu">library</span>(glue)</span>
 <span id="cb2-11"><a href="index.html#cb2-11" tabindex="-1"></a>  <span class="fu">library</span>(mixOmics)</span>
 <span id="cb2-12"><a href="index.html#cb2-12" tabindex="-1"></a>  <span class="fu">library</span>(patchwork)</span>
-<span id="cb2-13"><a href="index.html#cb2-13" tabindex="-1"></a>  <span class="fu">library</span>(purrr)</span>
-<span id="cb2-14"><a href="index.html#cb2-14" tabindex="-1"></a>  <span class="fu">library</span>(scico)</span>
-<span id="cb2-15"><a href="index.html#cb2-15" tabindex="-1"></a>  <span class="fu">library</span>(splines)</span>
-<span id="cb2-16"><a href="index.html#cb2-16" tabindex="-1"></a>  <span class="fu">library</span>(tibble)</span>
-<span id="cb2-17"><a href="index.html#cb2-17" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)</span>
-<span id="cb2-18"><a href="index.html#cb2-18" tabindex="-1"></a>  <span class="fu">library</span>(MIGsim)</span>
+<span id="cb2-13"><a href="index.html#cb2-13" tabindex="-1"></a>  <span class="fu">library</span>(scico)</span>
+<span id="cb2-14"><a href="index.html#cb2-14" tabindex="-1"></a>  <span class="fu">library</span>(splines)</span>
+<span id="cb2-15"><a href="index.html#cb2-15" tabindex="-1"></a>  <span class="fu">library</span>(tibble)</span>
+<span id="cb2-16"><a href="index.html#cb2-16" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)</span>
+<span id="cb2-17"><a href="index.html#cb2-17" tabindex="-1"></a>  <span class="fu">library</span>(MIGsim)</span>
+<span id="cb2-18"><a href="index.html#cb2-18" tabindex="-1"></a>  <span class="fu">library</span>(purrr)</span>
 <span id="cb2-19"><a href="index.html#cb2-19" tabindex="-1"></a>  <span class="fu">library</span>(scDesigner)</span>
 <span id="cb2-20"><a href="index.html#cb2-20" tabindex="-1"></a>})</span>
 <span id="cb2-21"><a href="index.html#cb2-21" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span></code></pre></div>
@@ -326,14 +336,15 @@ gives the type of model to fit, in this case, a Gaussian location-shape-scale
 model.</p>
 <div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="index.html#cb20-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(exper_ts, <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>) <span class="sc">*</span> group, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
 <span id="cb20-2"><a href="index.html#cb20-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
-<pre><code>## [===============================================================&gt;----------------------------------------------------------------] 3/6 ETA:
-## 0s[====================================================================================&gt;-------------------------------------------] 4/6 ETA:
-## 0s[==========================================================================================================&gt;---------------------] 5/6 ETA:
-## 0s[================================================================================================================================] 6/6 ETA: 0s</code></pre>
+<pre><code>## [=========================================&gt;------------------------------------------------------------------------------------] 2/6 ETA:
+## 1s[==============================================================&gt;---------------------------------------------------------------] 3/6 ETA:
+## 1s[===================================================================================&gt;------------------------------------------] 4/6 ETA:
+## 0s[========================================================================================================&gt;---------------------] 5/6 ETA:
+## 0s[==============================================================================================================================] 6/6 ETA: 0s</code></pre>
 <div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="index.html#cb22-1" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
 <span id="cb22-2"><a href="index.html#cb22-2" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
 <pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
-<pre><code>## Warning: Removed 2 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 5 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p><strong>Exercise</strong>: Right now, each panel allows for an interaction between the trend and
 group type. Can you define a simulator where the groups have no effect on the
@@ -355,14 +366,14 @@ link function. To ensure that this only applies to the first two panels, we use
 features to apply the new formula to.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="index.html#cb26-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
 <span id="cb26-2"><a href="index.html#cb26-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="index.html#cb26-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
-<span id="cb26-4"><a href="index.html#cb26-4" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="index.html#cb26-5" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
-<span id="cb26-6"><a href="index.html#cb26-6" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<span id="cb26-3"><a href="index.html#cb26-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<pre><code>## [==============================================================================================================================] 2/2 ETA: 0s</code></pre>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="index.html#cb28-1" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="index.html#cb28-2" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
 <pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
-<pre><code>## Warning: Removed 6 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 5 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="index.html#cb29-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="index.html#cb31-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
@@ -381,42 +392,51 @@ features to apply the new formula to.</p>
 ##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1               XVector_0.44.0                  SingleCellExperiment_1.26.0    
-##  [5] scDesigner_0.0.0.9000           MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                   
-##  [9] scico_1.5.0                     purrr_1.0.2                     patchwork_1.2.0                 mixOmics_6.28.0                
-## [13] lattice_0.22-6                  MASS_7.3-60.2                   glue_1.7.0                      ggplot2_3.5.1                  
-## [17] ggdist_3.3.2                    gamboostLSS_2.0-7               mboost_2.9-10                   stabs_0.6-4                    
-## [21] forcats_1.0.0                   dplyr_1.1.4                     SummarizedExperiment_1.34.0     Biobase_2.64.0                 
-## [25] GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                  S4Vectors_0.42.0               
-## [29] BiocGenerics_0.50.0             MatrixGenerics_1.16.0           matrixStats_1.3.0               SpiecEasi_1.1.3                
-## [33] CovTools_0.5.4                 
+##  [1] lubridate_1.9.3                 stringr_1.5.1                   readr_2.1.5                     tidyverse_2.0.0                
+##  [5] RefManageR_1.4.0                knitr_1.47                      TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1              
+##  [9] XVector_0.44.0                  SingleCellExperiment_1.26.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
+## [13] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                    
+## [17] patchwork_1.2.0                 mixOmics_6.28.0                 lattice_0.22-6                  MASS_7.3-60.2                  
+## [21] glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                    gamboostLSS_2.0-7              
+## [25] mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                    
+## [29] SummarizedExperiment_1.34.0     Biobase_2.64.0                  GenomicRanges_1.56.0            GenomeInfoDb_1.40.0            
+## [33] IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0             MatrixGenerics_1.16.0          
+## [37] matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] libcoin_1.0-10          RColorBrewer_1.1-3      rstudioapi_0.16.0       jsonlite_1.8.8          shape_1.4.6.1          
-##   [6] magrittr_2.0.3          farver_2.1.2            rmarkdown_2.27          fs_1.6.4                zlibbioc_1.50.0        
-##  [11] vctrs_0.6.5             memoise_2.0.1           base64enc_0.1-3         progress_1.2.3          htmltools_0.5.8.1      
-##  [16] S4Arrays_1.4.1          distributional_0.4.0    SparseArray_1.4.8       Formula_1.2-5           sass_0.4.9             
-##  [21] pracma_2.4.4            bslib_0.7.0.9000        htmlwidgets_1.6.4       plyr_1.8.9              copula_1.1-3           
-##  [26] cachem_1.1.0            igraph_2.0.3            lifecycle_1.0.4         minpack.lm_1.2-4        iterators_1.0.14       
-##  [31] pkgconfig_2.0.3         Matrix_1.7-0            R6_2.5.1                fastmap_1.2.0           GenomeInfoDbData_1.2.12
-##  [36] rbibutils_2.2.16        numDeriv_2016.8-1.1     digest_0.6.35           colorspace_2.1-0        rARPACK_0.11-0         
-##  [41] RSpectra_0.16-1         kde1d_1.0.7             ellipse_0.5.0           labeling_0.4.3          pspline_1.0-20         
-##  [46] fansi_1.0.6             nnls_1.5                httr_1.4.7              abind_1.4-5             compiler_4.4.0         
-##  [51] gsl_2.1-8               withr_3.0.0             doParallel_1.0.17       BiocParallel_1.38.0     highr_0.11             
-##  [56] DelayedArray_0.30.1     corpcor_1.6.10          scatterplot3d_0.3-44    tools_4.4.0             ape_5.8                
-##  [61] quadprog_1.5-8          stabledist_0.7-1        nlme_3.1-164            inum_1.0-5              grid_4.4.0             
-##  [66] reshape2_1.4.4          generics_0.1.3          gtable_0.3.5            flare_1.7.0.1           hms_1.1.3              
-##  [71] huge_1.3.5              utf8_1.2.4              ggrepel_0.9.5           foreach_1.5.2           pillar_1.9.0           
-##  [76] stringr_1.5.1           yulab.utils_0.1.4       limma_3.60.2            partykit_1.2-20         treeio_1.28.0          
-##  [81] survival_3.7-0          tidyselect_1.2.1        ADGofTest_0.3           locfit_1.5-9.9          knitr_1.47             
-##  [86] gridExtra_2.3           bookdown_0.39.1         edgeR_4.2.0             xfun_0.44               expm_0.999-9           
-##  [91] statmod_1.5.0           geigen_2.3              stringi_1.8.4           VGAM_1.1-11             UCSC.utils_1.0.0       
-##  [96] lazyeval_0.2.2          yaml_2.3.8              evaluate_0.23           codetools_0.2-20        SHT_0.1.8              
-## [101] cli_3.6.2               rpart_4.1.23            Rdpack_2.6              munsell_0.5.1           jquerylib_0.1.4        
-## [106] pulsar_0.3.11           Rcpp_1.0.12             rngWELL_0.10-9          randtoolbox_2.0.4       assertthat_0.2.1       
-## [111] rgl_1.3.1               prettyunits_1.2.0       gamlss.dist_6.1-1       glmnet_4.1-8            tidytree_0.4.6         
-## [116] mvtnorm_1.2-5           scales_1.3.0            pcaPP_2.0-4             insight_0.20.1          crayon_1.5.2           
-## [121] shapes_1.2.7            rlang_1.1.4             rvinecopulib_0.6.3.1.1</code></pre>
+##   [1] minpack.lm_1.2-4            rpart_4.1.23                lifecycle_1.0.4             Rdpack_2.6                 
+##   [5] edgeR_4.2.0                 doParallel_1.0.17           MultiAssayExperiment_1.30.2 insight_0.20.1             
+##   [9] backports_1.5.0             magrittr_2.0.3              limma_3.60.2                sass_0.4.9                 
+##  [13] rmarkdown_2.27              jquerylib_0.1.4             yaml_2.3.8                  RColorBrewer_1.1-3         
+##  [17] ADGofTest_0.3               abind_1.4-5                 zlibbioc_1.50.0             expm_0.999-9               
+##  [21] quadprog_1.5-8              pspline_1.0-20              kde1d_1.0.7                 rgl_1.3.1                  
+##  [25] yulab.utils_0.1.4           pracma_2.4.4                GenomeInfoDbData_1.2.12     ggrepel_0.9.5              
+##  [29] tidytree_0.4.6              ellipse_0.5.0               RSpectra_0.16-1             codetools_0.2-20           
+##  [33] DelayedArray_0.30.1         xml2_1.3.6                  shapes_1.2.7                tidyselect_1.2.1           
+##  [37] shape_1.4.6.1               UCSC.utils_1.0.0            farver_2.1.2                randtoolbox_2.0.4          
+##  [41] base64enc_0.1-3             jsonlite_1.8.8              Formula_1.2-5               survival_3.7-0             
+##  [45] iterators_1.0.14            systemfonts_1.1.0           foreach_1.5.2               tools_4.4.0                
+##  [49] progress_1.2.3              ragg_1.3.2                  treeio_1.28.0               Rcpp_1.0.12                
+##  [53] rARPACK_0.11-0              BiocBaseUtils_1.6.0         gridExtra_2.3               SparseArray_1.4.8          
+##  [57] xfun_0.44                   distributional_0.4.0        withr_3.0.0                 numDeriv_2016.8-1.1        
+##  [61] fastmap_1.2.0               fansi_1.0.6                 digest_0.6.35               timechange_0.3.0           
+##  [65] R6_2.5.1                    textshaping_0.4.0           colorspace_2.1-0            inum_1.0-5                 
+##  [69] copula_1.1-3                flare_1.7.0.1               utf8_1.2.4                  generics_0.1.3             
+##  [73] corpcor_1.6.10              prettyunits_1.2.0           pulsar_0.3.11               httr_1.4.7                 
+##  [77] htmlwidgets_1.6.4           S4Arrays_1.4.1              scatterplot3d_0.3-44        rngWELL_0.10-9             
+##  [81] pkgconfig_2.0.3             geigen_2.3                  gtable_0.3.5                pcaPP_2.0-4                
+##  [85] htmltools_0.5.8.1           bookdown_0.39.1             scales_1.3.0                SHT_0.1.8                  
+##  [89] rstudioapi_0.16.0           tzdb_0.4.0                  reshape2_1.4.4              nlme_3.1-164               
+##  [93] cachem_1.1.0                libcoin_1.0-10              pillar_1.9.0                grid_4.4.0                 
+##  [97] vctrs_0.6.5                 VGAM_1.1-11                 huge_1.3.5                  gamlss.dist_6.1-1          
+## [101] evaluate_0.23               mvtnorm_1.2-5               cli_3.6.2                   locfit_1.5-9.9             
+## [105] compiler_4.4.0              rlang_1.1.4                 crayon_1.5.2                labeling_0.4.3             
+## [109] plyr_1.8.9                  fs_1.6.4                    stringi_1.8.4               BiocParallel_1.38.0        
+## [113] nnls_1.5                    assertthat_0.2.1            rvinecopulib_0.6.3.1.1      munsell_0.5.1              
+## [117] gsl_2.1-8                   lazyeval_0.2.2              glmnet_4.1-8                Matrix_1.7-0               
+## [121] hms_1.1.3                   stabledist_0.7-1            statmod_1.5.0               highr_0.11                 
+## [125] rbibutils_2.2.16            partykit_1.2-20             igraph_2.0.3                memoise_2.0.1              
+## [129] bslib_0.7.0.9000            bibtex_0.5.1                ape_5.8</code></pre>
 
 </div>
 </div>

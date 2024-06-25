@@ -15,7 +15,13 @@ estimation-1
 evaluation-1
 block-covariance
 generalization
-integrative-simulation
-horizontal-integration
-interlude-using-map
+batch-effect-correction
+anaerobic-digestion-data
+simulation-design
+benchmarking
 vertical-integration
+icu-dataset
+interlude-using-map
+simulation-question
+simulation-results
+alignability

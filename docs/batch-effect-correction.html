@@ -1,0 +1,508 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 5 Batch Effect Correction | Simulation for Microbiome Analysis</title>
+  <meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="generator" content="bookdown 0.39.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 5 Batch Effect Correction | Simulation for Microbiome Analysis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 5 Batch Effect Correction | Simulation for Microbiome Analysis" />
+  
+  <meta name="twitter:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
+
+
+<meta name="date" content="2024-06-25" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="microbiome-networks.html"/>
+<link rel="next" href="vertical-integration.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Simulation for Microbiome Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#setup"><i class="fa fa-check"></i><b>1.1</b> Setup</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#using-summarizedexperiment"><i class="fa fa-check"></i><b>1.2</b> Using <code>SummarizedExperiment</code></a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#warm-up-a-gaussian-example"><i class="fa fa-check"></i><b>1.3</b> Warm-up: A Gaussian Example</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html"><i class="fa fa-check"></i><b>2</b> Simulating Differential Abundance</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#critique"><i class="fa fa-check"></i><b>2.1</b> Critique</a></li>
+<li class="chapter" data-level="2.2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#power-analysis-loop"><i class="fa fa-check"></i><b>2.2</b> Power Analysis Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html"><i class="fa fa-check"></i><b>3</b> Multivariate Power Analysis</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#interpreting-pls-da"><i class="fa fa-check"></i><b>3.1</b> Interpreting PLS-DA</a></li>
+<li class="chapter" data-level="3.2" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#estimation"><i class="fa fa-check"></i><b>3.2</b> Estimation</a></li>
+<li class="chapter" data-level="3.3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#evaluation"><i class="fa fa-check"></i><b>3.3</b> Evaluation</a></li>
+<li class="chapter" data-level="3.4" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#pls-da-power-analysis"><i class="fa fa-check"></i><b>3.4</b> PLS-DA Power Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="microbiome-networks.html"><a href="microbiome-networks.html"><i class="fa fa-check"></i><b>4</b> Microbiome Networks</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="microbiome-networks.html"><a href="microbiome-networks.html#estimation-1"><i class="fa fa-check"></i><b>4.1</b> Estimation</a></li>
+<li class="chapter" data-level="4.2" data-path="microbiome-networks.html"><a href="microbiome-networks.html#evaluation-1"><i class="fa fa-check"></i><b>4.2</b> Evaluation</a></li>
+<li class="chapter" data-level="4.3" data-path="microbiome-networks.html"><a href="microbiome-networks.html#block-covariance"><i class="fa fa-check"></i><b>4.3</b> Block Covariance</a></li>
+<li class="chapter" data-level="4.4" data-path="microbiome-networks.html"><a href="microbiome-networks.html#generalization"><i class="fa fa-check"></i><b>4.4</b> Generalization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>5</b> Batch Effect Correction</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#anaerobic-digestion-data"><i class="fa fa-check"></i><b>5.1</b> Anaerobic Digestion Data</a></li>
+<li class="chapter" data-level="5.2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#simulation-design"><i class="fa fa-check"></i><b>5.2</b> Simulation Design</a></li>
+<li class="chapter" data-level="5.3" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#benchmarking"><i class="fa fa-check"></i><b>5.3</b> Benchmarking</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="vertical-integration.html"><a href="vertical-integration.html"><i class="fa fa-check"></i><b>6</b> Vertical Integration</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="vertical-integration.html"><a href="vertical-integration.html#icu-dataset"><i class="fa fa-check"></i><b>6.1</b> ICU Dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="interlude-using-map.html"><a href="interlude-using-map.html"><i class="fa fa-check"></i><b>7</b> Interlude: Using map</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="interlude-using-map.html"><a href="interlude-using-map.html#simulation-question"><i class="fa fa-check"></i><b>7.1</b> Simulation Question</a></li>
+<li class="chapter" data-level="7.2" data-path="interlude-using-map.html"><a href="interlude-using-map.html#simulation-results"><i class="fa fa-check"></i><b>7.2</b> Simulation Results</a></li>
+<li class="chapter" data-level="7.3" data-path="interlude-using-map.html"><a href="interlude-using-map.html#alignability"><i class="fa fa-check"></i><b>7.3</b> Alignability</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Simulation for Microbiome Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="batch-effect-correction" class="section level1 hasAnchor" number="5">
+<h1><span class="header-section-number">Chapter 5</span> Batch Effect Correction<a href="batch-effect-correction.html#batch-effect-correction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>Integration can be a subtle exercise. We need to balance our interest in seeing
+similarities between datasets with the risk of making things seem more similar
+than they really are. Simulation can help navigate this subtlety by letting us
+see how integration methods would behave in situations where we know exactly how
+the different datasets are related. This note will illustrate this perspective
+by showing how simulation can help with both horizontal (across batches) and
+vertical (across assays) integration. We’ll have a brief interlude on the <code>map</code>
+function in the <code>purrr</code>, which is helpful for concisely writing code that would
+otherwise need for loops (e.g., over batches or assays).</p>
+<p>As usual, let’s load the libraries we’ll need. Remember that instructions for
+installing <code>MIGsim</code> and <code>scDesigner</code> are documented in the repository
+<a href="https://github.com/krisrs1128/intro-to-simulation/">README</a>.</p>
+<div id="anaerobic-digestion-data" class="section level2 hasAnchor" number="5.1">
+<h2><span class="header-section-number">5.1</span> Anaerobic Digestion Data<a href="batch-effect-correction.html#anaerobic-digestion-data" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>This example is about simultaneously analyzing several batches in a dataset
+about the efficiency of anaerobic digestion (AD) of organic matter. The
+essential problem is that, in this study, the samples could not be collected
+simultaneously. Small differences across separate runs could lead to systematic
+differences in the resulting data, which can obfuscate the more interesting
+between-group variation that the experiment was intended to uncover. For
+example, in the AD dataset, the date of the sequencing run has a global effect
+on measured community composition, which we can see right away from a principal
+components plot:</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="batch-effect-correction.html#cb70-1" tabindex="-1"></a><span class="fu">data</span>(anaerobic)</span>
+<span id="cb70-2"><a href="batch-effect-correction.html#cb70-2" tabindex="-1"></a><span class="fu">pca_batch</span>(anaerobic, <span class="at">facet =</span> <span class="cn">FALSE</span>) <span class="sc">+</span></span>
+<span id="cb70-3"><a href="batch-effect-correction.html#cb70-3" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#191C59&quot;</span>, <span class="st">&quot;#bc0c3c&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb70-4"><a href="batch-effect-correction.html#cb70-4" tabindex="-1"></a>  <span class="fu">labs</span>(</span>
+<span id="cb70-5"><a href="batch-effect-correction.html#cb70-5" tabindex="-1"></a>    <span class="at">col =</span> <span class="st">&quot;Treatment&quot;</span>,</span>
+<span id="cb70-6"><a href="batch-effect-correction.html#cb70-6" tabindex="-1"></a>    <span class="at">shape =</span> <span class="st">&quot;Batch&quot;</span>,</span>
+<span id="cb70-7"><a href="batch-effect-correction.html#cb70-7" tabindex="-1"></a>    <span class="at">x =</span> <span class="st">&quot;PC1 [25.2% Variance Explained]&quot;</span>,</span>
+<span id="cb70-8"><a href="batch-effect-correction.html#cb70-8" tabindex="-1"></a>    <span class="at">y =</span> <span class="st">&quot;PC2 [16.2% Varianced Explained]&quot;</span></span>
+<span id="cb70-9"><a href="batch-effect-correction.html#cb70-9" tabindex="-1"></a>  )</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/pca-anaerobic-1.png" width="672" /></p>
+<p>You can learn more about the general microbiome batch effect integration problem
+in <a href="https://doi.org/10.1093/bib/bbz105">(Wang and Le Cao, 2020)</a>, which is where
+this dataset example and the batch effect correction code below comes from. The
+article also reviews mechanisms that could lead to batch effects in microbiome
+data, together with methods for removing these effects and the situations within
+which they are most appropriate.</p>
+<p>In batch effect correction, it’s important to remove as much of the batch
+variation as possible without accidentally also removing the real biological
+variation that would have been present even if all the samples had been
+sequenced together. This is sometimes called ``overintegration,’’ and this is an
+especially high risk if some of the real biological variation is quite subtle,
+e.g., a rare cell type or one that is very similar to a more prominent one.
+Simulation can help us gauge the extent to which different methods may or may
+not overintegrate. Since we get to control the between-batch and and
+between-biological-condition differences, we can see the extent to which
+integration methods can remove the former while preserving the latter.</p>
+</div>
+<div id="simulation-design" class="section level2 hasAnchor" number="5.2">
+<h2><span class="header-section-number">5.2</span> Simulation Design<a href="batch-effect-correction.html#simulation-design" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>The block below estimates a candidate simulator. By using the formula <code>~ batch + treatment</code>, we’re allowing for taxon-wise differences due to batch and
+treatment. Note that in principle, we could estimate an interaction between
+batch and treatment (the treatment could appear stronger in some batches than
+others). I encourage you to try estimating that model; however, visually
+analyzing the output suggests that this full model has a tendancy to overfit.
+Since the data have already been centered log-ratio transformed, we can try out
+a Gaussian marginal model. The AD dataset has relatively few samples
+compared to the number of features, so we’ll use a copula that’s designed for
+this setting.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="batch-effect-correction.html#cb71-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb71-2"><a href="batch-effect-correction.html#cb71-2" tabindex="-1"></a>  anaerobic,</span>
+<span id="cb71-3"><a href="batch-effect-correction.html#cb71-3" tabindex="-1"></a>  <span class="sc">~</span> batch <span class="sc">+</span> treatment,</span>
+<span id="cb71-4"><a href="batch-effect-correction.html#cb71-4" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb71-5"><a href="batch-effect-correction.html#cb71-5" tabindex="-1"></a>  <span class="at">copula =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> .<span class="dv">1</span>)</span>
+<span id="cb71-6"><a href="batch-effect-correction.html#cb71-6" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb71-7"><a href="batch-effect-correction.html#cb71-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>, <span class="at">mstop =</span> <span class="dv">100</span>) <span class="co"># lower nu -&gt; stable training</span></span></code></pre></div>
+<p>We can simulate from the fitted model and evaluate the quality of our fit using
+<code>contrast_boxplot</code>. This is a light wrapper of the ggplot2 code we used to
+compare experiments from our first session, and you can read its definition
+<a href="https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/R/plot.R#L26">here</a>.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="batch-effect-correction.html#cb72-1" tabindex="-1"></a>anaerobic_sim <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
+<span id="cb72-2"><a href="batch-effect-correction.html#cb72-2" tabindex="-1"></a><span class="fu">contrast_boxplot</span>(anaerobic, anaerobic_sim)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/eval-anaerobic-1.png" width="672" /></p>
+<p><strong>Exercise</strong> Propose and create at least one other visualization that can be
+used to compare and contrast the simulator with real data. What conclusions can
+you draw?</p>
+<p><strong>Solution</strong>: There are many possible answers:</p>
+<ul>
+<li>Boxplots across taxa with different overall abundance levels.</li>
+<li>Analogous histograms or CDF plots, to show the entire distributions, rather than just summarized quantiles.</li>
+<li>Pair scatterplots, to see how well the bivariate relationships between taxa are preserved.</li>
+<li>Dimensionality reduction on the simulated data, to see how well it matches global structure in the original data.</li>
+</ul>
+<p>We’ll implement the last idea using PCA. This should be contrasted with the PCA
+plot on the original data above. It’s okay if the plot seems rotated relative to
+the oiginal plot – PCA is only unique up to rotation. The main characteristic
+we’re looking for is that the relative sizes of the batch and treatment effects
+seem reasonaly well-preserved, since these will be the types of effects that our
+later batch effect integration methods must be able to distinguish.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="batch-effect-correction.html#cb73-1" tabindex="-1"></a><span class="fu">pca_batch</span>(anaerobic_sim)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-26-1.png" width="672" />
+:::</p>
+<p>To study the risk for overintegration, let’s imagine that there were a third
+treatment group with relatively fewer samples. This is the type of group that a
+correction method might accidentally blend in with the rest, if it’s too
+aggressive. We’ve defined the imaginary experiment using the data.frame below.
+The <code>treatment</code> level <code>1.8</code> is the new one. We’ve supposed there are between 1 -
+3 technical replicates (<code>extraction</code>) for each biological sample (<code>sample</code>), and
+the batch dates are the same as before.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="batch-effect-correction.html#cb74-1" tabindex="-1"></a><span class="fu">data</span>(imaginary_design)</span>
+<span id="cb74-2"><a href="batch-effect-correction.html#cb74-2" tabindex="-1"></a><span class="fu">summary</span>(imaginary_design)</span></code></pre></div>
+<pre><code>##    extraction        batch      treatment           rep           sample   
+##  Min.   :1    09/04/2015:36   Min.   :0.0000   Min.   :1.00   1      :  2  
+##  1st Qu.:1    14/04/2016:36   1st Qu.:0.0000   1st Qu.:1.75   2      :  2  
+##  Median :2    01/07/2016:36   Median :1.0000   Median :2.50   3      :  2  
+##  Mean   :2    14/11/2016:36   Mean   :0.7167   Mean   :2.75   4      :  2  
+##  3rd Qu.:3    21/09/2017:36   3rd Qu.:1.0000   3rd Qu.:4.00   5      :  2  
+##  Max.   :3                    Max.   :1.8000   Max.   :5.00   6      :  2  
+##                                                               (Other):168</code></pre>
+<p>We can simulate from the new design and look at how different this new treatment
+group seems from the others. It’s a subtle effect, definitely smaller than the
+batch effect, but also separate enough that we should be able to preserve it.</p>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="batch-effect-correction.html#cb76-1" tabindex="-1"></a>p <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb76-2"><a href="batch-effect-correction.html#cb76-2" tabindex="-1"></a>anaerobic_sim <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator, <span class="at">new_data =</span> imaginary_design)</span>
+<span id="cb76-3"><a href="batch-effect-correction.html#cb76-3" tabindex="-1"></a>p[[<span class="st">&quot;sim&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(anaerobic_sim)</span></code></pre></div>
+</div>
+<div id="benchmarking" class="section level2 hasAnchor" number="5.3">
+<h2><span class="header-section-number">5.3</span> Benchmarking<a href="batch-effect-correction.html#benchmarking" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We’ve defined a <code>batch_correct</code> wrapper function that implements either the
+RUV-III or ComBat batch effect correction methods. Their outputs are contrasted
+in the PCAs below. It looks like ComBat might be somewhat too aggressive,
+causing the <code>1</code> and <code>1.8</code> treatment groups to substantially overlap, while RUV
+is a bit more conservative, keeping the treatment groups nicely separate. As an
+aside, we note that this conclusion can depend on the number of replicates and
+total number of samples available. We’ve included the code for generating the
+<code>imaginary_design</code> data.frame in <a href="https://github.com/krisrs1128/intro-to-simulation/blob/10fa498aea952684204b2f15c387a7983c30626d/MIGsim/vignettes/process-integration.Rmd#L76">a vignette</a>
+for the <code>MIGsim</code> package. Can you find settings that lead either method astray?</p>
+<div class="sourceCode" id="cb77"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb77-1"><a href="batch-effect-correction.html#cb77-1" tabindex="-1"></a>p[[<span class="st">&quot;ruv&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(<span class="fu">batch_correct</span>(anaerobic_sim, <span class="st">&quot;ruv&quot;</span>))</span>
+<span id="cb77-2"><a href="batch-effect-correction.html#cb77-2" tabindex="-1"></a>p[[<span class="st">&quot;combat&quot;</span>]] <span class="ot">&lt;-</span> <span class="fu">pca_batch</span>(<span class="fu">batch_correct</span>(anaerobic_sim, <span class="st">&quot;combat&quot;</span>))</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/batch-correction-vis-1.png" width="672" /></p>
+<div class="sourceCode" id="cb78"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb78-1"><a href="batch-effect-correction.html#cb78-1" tabindex="-1"></a>prediction_errors <span class="ot">&lt;-</span> <span class="cf">function</span>(df) {</span>
+<span id="cb78-2"><a href="batch-effect-correction.html#cb78-2" tabindex="-1"></a>  y_hat <span class="ot">&lt;-</span> <span class="fu">predict</span>(<span class="fu">lda</span>(treatment <span class="sc">~</span> PC1 <span class="sc">+</span> PC2, <span class="at">data =</span> df), <span class="at">type =</span> <span class="st">&quot;response&quot;</span>)<span class="sc">$</span>class</span>
+<span id="cb78-3"><a href="batch-effect-correction.html#cb78-3" tabindex="-1"></a>  <span class="fu">table</span>(df<span class="sc">$</span>treatment, y_hat)</span>
+<span id="cb78-4"><a href="batch-effect-correction.html#cb78-4" tabindex="-1"></a>}</span>
+<span id="cb78-5"><a href="batch-effect-correction.html#cb78-5" tabindex="-1"></a></span>
+<span id="cb78-6"><a href="batch-effect-correction.html#cb78-6" tabindex="-1"></a><span class="fu">map</span>(p, <span class="sc">~</span> <span class="fu">prediction_errors</span>(.<span class="sc">$</span>data))</span></code></pre></div>
+<pre><code>## $sim
+##      y_hat
+##        0  1 1.8
+##   0   62 13   0
+##   1   15 56   4
+##   1.8  1 14  15
+## 
+## $ruv
+##      y_hat
+##        0  1 1.8
+##   0   70  5   0
+##   1    2 67   6
+##   1.8  0  8  22
+## 
+## $combat
+##      y_hat
+##        0  1 1.8
+##   0   65 10   0
+##   1   12 59   4
+##   1.8  1 12  17</code></pre>
+<div class="sourceCode" id="cb80"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb80-1"><a href="batch-effect-correction.html#cb80-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.4.0 (2024-04-24)
+## Platform: aarch64-apple-darwin20
+## Running under: macOS Ventura 13.4
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: Australia/Melbourne
+## tzcode source: internal
+## 
+## attached base packages:
+##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1               XVector_0.44.0                  SingleCellExperiment_1.26.0    
+##  [5] scDesigner_0.0.0.9000           MIGsim_0.0.0.9000               scico_1.5.0                     patchwork_1.2.0                
+##  [9] mixOmics_6.28.0                 lattice_0.22-6                  glue_1.7.0                      ggdist_3.3.2                   
+## [13] gamboostLSS_2.0-7               mboost_2.9-10                   stabs_0.6-4                     SummarizedExperiment_1.34.0    
+## [17] Biobase_2.64.0                  GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                 
+## [21] S4Vectors_0.42.0                BiocGenerics_0.50.0             MatrixGenerics_1.16.0           matrixStats_1.3.0              
+## [25] SpiecEasi_1.1.3                 CovTools_0.5.4                  lubridate_1.9.3                 forcats_1.0.0                  
+## [29] stringr_1.5.1                   dplyr_1.1.4                     purrr_1.0.2                     readr_2.1.5                    
+## [33] tidyr_1.3.1                     tibble_3.2.1                    ggplot2_3.5.1                   tidyverse_2.0.0                
+## [37] RefManageR_1.4.0                knitr_1.47                      MASS_7.3-60.2                  
+## 
+## loaded via a namespace (and not attached):
+##   [1] minpack.lm_1.2-4            rpart_4.1.23                lifecycle_1.0.4             Rdpack_2.6                 
+##   [5] edgeR_4.2.0                 doParallel_1.0.17           MultiAssayExperiment_1.30.2 insight_0.20.1             
+##   [9] backports_1.5.0             magrittr_2.0.3              limma_3.60.2                sass_0.4.9                 
+##  [13] rmarkdown_2.27              jquerylib_0.1.4             yaml_2.3.8                  RColorBrewer_1.1-3         
+##  [17] ADGofTest_0.3               abind_1.4-5                 zlibbioc_1.50.0             expm_0.999-9               
+##  [21] quadprog_1.5-8              pspline_1.0-20              kde1d_1.0.7                 yulab.utils_0.1.4          
+##  [25] rgl_1.3.1                   pracma_2.4.4                xaringan_0.30               GenomeInfoDbData_1.2.12    
+##  [29] ggrepel_0.9.5               tidytree_0.4.6              ellipse_0.5.0               RSpectra_0.16-1            
+##  [33] codetools_0.2-20            DelayedArray_0.30.1         xml2_1.3.6                  shapes_1.2.7               
+##  [37] tidyselect_1.2.1            shape_1.4.6.1               farver_2.1.2                UCSC.utils_1.0.0           
+##  [41] randtoolbox_2.0.4           base64enc_0.1-3             jsonlite_1.8.8              Formula_1.2-5              
+##  [45] survival_3.7-0              iterators_1.0.14            systemfonts_1.1.0           foreach_1.5.2              
+##  [49] tools_4.4.0                 progress_1.2.3              ragg_1.3.2                  treeio_1.28.0              
+##  [53] Rcpp_1.0.12                 rARPACK_0.11-0              BiocBaseUtils_1.6.0         gridExtra_2.3              
+##  [57] SparseArray_1.4.8           xfun_0.44                   distributional_0.4.0        withr_3.0.0                
+##  [61] numDeriv_2016.8-1.1         fastmap_1.2.0               fansi_1.0.6                 digest_0.6.35              
+##  [65] timechange_0.3.0            R6_2.5.1                    textshaping_0.4.0           colorspace_2.1-0           
+##  [69] inum_1.0-5                  copula_1.1-3                flare_1.7.0.1               utf8_1.2.4                 
+##  [73] generics_0.1.3              corpcor_1.6.10              prettyunits_1.2.0           pulsar_0.3.11              
+##  [77] httr_1.4.7                  htmlwidgets_1.6.4           S4Arrays_1.4.1              scatterplot3d_0.3-44       
+##  [81] rngWELL_0.10-9              pkgconfig_2.0.3             geigen_2.3                  gtable_0.3.5               
+##  [85] pcaPP_2.0-4                 htmltools_0.5.8.1           bookdown_0.39.1             scales_1.3.0               
+##  [89] SHT_0.1.8                   rstudioapi_0.16.0           tzdb_0.4.0                  reshape2_1.4.4             
+##  [93] nlme_3.1-164                cachem_1.1.0                libcoin_1.0-10              pillar_1.9.0               
+##  [97] grid_4.4.0                  vctrs_0.6.5                 VGAM_1.1-11                 huge_1.3.5                 
+## [101] gamlss.dist_6.1-1           evaluate_0.23               mvtnorm_1.2-5               cli_3.6.2                  
+## [105] locfit_1.5-9.9              compiler_4.4.0              rlang_1.1.4                 crayon_1.5.2               
+## [109] labeling_0.4.3              fs_1.6.4                    plyr_1.8.9                  stringi_1.8.4              
+## [113] BiocParallel_1.38.0         nnls_1.5                    assertthat_0.2.1            rvinecopulib_0.6.3.1.1     
+## [117] munsell_0.5.1               gsl_2.1-8                   lazyeval_0.2.2              glmnet_4.1-8               
+## [121] Matrix_1.7-0                hms_1.1.3                   stabledist_0.7-1            statmod_1.5.0              
+## [125] highr_0.11                  rbibutils_2.2.16            memoise_2.0.1               partykit_1.2-20            
+## [129] igraph_2.0.3                bslib_0.7.0.9000            bibtex_0.5.1                ape_5.8</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="microbiome-networks.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="vertical-integration.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/04-batch-effect-correction.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["simulation_for_microbiome.pdf", "simulation_for_microbiome.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

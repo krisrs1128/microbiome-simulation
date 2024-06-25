@@ -1,0 +1,532 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 7 Interlude: Using map | Simulation for Microbiome Analysis</title>
+  <meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="generator" content="bookdown 0.39.1 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 7 Interlude: Using map | Simulation for Microbiome Analysis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 7 Interlude: Using map | Simulation for Microbiome Analysis" />
+  
+  <meta name="twitter:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
+
+
+<meta name="date" content="2024-06-25" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="vertical-integration.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+</head>
+
+<body>
+
+
+
+  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
+
+    <div class="book-summary">
+      <nav role="navigation">
+
+<ul class="summary">
+<li><a href="./">Simulation for Microbiome Analysis</a></li>
+
+<li class="divider"></li>
+<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
+<ul>
+<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#setup"><i class="fa fa-check"></i><b>1.1</b> Setup</a></li>
+<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#using-summarizedexperiment"><i class="fa fa-check"></i><b>1.2</b> Using <code>SummarizedExperiment</code></a></li>
+<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#warm-up-a-gaussian-example"><i class="fa fa-check"></i><b>1.3</b> Warm-up: A Gaussian Example</a></li>
+</ul></li>
+<li class="chapter" data-level="2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html"><i class="fa fa-check"></i><b>2</b> Simulating Differential Abundance</a>
+<ul>
+<li class="chapter" data-level="2.1" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#critique"><i class="fa fa-check"></i><b>2.1</b> Critique</a></li>
+<li class="chapter" data-level="2.2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#power-analysis-loop"><i class="fa fa-check"></i><b>2.2</b> Power Analysis Loop</a></li>
+</ul></li>
+<li class="chapter" data-level="3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html"><i class="fa fa-check"></i><b>3</b> Multivariate Power Analysis</a>
+<ul>
+<li class="chapter" data-level="3.1" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#interpreting-pls-da"><i class="fa fa-check"></i><b>3.1</b> Interpreting PLS-DA</a></li>
+<li class="chapter" data-level="3.2" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#estimation"><i class="fa fa-check"></i><b>3.2</b> Estimation</a></li>
+<li class="chapter" data-level="3.3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#evaluation"><i class="fa fa-check"></i><b>3.3</b> Evaluation</a></li>
+<li class="chapter" data-level="3.4" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#pls-da-power-analysis"><i class="fa fa-check"></i><b>3.4</b> PLS-DA Power Analysis</a></li>
+</ul></li>
+<li class="chapter" data-level="4" data-path="microbiome-networks.html"><a href="microbiome-networks.html"><i class="fa fa-check"></i><b>4</b> Microbiome Networks</a>
+<ul>
+<li class="chapter" data-level="4.1" data-path="microbiome-networks.html"><a href="microbiome-networks.html#estimation-1"><i class="fa fa-check"></i><b>4.1</b> Estimation</a></li>
+<li class="chapter" data-level="4.2" data-path="microbiome-networks.html"><a href="microbiome-networks.html#evaluation-1"><i class="fa fa-check"></i><b>4.2</b> Evaluation</a></li>
+<li class="chapter" data-level="4.3" data-path="microbiome-networks.html"><a href="microbiome-networks.html#block-covariance"><i class="fa fa-check"></i><b>4.3</b> Block Covariance</a></li>
+<li class="chapter" data-level="4.4" data-path="microbiome-networks.html"><a href="microbiome-networks.html#generalization"><i class="fa fa-check"></i><b>4.4</b> Generalization</a></li>
+</ul></li>
+<li class="chapter" data-level="5" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>5</b> Batch Effect Correction</a>
+<ul>
+<li class="chapter" data-level="5.1" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#anaerobic-digestion-data"><i class="fa fa-check"></i><b>5.1</b> Anaerobic Digestion Data</a></li>
+<li class="chapter" data-level="5.2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#simulation-design"><i class="fa fa-check"></i><b>5.2</b> Simulation Design</a></li>
+<li class="chapter" data-level="5.3" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#benchmarking"><i class="fa fa-check"></i><b>5.3</b> Benchmarking</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="vertical-integration.html"><a href="vertical-integration.html"><i class="fa fa-check"></i><b>6</b> Vertical Integration</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="vertical-integration.html"><a href="vertical-integration.html#icu-dataset"><i class="fa fa-check"></i><b>6.1</b> ICU Dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="interlude-using-map.html"><a href="interlude-using-map.html"><i class="fa fa-check"></i><b>7</b> Interlude: Using map</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="interlude-using-map.html"><a href="interlude-using-map.html#simulation-question"><i class="fa fa-check"></i><b>7.1</b> Simulation Question</a></li>
+<li class="chapter" data-level="7.2" data-path="interlude-using-map.html"><a href="interlude-using-map.html#simulation-results"><i class="fa fa-check"></i><b>7.2</b> Simulation Results</a></li>
+<li class="chapter" data-level="7.3" data-path="interlude-using-map.html"><a href="interlude-using-map.html#alignability"><i class="fa fa-check"></i><b>7.3</b> Alignability</a></li>
+</ul></li>
+<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
+<li class="divider"></li>
+<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
+
+</ul>
+
+      </nav>
+    </div>
+
+    <div class="book-body">
+      <div class="body-inner">
+        <div class="book-header" role="navigation">
+          <h1>
+            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Simulation for Microbiome Analysis</a>
+          </h1>
+        </div>
+
+        <div class="page-wrapper" tabindex="-1" role="main">
+          <div class="page-inner">
+
+            <section class="normal" id="section-">
+<div id="interlude-using-map" class="section level1 hasAnchor" number="7">
+<h1><span class="header-section-number">Chapter 7</span> Interlude: Using map<a href="interlude-using-map.html#interlude-using-map" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+<p>In the examples below, we’ll find it helpful to use the function <code>map</code> in the
+purrr package. This function gives a one-line replacement for simple for-loops;
+it is analogous to list comprehensions in python. It can be useful many places
+besides the topic of this tutorial. For example, if we want to convert the
+vector <code>c(1, 2, 3)</code> into <code>c(1, 4, 9)</code>, we can use this map:</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="interlude-using-map.html#cb87-1" tabindex="-1"></a><span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<pre><code>## [[1]]
+## [1] 1
+## 
+## [[2]]
+## [1] 4
+## 
+## [[3]]
+## [1] 9</code></pre>
+<p>The <code>~</code> notation is shorthand for defining a function, and the <code>.</code> represents
+the current vector element. More generally, we can apply map to lists. This
+line will update the list so that 1 is added to each element.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="interlude-using-map.html#cb89-1" tabindex="-1"></a><span class="fu">map</span>(<span class="fu">list</span>(<span class="at">a =</span> <span class="dv">1</span>, <span class="at">b =</span> <span class="dv">2</span>, <span class="at">c =</span> <span class="dv">3</span>), <span class="sc">~</span> . <span class="sc">+</span> <span class="dv">1</span>)</span></code></pre></div>
+<pre><code>## $a
+## [1] 2
+## 
+## $b
+## [1] 3
+## 
+## $c
+## [1] 4</code></pre>
+<p><strong>Exercise</strong>: To test your understanding, can you write a map that computes the
+*mean for each
+vector in the list <code>x</code> below? What about the mean of the 10 smallest elements?</p>
+<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="interlude-using-map.html#cb91-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">a =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">b =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">1</span>))</span></code></pre></div>
+<button onclick="myFunction(&#39;q-map&#39;)">
+Show solution
+</button>
+<div id="q-map" style="display:none">
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="interlude-using-map.html#cb92-1" tabindex="-1"></a><span class="fu">map</span>(x, mean)</span></code></pre></div>
+<pre><code>## $a
+## [1] 0.1177328
+## 
+## $b
+## [1] 1.128995</code></pre>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="interlude-using-map.html#cb94-1" tabindex="-1"></a><span class="fu">map</span>(x, <span class="sc">~</span> <span class="fu">mean</span>(<span class="fu">sort</span>(.)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]))</span></code></pre></div>
+<pre><code>## $a
+## [1] -1.920247
+## 
+## $b
+## [1] -0.8639795</code></pre>
+</div>
+<div id="simulation-question" class="section level2 hasAnchor" number="7.1">
+<h2><span class="header-section-number">7.1</span> Simulation Question<a href="interlude-using-map.html#simulation-question" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>How would the output have looked if 16S community composition had not been
+related to disease or antibiotics groups? Since integrative analysis prioritizes
+similarities across sources, we expect this to mask some of the real differences
+in the fungal and virus data as well. We can use simulation to gauge the extent
+of this masking.</p>
+<p>Our first step is to train a simulator. We’re just learning four different
+setes of parameters for each of the four observed groups. This is not as nuanced
+as learning separate effects for sepsis and antibiotics, but it will be enough
+for illustration. We have used <code>map</code> to estimate a simulator for each assay in
+the <code>icu</code> list.</p>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="interlude-using-map.html#cb96-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">map</span>(</span>
+<span id="cb96-2"><a href="interlude-using-map.html#cb96-2" tabindex="-1"></a>  icu,</span>
+<span id="cb96-3"><a href="interlude-using-map.html#cb96-3" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">setup_simulator</span>(., <span class="sc">~</span>Category, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb96-4"><a href="interlude-using-map.html#cb96-4" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span>
+<span id="cb96-5"><a href="interlude-using-map.html#cb96-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>So far, we haven’t tried removing any relationships present in the 16S assay,
+and indeed our integrative analysis output on the simulated data looks
+comparable to that from the original study.</p>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="interlude-using-map.html#cb97-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb97-2"><a href="interlude-using-map.html#cb97-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb97-3"><a href="interlude-using-map.html#cb97-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
+<span id="cb97-4"><a href="interlude-using-map.html#cb97-4" tabindex="-1"></a></span>
+<span id="cb97-5"><a href="interlude-using-map.html#cb97-5" tabindex="-1"></a>fit_sim <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
+<span id="cb97-6"><a href="interlude-using-map.html#cb97-6" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit_sim)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="interlude-using-map.html#cb98-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
+<pre><code>##              comp1     comp2
+## Bacteria 0.8580402 0.8191458
+## Fungi    0.6513668 0.4845247
+## Viruses  0.6118091 0.8047067</code></pre>
+<p><strong>Exercise</strong>: Modify the simulator above so that the 16S group no longer depends
+on disease cateogry. This will allow us to study how the integrative analysis
+output changes when the data are not alignable.</p>
+<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="interlude-using-map.html#cb100-1" tabindex="-1"></a>null_simulator <span class="ot">&lt;-</span> simulator</span>
+<span id="cb100-2"><a href="interlude-using-map.html#cb100-2" tabindex="-1"></a><span class="co"># fill this in</span></span>
+<span id="cb100-3"><a href="interlude-using-map.html#cb100-3" tabindex="-1"></a><span class="co"># null_simulator[[1]] &lt;- ???</span></span></code></pre></div>
+<p><strong>Solution</strong>: We need to define a new link that no longer depends on <code>Category</code>. One solution
+is to modify the existing simulator in place using <code>mutate</code>.</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="interlude-using-map.html#cb101-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> simulator[[<span class="dv">1</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb101-2"><a href="interlude-using-map.html#cb101-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">180</span>, <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb101-3"><a href="interlude-using-map.html#cb101-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<p>Since we are modifying all taxa, a simpler solution is to just define a
+new simulator from scratch.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="interlude-using-map.html#cb102-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(icu[[<span class="dv">1</span>]], <span class="sc">~</span><span class="dv">1</span>, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb102-2"><a href="interlude-using-map.html#cb102-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+</div>
+<div id="simulation-results" class="section level2 hasAnchor" number="7.2">
+<h2><span class="header-section-number">7.2</span> Simulation Results<a href="interlude-using-map.html#simulation-results" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>We can rerun the integrative analysis using the modified simulator. Somewhat
+surprisingly, the disease association in the bacteria group hasn’t been erased.
+This is an artifact of the integration. The other assays have associations with
+disease group, and since the method encourages outputs across tables to be
+consistent with one another, we have artificially introduced some structure into
+the bacteria visualization (even if it is quite weak.) Nonetheless, we still
+observe a large dropoff in weight for the bacterial table. Further, there seems
+to be a minor deterioration in the group separations for the fungal and virus
+communities, and the component weights are higher when we work with only the
+fungal and virus assays. Altogether, this suggests that we may want to check
+table-level associations with the response variable, especially if any of the
+integration outputs are ambiguous. In this case, we might be able to increase
+power by focusing only on class-associated assays. Nonetheless, the block
+sPLS-DA also seems relatively robust – considering the dramatic change in the
+microbiome table, the output for the remaining tables still surfaces interesting
+relationships.</p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="interlude-using-map.html#cb103-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(null_simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb103-2"><a href="interlude-using-map.html#cb103-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb103-3"><a href="interlude-using-map.html#cb103-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
+<span id="cb103-4"><a href="interlude-using-map.html#cb103-4" tabindex="-1"></a>fit_null <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
+<span id="cb103-5"><a href="interlude-using-map.html#cb103-5" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="interlude-using-map.html#cb104-1" tabindex="-1"></a>fit_null<span class="sc">$</span>weights</span></code></pre></div>
+<pre><code>##              comp1     comp2
+## Bacteria 0.6658170 0.6571177
+## Fungi    0.7479665 0.6797712
+## Viruses  0.7015960 0.7929047</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-44-1.png" width="672" /><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-44-2.png" width="672" /><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-44-3.png" width="672" /><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-44-4.png" width="672" /></p>
+</div>
+<div id="alignability" class="section level2 hasAnchor" number="7.3">
+<h2><span class="header-section-number">7.3</span> Alignability<a href="interlude-using-map.html#alignability" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<p>How do the canonical correlations compare between the real data and a reference
+null? First, we can compute the CCA canonical correlations using the real
+Bacteria and Virus data.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="interlude-using-map.html#cb106-1" tabindex="-1"></a>merged <span class="ot">&lt;-</span> simulator[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)] <span class="sc">|&gt;</span></span>
+<span id="cb106-2"><a href="interlude-using-map.html#cb106-2" tabindex="-1"></a>  <span class="fu">join_copula</span>(<span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.01</span>))</span>
+<span id="cb106-3"><a href="interlude-using-map.html#cb106-3" tabindex="-1"></a></span>
+<span id="cb106-4"><a href="interlude-using-map.html#cb106-4" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">sample</span>(merged) <span class="sc">|&gt;</span></span>
+<span id="cb106-5"><a href="interlude-using-map.html#cb106-5" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb106-6"><a href="interlude-using-map.html#cb106-6" tabindex="-1"></a>  <span class="fu">t</span>()</span>
+<span id="cb106-7"><a href="interlude-using-map.html#cb106-7" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">map</span>(icu, rownames)</span>
+<span id="cb106-8"><a href="interlude-using-map.html#cb106-8" tabindex="-1"></a>cca_result <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy[, ix[[<span class="dv">1</span>]]], xy[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)</span></code></pre></div>
+<p>Next, we define a reference null and compute canonical correlations on ten
+replicates from this null. To define the reference null, we zero out any
+correlations across tables. We then draw 100 samples from the resulting
+distribution and compute canonical correlations for each.</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="interlude-using-map.html#cb107-1" tabindex="-1"></a>rho_null <span class="ot">&lt;-</span> <span class="fu">copula_parameters</span>(merged)</span>
+<span id="cb107-2"><a href="interlude-using-map.html#cb107-2" tabindex="-1"></a><span class="fu">dimnames</span>(rho_null) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">colnames</span>(xy), <span class="fu">colnames</span>(xy))</span>
+<span id="cb107-3"><a href="interlude-using-map.html#cb107-3" tabindex="-1"></a>rho_null[ix[[<span class="dv">1</span>]], ix[[<span class="dv">3</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb107-4"><a href="interlude-using-map.html#cb107-4" tabindex="-1"></a>rho_null[ix[[<span class="dv">3</span>]], ix[[<span class="dv">1</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb107-5"><a href="interlude-using-map.html#cb107-5" tabindex="-1"></a></span>
+<span id="cb107-6"><a href="interlude-using-map.html#cb107-6" tabindex="-1"></a>null_cancor <span class="ot">&lt;-</span> merged <span class="sc">|&gt;</span></span>
+<span id="cb107-7"><a href="interlude-using-map.html#cb107-7" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho_null)</span>
+<span id="cb107-8"><a href="interlude-using-map.html#cb107-8" tabindex="-1"></a></span>
+<span id="cb107-9"><a href="interlude-using-map.html#cb107-9" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb107-10"><a href="interlude-using-map.html#cb107-10" tabindex="-1"></a>cancors <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb107-11"><a href="interlude-using-map.html#cb107-11" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="fu">seq_len</span>(B)) {</span>
+<span id="cb107-12"><a href="interlude-using-map.html#cb107-12" tabindex="-1"></a>  xy_null <span class="ot">&lt;-</span> <span class="fu">sample</span>(null_cancor) <span class="sc">|&gt;</span></span>
+<span id="cb107-13"><a href="interlude-using-map.html#cb107-13" tabindex="-1"></a>    <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb107-14"><a href="interlude-using-map.html#cb107-14" tabindex="-1"></a>    <span class="fu">t</span>()</span>
+<span id="cb107-15"><a href="interlude-using-map.html#cb107-15" tabindex="-1"></a></span>
+<span id="cb107-16"><a href="interlude-using-map.html#cb107-16" tabindex="-1"></a>  cancors[[<span class="fu">glue</span>(<span class="st">&quot;sim_{b}&quot;</span>)]] <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy_null[, ix[[<span class="dv">1</span>]]], xy_null[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)<span class="sc">$</span>cor</span>
+<span id="cb107-17"><a href="interlude-using-map.html#cb107-17" tabindex="-1"></a>}</span></code></pre></div>
+<p>To help with later visualization, we combine both the real and reference
+canonical correlations into a tidy data.frame. These are visualized in a hidden
+chunk below – if you want to see the source code, you can review it
+<a href="https://github.com/krisrs1128/microbiome-simulation/blob/main/book/04-integration.Rmd">here</a>.</p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="interlude-using-map.html#cb108-1" tabindex="-1"></a>cancors[[<span class="st">&quot;true&quot;</span>]] <span class="ot">&lt;-</span> cca_result<span class="sc">$</span>cor</span>
+<span id="cb108-2"><a href="interlude-using-map.html#cb108-2" tabindex="-1"></a>contrast_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(cancors, <span class="at">.id =</span> <span class="st">&quot;rep&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb108-3"><a href="interlude-using-map.html#cb108-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>rep, <span class="at">names_to =</span> <span class="st">&quot;loading&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb108-4"><a href="interlude-using-map.html#cb108-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb108-5"><a href="interlude-using-map.html#cb108-5" tabindex="-1"></a>    <span class="at">source =</span> <span class="fu">grepl</span>(<span class="st">&quot;true&quot;</span>, rep),</span>
+<span id="cb108-6"><a href="interlude-using-map.html#cb108-6" tabindex="-1"></a>    <span class="at">loading =</span> <span class="fu">as.integer</span>(loading)</span>
+<span id="cb108-7"><a href="interlude-using-map.html#cb108-7" tabindex="-1"></a>  )</span>
+<span id="cb108-8"><a href="interlude-using-map.html#cb108-8" tabindex="-1"></a><span class="fu">head</span>(contrast_data)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##   rep   loading value source
+##   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;lgl&gt; 
+## 1 sim_1       1 0.913 FALSE 
+## 2 sim_1       2 0.880 FALSE 
+## 3 sim_1       3 0.848 FALSE 
+## 4 sim_1       4 0.826 FALSE 
+## 5 sim_1       5 0.815 FALSE 
+## 6 sim_1       6 0.797 FALSE</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/contrast-vis-1.png" width="672" /></p>
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="interlude-using-map.html#cb110-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.4.0 (2024-04-24)
+## Platform: aarch64-apple-darwin20
+## Running under: macOS Ventura 13.4
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: Australia/Melbourne
+## tzcode source: internal
+## 
+## attached base packages:
+##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] lubridate_1.9.3                 stringr_1.5.1                   readr_2.1.5                     tidyverse_2.0.0                
+##  [5] RefManageR_1.4.0                knitr_1.47                      TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1              
+##  [9] XVector_0.44.0                  SingleCellExperiment_1.26.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
+## [13] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                    
+## [17] patchwork_1.2.0                 mixOmics_6.28.0                 lattice_0.22-6                  MASS_7.3-60.2                  
+## [21] glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                    gamboostLSS_2.0-7              
+## [25] mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                    
+## [29] SummarizedExperiment_1.34.0     Biobase_2.64.0                  GenomicRanges_1.56.0            GenomeInfoDb_1.40.0            
+## [33] IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0             MatrixGenerics_1.16.0          
+## [37] matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
+## 
+## loaded via a namespace (and not attached):
+##   [1] minpack.lm_1.2-4            rpart_4.1.23                lifecycle_1.0.4             Rdpack_2.6                 
+##   [5] edgeR_4.2.0                 doParallel_1.0.17           MultiAssayExperiment_1.30.2 insight_0.20.1             
+##   [9] backports_1.5.0             magrittr_2.0.3              limma_3.60.2                sass_0.4.9                 
+##  [13] rmarkdown_2.27              jquerylib_0.1.4             yaml_2.3.8                  RColorBrewer_1.1-3         
+##  [17] ADGofTest_0.3               abind_1.4-5                 zlibbioc_1.50.0             expm_0.999-9               
+##  [21] quadprog_1.5-8              pspline_1.0-20              kde1d_1.0.7                 rgl_1.3.1                  
+##  [25] yulab.utils_0.1.4           pracma_2.4.4                GenomeInfoDbData_1.2.12     ggrepel_0.9.5              
+##  [29] tidytree_0.4.6              ellipse_0.5.0               RSpectra_0.16-1             codetools_0.2-20           
+##  [33] DelayedArray_0.30.1         xml2_1.3.6                  shapes_1.2.7                tidyselect_1.2.1           
+##  [37] shape_1.4.6.1               UCSC.utils_1.0.0            farver_2.1.2                randtoolbox_2.0.4          
+##  [41] base64enc_0.1-3             jsonlite_1.8.8              Formula_1.2-5               survival_3.7-0             
+##  [45] iterators_1.0.14            systemfonts_1.1.0           foreach_1.5.2               tools_4.4.0                
+##  [49] progress_1.2.3              ragg_1.3.2                  treeio_1.28.0               Rcpp_1.0.12                
+##  [53] rARPACK_0.11-0              BiocBaseUtils_1.6.0         gridExtra_2.3               SparseArray_1.4.8          
+##  [57] xfun_0.44                   distributional_0.4.0        withr_3.0.0                 numDeriv_2016.8-1.1        
+##  [61] fastmap_1.2.0               fansi_1.0.6                 digest_0.6.35               timechange_0.3.0           
+##  [65] R6_2.5.1                    textshaping_0.4.0           colorspace_2.1-0            inum_1.0-5                 
+##  [69] copula_1.1-3                flare_1.7.0.1               utf8_1.2.4                  generics_0.1.3             
+##  [73] corpcor_1.6.10              prettyunits_1.2.0           pulsar_0.3.11               httr_1.4.7                 
+##  [77] htmlwidgets_1.6.4           S4Arrays_1.4.1              scatterplot3d_0.3-44        rngWELL_0.10-9             
+##  [81] pkgconfig_2.0.3             geigen_2.3                  gtable_0.3.5                pcaPP_2.0-4                
+##  [85] htmltools_0.5.8.1           bookdown_0.39.1             scales_1.3.0                SHT_0.1.8                  
+##  [89] rstudioapi_0.16.0           tzdb_0.4.0                  reshape2_1.4.4              nlme_3.1-164               
+##  [93] cachem_1.1.0                libcoin_1.0-10              pillar_1.9.0                grid_4.4.0                 
+##  [97] vctrs_0.6.5                 VGAM_1.1-11                 huge_1.3.5                  gamlss.dist_6.1-1          
+## [101] evaluate_0.23               mvtnorm_1.2-5               cli_3.6.2                   locfit_1.5-9.9             
+## [105] compiler_4.4.0              rlang_1.1.4                 crayon_1.5.2                labeling_0.4.3             
+## [109] plyr_1.8.9                  fs_1.6.4                    stringi_1.8.4               BiocParallel_1.38.0        
+## [113] nnls_1.5                    assertthat_0.2.1            rvinecopulib_0.6.3.1.1      munsell_0.5.1              
+## [117] gsl_2.1-8                   lazyeval_0.2.2              glmnet_4.1-8                Matrix_1.7-0               
+## [121] hms_1.1.3                   stabledist_0.7-1            statmod_1.5.0               highr_0.11                 
+## [125] rbibutils_2.2.16            partykit_1.2-20             igraph_2.0.3                memoise_2.0.1              
+## [129] bslib_0.7.0.9000            bibtex_0.5.1                ape_5.8</code></pre>
+
+</div>
+</div>
+            </section>
+
+          </div>
+        </div>
+      </div>
+<a href="vertical-integration.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
+<a href="references.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
+    </div>
+  </div>
+<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
+<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
+<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
+<script>
+gitbook.require(["gitbook"], function(gitbook) {
+gitbook.start({
+"sharing": {
+"github": false,
+"facebook": true,
+"twitter": true,
+"linkedin": false,
+"weibo": false,
+"instapaper": false,
+"vk": false,
+"whatsapp": false,
+"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
+},
+"fontsettings": {
+"theme": "white",
+"family": "sans",
+"size": 2
+},
+"edit": {
+"link": "https://github.com/USERNAME/REPO/edit/BRANCH/05-vertical-integration.Rmd",
+"text": "Edit"
+},
+"history": {
+"link": null,
+"text": null
+},
+"view": {
+"link": null,
+"text": null
+},
+"download": ["simulation_for_microbiome.pdf", "simulation_for_microbiome.epub"],
+"search": {
+"engine": "fuse",
+"options": null
+},
+"toc": {
+"collapse": "subsection"
+}
+});
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    var src = "true";
+    if (src === "" || src === "true") src = "https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.9/latest.js?config=TeX-MML-AM_CHTML";
+    if (location.protocol !== "file:")
+      if (/^https?:/.test(src))
+        src = src.replace(/^https?:/, '');
+    script.src = src;
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+</body>
+
+</html>

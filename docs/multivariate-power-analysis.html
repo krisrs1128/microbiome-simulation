@@ -23,7 +23,7 @@
 <meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
 
 
-<meta name="date" content="2024-06-21" />
+<meta name="date" content="2024-06-25" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -165,11 +165,21 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="4.3" data-path="microbiome-networks.html"><a href="microbiome-networks.html#block-covariance"><i class="fa fa-check"></i><b>4.3</b> Block Covariance</a></li>
 <li class="chapter" data-level="4.4" data-path="microbiome-networks.html"><a href="microbiome-networks.html#generalization"><i class="fa fa-check"></i><b>4.4</b> Generalization</a></li>
 </ul></li>
-<li class="chapter" data-level="5" data-path="integrative-simulation.html"><a href="integrative-simulation.html"><i class="fa fa-check"></i><b>5</b> Integrative Simulation</a>
+<li class="chapter" data-level="5" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>5</b> Batch Effect Correction</a>
 <ul>
-<li class="chapter" data-level="5.1" data-path="integrative-simulation.html"><a href="integrative-simulation.html#horizontal-integration"><i class="fa fa-check"></i><b>5.1</b> Horizontal Integration</a></li>
-<li class="chapter" data-level="5.2" data-path="integrative-simulation.html"><a href="integrative-simulation.html#interlude-using-map"><i class="fa fa-check"></i><b>5.2</b> Interlude: Using map</a></li>
-<li class="chapter" data-level="5.3" data-path="integrative-simulation.html"><a href="integrative-simulation.html#vertical-integration"><i class="fa fa-check"></i><b>5.3</b> Vertical Integration</a></li>
+<li class="chapter" data-level="5.1" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#anaerobic-digestion-data"><i class="fa fa-check"></i><b>5.1</b> Anaerobic Digestion Data</a></li>
+<li class="chapter" data-level="5.2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#simulation-design"><i class="fa fa-check"></i><b>5.2</b> Simulation Design</a></li>
+<li class="chapter" data-level="5.3" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#benchmarking"><i class="fa fa-check"></i><b>5.3</b> Benchmarking</a></li>
+</ul></li>
+<li class="chapter" data-level="6" data-path="vertical-integration.html"><a href="vertical-integration.html"><i class="fa fa-check"></i><b>6</b> Vertical Integration</a>
+<ul>
+<li class="chapter" data-level="6.1" data-path="vertical-integration.html"><a href="vertical-integration.html#icu-dataset"><i class="fa fa-check"></i><b>6.1</b> ICU Dataset</a></li>
+</ul></li>
+<li class="chapter" data-level="7" data-path="interlude-using-map.html"><a href="interlude-using-map.html"><i class="fa fa-check"></i><b>7</b> Interlude: Using map</a>
+<ul>
+<li class="chapter" data-level="7.1" data-path="interlude-using-map.html"><a href="interlude-using-map.html#simulation-question"><i class="fa fa-check"></i><b>7.1</b> Simulation Question</a></li>
+<li class="chapter" data-level="7.2" data-path="interlude-using-map.html"><a href="interlude-using-map.html#simulation-results"><i class="fa fa-check"></i><b>7.2</b> Simulation Results</a></li>
+<li class="chapter" data-level="7.3" data-path="interlude-using-map.html"><a href="interlude-using-map.html#alignability"><i class="fa fa-check"></i><b>7.3</b> Alignability</a></li>
 </ul></li>
 <li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
 <li class="divider"></li>
@@ -211,15 +221,15 @@ T1D patients and 61 healthy controls. These data were originally gathered by
 the relationship between the pancreas and intestinal issues often experienced by
 T1D patients. They were especially curious about whether microbime-associated
 proteins might be related to increased risk for T1D development.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="multivariate-power-analysis.html#cb38-1" tabindex="-1"></a><span class="fu">data</span>(t1d)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="multivariate-power-analysis.html#cb40-1" tabindex="-1"></a><span class="fu">data</span>(t1d)</span></code></pre></div>
 <p>The output that we care about are the PLD-DA scores and loadings. The wrapper
 below directly gives us this output without our having to explicitly set
 hyerparameters, though you can <a href="https://github.com/krisrs1128/intro-to-simulation/blob/main/MIGsim/R/methods.R">look here</a>
 to see how the function was defined.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="multivariate-power-analysis.html#cb39-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">splsda_fit</span>(t1d)</span>
-<span id="cb39-2"><a href="multivariate-power-analysis.html#cb39-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(result<span class="sc">$</span>fit, <span class="at">cex =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="multivariate-power-analysis.html#cb41-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">splsda_fit</span>(t1d)</span>
+<span id="cb41-2"><a href="multivariate-power-analysis.html#cb41-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(result<span class="sc">$</span>fit, <span class="at">cex =</span> <span class="dv">10</span>)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-15-1.png" width="672" /></p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="multivariate-power-analysis.html#cb40-1" tabindex="-1"></a><span class="fu">plotVar</span>(result<span class="sc">$</span>fit, <span class="at">cutoff =</span> <span class="fl">0.4</span>, <span class="at">cex =</span> <span class="dv">10</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multivariate-power-analysis.html#cb42-1" tabindex="-1"></a><span class="fu">plotVar</span>(result<span class="sc">$</span>fit, <span class="at">cutoff =</span> <span class="fl">0.4</span>, <span class="at">cex =</span> <span class="dv">10</span>)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-15-2.png" width="672" /></p>
 <p><strong>Exercise</strong>: Discuss the output of <code>plotIndiv</code>. How does <code>plotVar</code> shape
 your interpretation?</p>
@@ -241,8 +251,8 @@ controls.</p>
 <p>Let’s estimate a simulator where every protein is allowed ot vary across T1D
 type. Since the data have already been centered log-ratio transformed, it’s okay
 to treat these as Gaussian.</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="multivariate-power-analysis.html#cb41-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(t1d, <span class="at">link_formula =</span> <span class="sc">~</span>outcome2, <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb41-2"><a href="multivariate-power-analysis.html#cb41-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="multivariate-power-analysis.html#cb43-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(t1d, <span class="at">link_formula =</span> <span class="sc">~</span>outcome2, <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="multivariate-power-analysis.html#cb43-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span></code></pre></div>
 </div>
 <div id="evaluation" class="section level2 hasAnchor" number="3.3">
 <h2><span class="header-section-number">3.3</span> Evaluation<a href="multivariate-power-analysis.html#evaluation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -255,44 +265,44 @@ correlations.</p>
 correlations from both the real and the simulated datasets. We seem to be often
 overestimating the correlation strength. This is likely a consequence of the
 high-dimensionality of the problem.</p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multivariate-power-analysis.html#cb42-1" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
-<span id="cb42-2"><a href="multivariate-power-analysis.html#cb42-2" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multivariate-power-analysis.html#cb44-1" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
+<span id="cb44-2"><a href="multivariate-power-analysis.html#cb44-2" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 <p><strong>Exercise</strong>: To address this, let’s try modifying the <code>copula_def</code> argument of
 <code>setup_simulator</code> to use a more suitable simulator. Generate new correlation
 histograms and comment on the changes you observe. You only need to modify the
 commented lines (<code>#</code>) lines in the block below.</p>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="multivariate-power-analysis.html#cb43-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
-<span id="cb43-2"><a href="multivariate-power-analysis.html#cb43-2" tabindex="-1"></a>  t1d,</span>
-<span id="cb43-3"><a href="multivariate-power-analysis.html#cb43-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
-<span id="cb43-4"><a href="multivariate-power-analysis.html#cb43-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
-<span id="cb43-5"><a href="multivariate-power-analysis.html#cb43-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="co"># fill this code in</span></span>
-<span id="cb43-6"><a href="multivariate-power-analysis.html#cb43-6" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb43-7"><a href="multivariate-power-analysis.html#cb43-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb43-8"><a href="multivariate-power-analysis.html#cb43-8" tabindex="-1"></a></span>
-<span id="cb43-9"><a href="multivariate-power-analysis.html#cb43-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator) <span class="co"># and then run these two lines</span></span>
-<span id="cb43-10"><a href="multivariate-power-analysis.html#cb43-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper) <span class="co">#</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="multivariate-power-analysis.html#cb45-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb45-2"><a href="multivariate-power-analysis.html#cb45-2" tabindex="-1"></a>  t1d,</span>
+<span id="cb45-3"><a href="multivariate-power-analysis.html#cb45-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
+<span id="cb45-4"><a href="multivariate-power-analysis.html#cb45-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb45-5"><a href="multivariate-power-analysis.html#cb45-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="co"># fill this code in</span></span>
+<span id="cb45-6"><a href="multivariate-power-analysis.html#cb45-6" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb45-7"><a href="multivariate-power-analysis.html#cb45-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb45-8"><a href="multivariate-power-analysis.html#cb45-8" tabindex="-1"></a></span>
+<span id="cb45-9"><a href="multivariate-power-analysis.html#cb45-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator) <span class="co"># and then run these two lines</span></span>
+<span id="cb45-10"><a href="multivariate-power-analysis.html#cb45-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper) <span class="co">#</span></span></code></pre></div>
 <p><strong>Solution</strong>: For our coupla, we can use a covariance estimator of <a href="https://www.tandfonline.com/doi/abs/10.1198/jasa.2011.tm10560">Cai and Liu
 (2011)</a>, that is
 suited for high dimensions. Larger values of <code>thr</code> will increase the stability
 of our estimates, but at the cost of potentially missing or weakening true
 correlations. In line with this point, our new simulated correlations are more
 concentrated.</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multivariate-power-analysis.html#cb44-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
-<span id="cb44-2"><a href="multivariate-power-analysis.html#cb44-2" tabindex="-1"></a>  t1d,</span>
-<span id="cb44-3"><a href="multivariate-power-analysis.html#cb44-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
-<span id="cb44-4"><a href="multivariate-power-analysis.html#cb44-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
-<span id="cb44-5"><a href="multivariate-power-analysis.html#cb44-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.4</span>)</span>
-<span id="cb44-6"><a href="multivariate-power-analysis.html#cb44-6" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb44-7"><a href="multivariate-power-analysis.html#cb44-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb44-8"><a href="multivariate-power-analysis.html#cb44-8" tabindex="-1"></a></span>
-<span id="cb44-9"><a href="multivariate-power-analysis.html#cb44-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
-<span id="cb44-10"><a href="multivariate-power-analysis.html#cb44-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multivariate-power-analysis.html#cb46-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb46-2"><a href="multivariate-power-analysis.html#cb46-2" tabindex="-1"></a>  t1d,</span>
+<span id="cb46-3"><a href="multivariate-power-analysis.html#cb46-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
+<span id="cb46-4"><a href="multivariate-power-analysis.html#cb46-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb46-5"><a href="multivariate-power-analysis.html#cb46-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.4</span>)</span>
+<span id="cb46-6"><a href="multivariate-power-analysis.html#cb46-6" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb46-7"><a href="multivariate-power-analysis.html#cb46-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb46-8"><a href="multivariate-power-analysis.html#cb46-8" tabindex="-1"></a></span>
+<span id="cb46-9"><a href="multivariate-power-analysis.html#cb46-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
+<span id="cb46-10"><a href="multivariate-power-analysis.html#cb46-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-19-1.png" width="672" />
 :::</p>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="multivariate-power-analysis.html#cb45-1" tabindex="-1"></a>MIGsim<span class="sc">::</span><span class="fu">contrast_boxplot</span>(t1d, sim_exper, <span class="sc">~</span> . <span class="sc">~</span> <span class="fu">reorder</span>(outcome2, value))</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="multivariate-power-analysis.html#cb47-1" tabindex="-1"></a>MIGsim<span class="sc">::</span><span class="fu">contrast_boxplot</span>(t1d, sim_exper, <span class="sc">~</span> . <span class="sc">~</span> <span class="fu">reorder</span>(outcome2, value))</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multivariate-power-analysis.html#cb46-1" tabindex="-1"></a><span class="co">#MIGsim::contrast_boxplot</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multivariate-power-analysis.html#cb48-1" tabindex="-1"></a><span class="co">#MIGsim::contrast_boxplot</span></span></code></pre></div>
 </div>
 <div id="pls-da-power-analysis" class="section level2 hasAnchor" number="3.4">
 <h2><span class="header-section-number">3.4</span> PLS-DA Power Analysis<a href="multivariate-power-analysis.html#pls-da-power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -306,51 +316,51 @@ classifier balance precision and recall on new samples.</p>
 have no relationship at all with the response? We’ll also simulate three
 hypothetical datasets for each sample size and sparsity level. All
 configurations of interest are stored in the <code>config</code> matrix below.</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="multivariate-power-analysis.html#cb47-1" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb47-2"><a href="multivariate-power-analysis.html#cb47-2" tabindex="-1"></a>  <span class="at">sample_size =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">15</span>, <span class="dv">150</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
-<span id="cb47-3"><a href="multivariate-power-analysis.html#cb47-3" tabindex="-1"></a>  <span class="at">n_rep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
-<span id="cb47-4"><a href="multivariate-power-analysis.html#cb47-4" tabindex="-1"></a>  <span class="at">n_null =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">317</span>, <span class="dv">417</span>, <span class="at">length.out =</span> <span class="dv">4</span>)),</span>
-<span id="cb47-5"><a href="multivariate-power-analysis.html#cb47-5" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="cn">NA</span></span>
-<span id="cb47-6"><a href="multivariate-power-analysis.html#cb47-6" tabindex="-1"></a>)</span>
-<span id="cb47-7"><a href="multivariate-power-analysis.html#cb47-7" tabindex="-1"></a></span>
-<span id="cb47-8"><a href="multivariate-power-analysis.html#cb47-8" tabindex="-1"></a><span class="fu">data</span>(t1d_order)</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="multivariate-power-analysis.html#cb49-1" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb49-2"><a href="multivariate-power-analysis.html#cb49-2" tabindex="-1"></a>  <span class="at">sample_size =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">15</span>, <span class="dv">150</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
+<span id="cb49-3"><a href="multivariate-power-analysis.html#cb49-3" tabindex="-1"></a>  <span class="at">n_rep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>,</span>
+<span id="cb49-4"><a href="multivariate-power-analysis.html#cb49-4" tabindex="-1"></a>  <span class="at">n_null =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">317</span>, <span class="dv">417</span>, <span class="at">length.out =</span> <span class="dv">4</span>)),</span>
+<span id="cb49-5"><a href="multivariate-power-analysis.html#cb49-5" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="cn">NA</span></span>
+<span id="cb49-6"><a href="multivariate-power-analysis.html#cb49-6" tabindex="-1"></a>)</span>
+<span id="cb49-7"><a href="multivariate-power-analysis.html#cb49-7" tabindex="-1"></a></span>
+<span id="cb49-8"><a href="multivariate-power-analysis.html#cb49-8" tabindex="-1"></a><span class="fu">data</span>(t1d_order)</span></code></pre></div>
 <p><strong>Exercise</strong>: Finally, we’re in a position to generate synthetic data and
 evaluate PLS-DA performance. Fill in the block below to update the simulator for
 each <code>i</code>. Remember that the original <code>simulator</code> defined above assumes that all
 proteins are associated with T1D. You can use <code>t1d_order</code> to prioritize the
 proteins with the strongest effects in the original data. As before, you should
 only need to modify the line marked with the comments (<code>#</code>).</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multivariate-power-analysis.html#cb48-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
-<span id="cb48-2"><a href="multivariate-power-analysis.html#cb48-2" tabindex="-1"></a>  simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
-<span id="cb48-3"><a href="multivariate-power-analysis.html#cb48-3" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
-<span id="cb48-4"><a href="multivariate-power-analysis.html#cb48-4" tabindex="-1"></a>      <span class="co"># fill this in</span></span>
-<span id="cb48-5"><a href="multivariate-power-analysis.html#cb48-5" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb48-6"><a href="multivariate-power-analysis.html#cb48-6" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb48-7"><a href="multivariate-power-analysis.html#cb48-7" tabindex="-1"></a></span>
-<span id="cb48-8"><a href="multivariate-power-analysis.html#cb48-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
-<span id="cb48-9"><a href="multivariate-power-analysis.html#cb48-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
-<span id="cb48-10"><a href="multivariate-power-analysis.html#cb48-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
-<span id="cb48-11"><a href="multivariate-power-analysis.html#cb48-11" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multivariate-power-analysis.html#cb50-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
+<span id="cb50-2"><a href="multivariate-power-analysis.html#cb50-2" tabindex="-1"></a>  simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
+<span id="cb50-3"><a href="multivariate-power-analysis.html#cb50-3" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb50-4"><a href="multivariate-power-analysis.html#cb50-4" tabindex="-1"></a>      <span class="co"># fill this in</span></span>
+<span id="cb50-5"><a href="multivariate-power-analysis.html#cb50-5" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb50-6"><a href="multivariate-power-analysis.html#cb50-6" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb50-7"><a href="multivariate-power-analysis.html#cb50-7" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="multivariate-power-analysis.html#cb50-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
+<span id="cb50-9"><a href="multivariate-power-analysis.html#cb50-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
+<span id="cb50-10"><a href="multivariate-power-analysis.html#cb50-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
+<span id="cb50-11"><a href="multivariate-power-analysis.html#cb50-11" tabindex="-1"></a>}</span></code></pre></div>
 <p><strong>Solution</strong>: To define nulls, we mutate the weakest proteins so that there is no longer any
 association with T1D: <code>link = ~ 1</code> instead of <code>link = ~ outcome2</code>. To speed up
 the computation, we organized the <code>mutate</code> calls so that we don’t need to
 re-estimate proteins whose effects were removed in a previous iteration.</p>
-<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="multivariate-power-analysis.html#cb49-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
-<span id="cb49-2"><a href="multivariate-power-analysis.html#cb49-2" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">==</span> <span class="dv">1</span> <span class="sc">||</span> config<span class="sc">$</span>n_null[i] <span class="sc">!=</span> config<span class="sc">$</span>n_null[i <span class="sc">-</span> <span class="dv">1</span>]) {</span>
-<span id="cb49-3"><a href="multivariate-power-analysis.html#cb49-3" tabindex="-1"></a>    simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
-<span id="cb49-4"><a href="multivariate-power-analysis.html#cb49-4" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">any_of</span>(<span class="fu">rev</span>(t1d_order)[<span class="dv">1</span><span class="sc">:</span>config<span class="sc">$</span>n_null[i]]), <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb49-5"><a href="multivariate-power-analysis.html#cb49-5" tabindex="-1"></a>      <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb49-6"><a href="multivariate-power-analysis.html#cb49-6" tabindex="-1"></a>  }</span>
-<span id="cb49-7"><a href="multivariate-power-analysis.html#cb49-7" tabindex="-1"></a></span>
-<span id="cb49-8"><a href="multivariate-power-analysis.html#cb49-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
-<span id="cb49-9"><a href="multivariate-power-analysis.html#cb49-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
-<span id="cb49-10"><a href="multivariate-power-analysis.html#cb49-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
-<span id="cb49-11"><a href="multivariate-power-analysis.html#cb49-11" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="multivariate-power-analysis.html#cb51-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
+<span id="cb51-2"><a href="multivariate-power-analysis.html#cb51-2" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">==</span> <span class="dv">1</span> <span class="sc">||</span> config<span class="sc">$</span>n_null[i] <span class="sc">!=</span> config<span class="sc">$</span>n_null[i <span class="sc">-</span> <span class="dv">1</span>]) {</span>
+<span id="cb51-3"><a href="multivariate-power-analysis.html#cb51-3" tabindex="-1"></a>    simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
+<span id="cb51-4"><a href="multivariate-power-analysis.html#cb51-4" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">any_of</span>(<span class="fu">rev</span>(t1d_order)[<span class="dv">1</span><span class="sc">:</span>config<span class="sc">$</span>n_null[i]]), <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb51-5"><a href="multivariate-power-analysis.html#cb51-5" tabindex="-1"></a>      <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb51-6"><a href="multivariate-power-analysis.html#cb51-6" tabindex="-1"></a>  }</span>
+<span id="cb51-7"><a href="multivariate-power-analysis.html#cb51-7" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="multivariate-power-analysis.html#cb51-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
+<span id="cb51-9"><a href="multivariate-power-analysis.html#cb51-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
+<span id="cb51-10"><a href="multivariate-power-analysis.html#cb51-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
+<span id="cb51-11"><a href="multivariate-power-analysis.html#cb51-11" tabindex="-1"></a>}</span></code></pre></div>
 <p>:::</p>
 <p>We can visualize variation in performance.</p>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multivariate-power-analysis.html#cb50-1" tabindex="-1"></a><span class="fu">ggplot</span>(config, <span class="fu">aes</span>(sample_size, metrics, <span class="at">col =</span> <span class="fu">factor</span>(n_null))) <span class="sc">+</span></span>
-<span id="cb50-2"><a href="multivariate-power-analysis.html#cb50-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
-<span id="cb50-3"><a href="multivariate-power-analysis.html#cb50-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>n_null)</span></code></pre></div>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="multivariate-power-analysis.html#cb52-1" tabindex="-1"></a><span class="fu">ggplot</span>(config, <span class="fu">aes</span>(sample_size, metrics, <span class="at">col =</span> <span class="fu">factor</span>(n_null))) <span class="sc">+</span></span>
+<span id="cb52-2"><a href="multivariate-power-analysis.html#cb52-2" tabindex="-1"></a>  <span class="fu">geom_point</span>() <span class="sc">+</span></span>
+<span id="cb52-3"><a href="multivariate-power-analysis.html#cb52-3" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>n_null)</span></code></pre></div>
 <p><strong>Discussion</strong>: Interpret the visualization above. How do you think analysis
 like this could help you justify making some experimental investments over
 others?</p>
@@ -364,7 +374,7 @@ then we may already achieve good power with ~ 100 samples. However, if we
 imagine our effect might be sparser in our future experiment, then this figure
 would give us good justification for arguing for a larger number of samples, in
 order to ensure we can discover a disease-associated proteomics signature.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="multivariate-power-analysis.html#cb51-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb53-1"><a href="multivariate-power-analysis.html#cb53-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
