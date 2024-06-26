@@ -23,7 +23,7 @@
 <meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
 
 
-<meta name="date" content="2024-06-25" />
+<meta name="date" content="2024-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -221,31 +221,31 @@ to fixed zero inflation across the population (<code>nu</code>), so we have set 
 Finally, since we want to eventually evaluate testing methods that are designed
 for count data, we have used the (Z)ero (I)nflated (N)egative (B)inomial
 location-shape-scale model.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="simulating-differential-abundance.html#cb31-1" tabindex="-1"></a><span class="fu">data</span>(atlas)</span>
-<span id="cb31-2"><a href="simulating-differential-abundance.html#cb31-2" tabindex="-1"></a></span>
-<span id="cb31-3"><a href="simulating-differential-abundance.html#cb31-3" tabindex="-1"></a>fmla <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb31-4"><a href="simulating-differential-abundance.html#cb31-4" tabindex="-1"></a>  <span class="at">mu =</span> <span class="sc">~</span> bmi_group <span class="sc">+</span> log_depth,</span>
-<span id="cb31-5"><a href="simulating-differential-abundance.html#cb31-5" tabindex="-1"></a>  <span class="at">sigma =</span> <span class="sc">~</span> bmi_group <span class="sc">+</span> log_depth,</span>
-<span id="cb31-6"><a href="simulating-differential-abundance.html#cb31-6" tabindex="-1"></a>  <span class="at">nu =</span> <span class="sc">~</span><span class="dv">1</span></span>
-<span id="cb31-7"><a href="simulating-differential-abundance.html#cb31-7" tabindex="-1"></a>)</span>
-<span id="cb31-8"><a href="simulating-differential-abundance.html#cb31-8" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(atlas, fmla, <span class="sc">~</span> <span class="fu">ZINBLSS</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb31-9"><a href="simulating-differential-abundance.html#cb31-9" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="simulating-differential-abundance.html#cb39-1" tabindex="-1"></a><span class="fu">data</span>(atlas)</span>
+<span id="cb39-2"><a href="simulating-differential-abundance.html#cb39-2" tabindex="-1"></a></span>
+<span id="cb39-3"><a href="simulating-differential-abundance.html#cb39-3" tabindex="-1"></a>fmla <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb39-4"><a href="simulating-differential-abundance.html#cb39-4" tabindex="-1"></a>  <span class="at">mu =</span> <span class="sc">~</span> bmi_group <span class="sc">+</span> log_depth,</span>
+<span id="cb39-5"><a href="simulating-differential-abundance.html#cb39-5" tabindex="-1"></a>  <span class="at">sigma =</span> <span class="sc">~</span> bmi_group <span class="sc">+</span> log_depth,</span>
+<span id="cb39-6"><a href="simulating-differential-abundance.html#cb39-6" tabindex="-1"></a>  <span class="at">nu =</span> <span class="sc">~</span><span class="dv">1</span></span>
+<span id="cb39-7"><a href="simulating-differential-abundance.html#cb39-7" tabindex="-1"></a>)</span>
+<span id="cb39-8"><a href="simulating-differential-abundance.html#cb39-8" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(atlas, fmla, <span class="sc">~</span> <span class="fu">ZINBLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb39-9"><a href="simulating-differential-abundance.html#cb39-9" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
 <div id="critique" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Critique<a href="simulating-differential-abundance.html#critique" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Exercise</strong>: The block below combines the real and simulated experiments and
 visualizes their difference. With your neighbors, discuss how well the simulator
 approximates the original template.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="simulating-differential-abundance.html#cb32-1" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb32-2"><a href="simulating-differential-abundance.html#cb32-2" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">pivot_experiment</span>(atlas), <span class="co"># real data</span></span>
-<span id="cb32-3"><a href="simulating-differential-abundance.html#cb32-3" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">pivot_experiment</span>(<span class="fu">sample</span>(sim)), <span class="co"># simulated</span></span>
-<span id="cb32-4"><a href="simulating-differential-abundance.html#cb32-4" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">&quot;source&quot;</span></span>
-<span id="cb32-5"><a href="simulating-differential-abundance.html#cb32-5" tabindex="-1"></a>)</span>
-<span id="cb32-6"><a href="simulating-differential-abundance.html#cb32-6" tabindex="-1"></a></span>
-<span id="cb32-7"><a href="simulating-differential-abundance.html#cb32-7" tabindex="-1"></a><span class="fu">ggplot</span>(combined) <span class="sc">+</span></span>
-<span id="cb32-8"><a href="simulating-differential-abundance.html#cb32-8" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(</span>
-<span id="cb32-9"><a href="simulating-differential-abundance.html#cb32-9" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> value), <span class="fu">reorder</span>(feature, value, median), <span class="at">fill =</span> bmi_group)</span>
-<span id="cb32-10"><a href="simulating-differential-abundance.html#cb32-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb32-11"><a href="simulating-differential-abundance.html#cb32-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> source)</span></code></pre></div>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="simulating-differential-abundance.html#cb40-1" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
+<span id="cb40-2"><a href="simulating-differential-abundance.html#cb40-2" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">pivot_experiment</span>(atlas), <span class="co"># real data</span></span>
+<span id="cb40-3"><a href="simulating-differential-abundance.html#cb40-3" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">pivot_experiment</span>(<span class="fu">sample</span>(sim)), <span class="co"># simulated</span></span>
+<span id="cb40-4"><a href="simulating-differential-abundance.html#cb40-4" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">&quot;source&quot;</span></span>
+<span id="cb40-5"><a href="simulating-differential-abundance.html#cb40-5" tabindex="-1"></a>)</span>
+<span id="cb40-6"><a href="simulating-differential-abundance.html#cb40-6" tabindex="-1"></a></span>
+<span id="cb40-7"><a href="simulating-differential-abundance.html#cb40-7" tabindex="-1"></a><span class="fu">ggplot</span>(combined) <span class="sc">+</span></span>
+<span id="cb40-8"><a href="simulating-differential-abundance.html#cb40-8" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(</span>
+<span id="cb40-9"><a href="simulating-differential-abundance.html#cb40-9" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> value), <span class="fu">reorder</span>(feature, value, median), <span class="at">fill =</span> bmi_group)</span>
+<span id="cb40-10"><a href="simulating-differential-abundance.html#cb40-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb40-11"><a href="simulating-differential-abundance.html#cb40-11" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> source)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/contrast-simulators-1.png" width="672" /></p>
 <p><strong>Solution</strong>: The clearest difference is that, for these more abundant taxa, there there are
 not many low or zero counts. In contrast, the simulated data tend to have a long
@@ -269,30 +269,30 @@ it as a true signal, the difference may be hard to detect. Eventually, our
 package will include functions for modifying these effects directly; at this
 point, though, we can only indirectly modify parameters by re-estimating them
 with new formulas.</p>
-<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="simulating-differential-abundance.html#cb33-1" tabindex="-1"></a>nulls <span class="ot">&lt;-</span> <span class="fu">differential_analysis</span>(atlas, <span class="st">&quot;LIMMA_voom&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb33-2"><a href="simulating-differential-abundance.html#cb33-2" tabindex="-1"></a>  <span class="fu">rownames</span>() <span class="sc">|&gt;</span></span>
-<span id="cb33-3"><a href="simulating-differential-abundance.html#cb33-3" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">16</span>)</span>
-<span id="cb33-4"><a href="simulating-differential-abundance.html#cb33-4" tabindex="-1"></a></span>
-<span id="cb33-5"><a href="simulating-differential-abundance.html#cb33-5" tabindex="-1"></a>null_fmla <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mu =</span> <span class="sc">~</span>log_depth, <span class="at">sigma =</span> <span class="sc">~</span>log_depth, <span class="at">nu =</span> <span class="sc">~</span><span class="dv">1</span>)</span>
-<span id="cb33-6"><a href="simulating-differential-abundance.html#cb33-6" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
-<span id="cb33-7"><a href="simulating-differential-abundance.html#cb33-7" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">any_of</span>(nulls), <span class="at">link =</span> null_fmla) <span class="sc">|&gt;</span></span>
-<span id="cb33-8"><a href="simulating-differential-abundance.html#cb33-8" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="simulating-differential-abundance.html#cb41-1" tabindex="-1"></a>nulls <span class="ot">&lt;-</span> <span class="fu">differential_analysis</span>(atlas, <span class="st">&quot;LIMMA_voom&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb41-2"><a href="simulating-differential-abundance.html#cb41-2" tabindex="-1"></a>  <span class="fu">rownames</span>() <span class="sc">|&gt;</span></span>
+<span id="cb41-3"><a href="simulating-differential-abundance.html#cb41-3" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">16</span>)</span>
+<span id="cb41-4"><a href="simulating-differential-abundance.html#cb41-4" tabindex="-1"></a></span>
+<span id="cb41-5"><a href="simulating-differential-abundance.html#cb41-5" tabindex="-1"></a>null_fmla <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mu =</span> <span class="sc">~</span>log_depth, <span class="at">sigma =</span> <span class="sc">~</span>log_depth, <span class="at">nu =</span> <span class="sc">~</span><span class="dv">1</span>)</span>
+<span id="cb41-6"><a href="simulating-differential-abundance.html#cb41-6" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb41-7"><a href="simulating-differential-abundance.html#cb41-7" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">any_of</span>(nulls), <span class="at">link =</span> null_fmla) <span class="sc">|&gt;</span></span>
+<span id="cb41-8"><a href="simulating-differential-abundance.html#cb41-8" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
 <p>Now that we have ground truth associations, we’ll evaluate LIMMA-voom for
 differential analysis. We consider sample sizes ranging from 50 to 1200, and we
 simulate 10 datasets for each sample size.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="simulating-differential-abundance.html#cb34-1" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb34-2"><a href="simulating-differential-abundance.html#cb34-2" tabindex="-1"></a>  <span class="at">sample_size =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">50</span>, <span class="dv">1200</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
-<span id="cb34-3"><a href="simulating-differential-abundance.html#cb34-3" tabindex="-1"></a>  <span class="at">n_rep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb34-4"><a href="simulating-differential-abundance.html#cb34-4" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb34-5"><a href="simulating-differential-abundance.html#cb34-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">run =</span> <span class="fu">as.character</span>(<span class="fu">row_number</span>()))</span>
-<span id="cb34-6"><a href="simulating-differential-abundance.html#cb34-6" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="simulating-differential-abundance.html#cb34-7" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb34-8"><a href="simulating-differential-abundance.html#cb34-8" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
-<span id="cb34-9"><a href="simulating-differential-abundance.html#cb34-9" tabindex="-1"></a>  atlas_ <span class="ot">&lt;-</span> <span class="fu">sample_n</span>(sim, config<span class="sc">$</span>sample_size[i])</span>
-<span id="cb34-10"><a href="simulating-differential-abundance.html#cb34-10" tabindex="-1"></a>  results[[i]] <span class="ot">&lt;-</span> <span class="fu">differential_analysis</span>(atlas_, <span class="st">&quot;LIMMA_voom&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb34-11"><a href="simulating-differential-abundance.html#cb34-11" tabindex="-1"></a>    <span class="fu">da_metrics</span>(nulls, <span class="at">level =</span> <span class="fl">0.3</span>)</span>
-<span id="cb34-12"><a href="simulating-differential-abundance.html#cb34-12" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;{i}/{nrow(config)}&quot;</span>))</span>
-<span id="cb34-13"><a href="simulating-differential-abundance.html#cb34-13" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="simulating-differential-abundance.html#cb42-1" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb42-2"><a href="simulating-differential-abundance.html#cb42-2" tabindex="-1"></a>  <span class="at">sample_size =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">50</span>, <span class="dv">1200</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
+<span id="cb42-3"><a href="simulating-differential-abundance.html#cb42-3" tabindex="-1"></a>  <span class="at">n_rep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
+<span id="cb42-4"><a href="simulating-differential-abundance.html#cb42-4" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb42-5"><a href="simulating-differential-abundance.html#cb42-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">run =</span> <span class="fu">as.character</span>(<span class="fu">row_number</span>()))</span>
+<span id="cb42-6"><a href="simulating-differential-abundance.html#cb42-6" tabindex="-1"></a></span>
+<span id="cb42-7"><a href="simulating-differential-abundance.html#cb42-7" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb42-8"><a href="simulating-differential-abundance.html#cb42-8" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
+<span id="cb42-9"><a href="simulating-differential-abundance.html#cb42-9" tabindex="-1"></a>  atlas_ <span class="ot">&lt;-</span> <span class="fu">sample_n</span>(sim, config<span class="sc">$</span>sample_size[i])</span>
+<span id="cb42-10"><a href="simulating-differential-abundance.html#cb42-10" tabindex="-1"></a>  results[[i]] <span class="ot">&lt;-</span> <span class="fu">differential_analysis</span>(atlas_, <span class="st">&quot;LIMMA_voom&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb42-11"><a href="simulating-differential-abundance.html#cb42-11" tabindex="-1"></a>    <span class="fu">da_metrics</span>(nulls, <span class="at">level =</span> <span class="fl">0.3</span>)</span>
+<span id="cb42-12"><a href="simulating-differential-abundance.html#cb42-12" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;{i}/{nrow(config)}&quot;</span>))</span>
+<span id="cb42-13"><a href="simulating-differential-abundance.html#cb42-13" tabindex="-1"></a>}</span></code></pre></div>
 <p><strong>Exercise</strong>: Visualize the results. How would you interpret the results of the
 power analysis? Based on your earlier critique of the simulator, do you think
 the estimated power here is conservative, liberal, or about right?</p>
@@ -302,16 +302,16 @@ that the average false discovery proportion is always controlled below 0.3,
 though the variance in this proportion can be quite high. We can also see that
 we would have quite good power with <span class="math inline">\(n \geq 625\)</span> samples, but the worst case
 scenarios can be quite poor for anything with fewer samples.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="simulating-differential-abundance.html#cb35-1" tabindex="-1"></a><span class="fu">bind_rows</span>(results, <span class="at">.id =</span> <span class="st">&quot;run&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb35-2"><a href="simulating-differential-abundance.html#cb35-2" tabindex="-1"></a>  <span class="fu">left_join</span>(config) <span class="sc">|&gt;</span></span>
-<span id="cb35-3"><a href="simulating-differential-abundance.html#cb35-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb35-4"><a href="simulating-differential-abundance.html#cb35-4" tabindex="-1"></a>  <span class="fu">stat_pointinterval</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(sample_size), value)) <span class="sc">+</span></span>
-<span id="cb35-5"><a href="simulating-differential-abundance.html#cb35-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>metric, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="simulating-differential-abundance.html#cb43-1" tabindex="-1"></a><span class="fu">bind_rows</span>(results, <span class="at">.id =</span> <span class="st">&quot;run&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb43-2"><a href="simulating-differential-abundance.html#cb43-2" tabindex="-1"></a>  <span class="fu">left_join</span>(config) <span class="sc">|&gt;</span></span>
+<span id="cb43-3"><a href="simulating-differential-abundance.html#cb43-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb43-4"><a href="simulating-differential-abundance.html#cb43-4" tabindex="-1"></a>  <span class="fu">stat_pointinterval</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(sample_size), value)) <span class="sc">+</span></span>
+<span id="cb43-5"><a href="simulating-differential-abundance.html#cb43-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>metric, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
 <p>We expect that this result is somewhat conservative. This is because the
 original data have more symmetric distributions than our simulation, so limma’s
 transformation to normality is likely easier to accomplish than in our more
 highly skewed data.</p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="simulating-differential-abundance.html#cb36-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="simulating-differential-abundance.html#cb44-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4

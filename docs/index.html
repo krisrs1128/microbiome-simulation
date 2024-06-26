@@ -23,7 +23,7 @@
 <meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
 
 
-<meta name="date" content="2024-06-25" />
+<meta name="date" content="2024-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -203,7 +203,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <div id="header">
 <h1 class="title">Simulation for Microbiome Analysis</h1>
 <p class="author"><em>Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao</em></p>
-<p class="date"><em>2024-06-25</em></p>
+<p class="date"><em>2024-06-26</em></p>
 </div>
 <div id="introduction" class="section level1 hasAnchor" number="1">
 <h1><span class="header-section-number">Chapter 1</span> Introduction<a href="index.html#introduction" class="anchor-section" aria-label="Anchor link to header"></a></h1>
@@ -242,8 +242,8 @@ throughout these book. You can install it by running:</p>
 </div>
 <div id="using-summarizedexperiment" class="section level2 hasAnchor" number="1.2">
 <h2><span class="header-section-number">1.2</span> Using <code>SummarizedExperiment</code><a href="index.html#using-summarizedexperiment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
-<p><code>scDesigner</code>’s interface is built with <code>SummarizedExperiment</code> in mind. These
-data structures simplify manipulation of sequencing experiments. For example,
+<p><code>SummarizedExperiment</code> data structures simplify manipulation of sequencing
+experiments, and we’ll be using them throughout these tutorials. For example,
 they distinguish between molecule counts, which are stored in the <code>assay</code> slot,
 and sample descriptors, which are stored in <code>colData</code>. At the same time, these
 separate components are nicely synchronized. For example, subsetting samples
@@ -253,24 +253,36 @@ from one of these tables automatically subsets the other.</p>
 profiled the gut microbiomes from 1006 healthy adults in Western Europe.</p>
 <div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="index.html#cb3-1" tabindex="-1"></a><span class="fu">data</span>(atlas)</span>
 <span id="cb3-2"><a href="index.html#cb3-2" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rowData</span>(atlas)<span class="sc">$</span>Phylum)</span></code></pre></div>
+<pre><code>## Loading required package: TreeSummarizedExperiment</code></pre>
+<pre><code>## Loading required package: SingleCellExperiment</code></pre>
+<pre><code>## Loading required package: Biostrings</code></pre>
+<pre><code>## Loading required package: XVector</code></pre>
+<pre><code>## 
+## Attaching package: &#39;XVector&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:purrr&#39;:
+## 
+##     compact</code></pre>
+<pre><code>## 
+## Attaching package: &#39;Biostrings&#39;</code></pre>
+<pre><code>## The following object is masked from &#39;package:base&#39;:
+## 
+##     strsplit</code></pre>
 <pre><code>## 
 ## Actinobacteria  Bacteroidetes     Firmicutes 
 ##              1              2             21</code></pre>
-<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="index.html#cb5-1" tabindex="-1"></a><span class="fu">mean</span>(atlas<span class="sc">$</span>age)</span></code></pre></div>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="index.html#cb13-1" tabindex="-1"></a><span class="fu">mean</span>(atlas<span class="sc">$</span>age)</span></code></pre></div>
 <pre><code>## [1] 45.15629</code></pre>
-<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="index.html#cb7-1" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">colData</span>(atlas)<span class="sc">$</span>bmi_group <span class="sc">==</span> <span class="st">&quot;obese&quot;</span></span>
-<span id="cb7-2"><a href="index.html#cb7-2" tabindex="-1"></a>abundances <span class="ot">&lt;-</span> <span class="fu">assay</span>(atlas)</span>
-<span id="cb7-3"><a href="index.html#cb7-3" tabindex="-1"></a><span class="fu">rowMeans</span>(abundances[, ix])</span></code></pre></div>
-<pre><code>##                   Allistipes et rel.          Anaerostipes caccae et rel.         Bacteroides vulgatus et rel.                      Bifidobacterium 
-##                            289.85263                            123.84211                           1235.44211                            120.72982 
-##     Bryantella formatexigens et rel.       Butyrivibrio crossotus et rel.        Clostridium cellulosi et rel.           Clostridium leptum et rel. 
-##                            137.74737                            188.54035                            437.13684                            129.88070 
-##           Clostridium nexile et rel.     Clostridium orbiscindens et rel.       Clostridium sphenoides et rel.        Clostridium symbiosum et rel. 
-##                             73.69474                            231.82807                            139.35439                            331.90175 
-##         Coprococcus eutactus et rel.        Dorea formicigenerans et rel.    Lachnospira pectinoschiza et rel.   Oscillospira guillermondii et rel. 
-##                            222.15088                            176.07368                            127.75439                           1560.27368 
-## Outgrouping clostridium cluster XIVa          Ruminococcus bromii et rel.        Ruminococcus callidus et rel.           Ruminococcus obeum et rel. 
-##                             91.93684                            100.09123                            103.61754                            449.28421 
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="index.html#cb15-1" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">colData</span>(atlas)<span class="sc">$</span>bmi_group <span class="sc">==</span> <span class="st">&quot;obese&quot;</span></span>
+<span id="cb15-2"><a href="index.html#cb15-2" tabindex="-1"></a>abundances <span class="ot">&lt;-</span> <span class="fu">assay</span>(atlas)</span>
+<span id="cb15-3"><a href="index.html#cb15-3" tabindex="-1"></a><span class="fu">rowMeans</span>(abundances[, ix])</span></code></pre></div>
+<pre><code>##                   Allistipes et rel.          Anaerostipes caccae et rel.         Bacteroides vulgatus et rel.                      Bifidobacterium     Bryantella formatexigens et rel. 
+##                            289.85263                            123.84211                           1235.44211                            120.72982                            137.74737 
+##       Butyrivibrio crossotus et rel.        Clostridium cellulosi et rel.           Clostridium leptum et rel.           Clostridium nexile et rel.     Clostridium orbiscindens et rel. 
+##                            188.54035                            437.13684                            129.88070                             73.69474                            231.82807 
+##       Clostridium sphenoides et rel.        Clostridium symbiosum et rel.         Coprococcus eutactus et rel.        Dorea formicigenerans et rel.    Lachnospira pectinoschiza et rel. 
+##                            139.35439                            331.90175                            222.15088                            176.07368                            127.75439 
+##   Oscillospira guillermondii et rel. Outgrouping clostridium cluster XIVa          Ruminococcus bromii et rel.        Ruminococcus callidus et rel.           Ruminococcus obeum et rel. 
+##                           1560.27368                             91.93684                            100.09123                            103.61754                            449.28421 
 ##       Sporobacter termitidis et rel.     Subdoligranulum variable at rel.           Uncultured Clostridiales I          Uncultured Clostridiales II 
 ##                            423.71579                            442.34737                            191.28772                            152.83509</code></pre>
 <p><strong>Exercise</strong>: To practice working with <code>SummarizedExperiment</code>
@@ -283,27 +295,25 @@ objects, try answering:</p>
 </ul>
 <p><em>Hint: The most important functions are <code>assay()</code>, <code>rowData()</code>, and <code>colData()</code>.</em></p>
 <p><strong>Solution</strong></p>
-<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="index.html#cb9-1" tabindex="-1"></a><span class="fu">nrow</span>(atlas)</span></code></pre></div>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="index.html#cb17-1" tabindex="-1"></a><span class="fu">nrow</span>(atlas)</span></code></pre></div>
 <pre><code>## [1] 24</code></pre>
-<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="index.html#cb11-1" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rowData</span>(atlas)<span class="sc">$</span>Phylum)</span></code></pre></div>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="index.html#cb19-1" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rowData</span>(atlas)<span class="sc">$</span>Phylum)</span></code></pre></div>
 <pre><code>## 
 ## Actinobacteria  Bacteroidetes     Firmicutes 
 ##              1              2             21</code></pre>
-<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="index.html#cb13-1" tabindex="-1"></a><span class="fu">mean</span>(atlas<span class="sc">$</span>age)</span></code></pre></div>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="index.html#cb21-1" tabindex="-1"></a><span class="fu">mean</span>(atlas<span class="sc">$</span>age)</span></code></pre></div>
 <pre><code>## [1] 45.15629</code></pre>
-<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="index.html#cb15-1" tabindex="-1"></a>atlas[, atlas<span class="sc">$</span>bmi_group <span class="sc">==</span> <span class="st">&quot;obese&quot;</span>] <span class="sc">|&gt;</span></span>
-<span id="cb15-2"><a href="index.html#cb15-2" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
-<span id="cb15-3"><a href="index.html#cb15-3" tabindex="-1"></a>  <span class="fu">rowMeans</span>()</span></code></pre></div>
-<pre><code>##                   Allistipes et rel.          Anaerostipes caccae et rel.         Bacteroides vulgatus et rel.                      Bifidobacterium 
-##                            289.85263                            123.84211                           1235.44211                            120.72982 
-##     Bryantella formatexigens et rel.       Butyrivibrio crossotus et rel.        Clostridium cellulosi et rel.           Clostridium leptum et rel. 
-##                            137.74737                            188.54035                            437.13684                            129.88070 
-##           Clostridium nexile et rel.     Clostridium orbiscindens et rel.       Clostridium sphenoides et rel.        Clostridium symbiosum et rel. 
-##                             73.69474                            231.82807                            139.35439                            331.90175 
-##         Coprococcus eutactus et rel.        Dorea formicigenerans et rel.    Lachnospira pectinoschiza et rel.   Oscillospira guillermondii et rel. 
-##                            222.15088                            176.07368                            127.75439                           1560.27368 
-## Outgrouping clostridium cluster XIVa          Ruminococcus bromii et rel.        Ruminococcus callidus et rel.           Ruminococcus obeum et rel. 
-##                             91.93684                            100.09123                            103.61754                            449.28421 
+<div class="sourceCode" id="cb23"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb23-1"><a href="index.html#cb23-1" tabindex="-1"></a>atlas[, atlas<span class="sc">$</span>bmi_group <span class="sc">==</span> <span class="st">&quot;obese&quot;</span>] <span class="sc">|&gt;</span></span>
+<span id="cb23-2"><a href="index.html#cb23-2" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb23-3"><a href="index.html#cb23-3" tabindex="-1"></a>  <span class="fu">rowMeans</span>()</span></code></pre></div>
+<pre><code>##                   Allistipes et rel.          Anaerostipes caccae et rel.         Bacteroides vulgatus et rel.                      Bifidobacterium     Bryantella formatexigens et rel. 
+##                            289.85263                            123.84211                           1235.44211                            120.72982                            137.74737 
+##       Butyrivibrio crossotus et rel.        Clostridium cellulosi et rel.           Clostridium leptum et rel.           Clostridium nexile et rel.     Clostridium orbiscindens et rel. 
+##                            188.54035                            437.13684                            129.88070                             73.69474                            231.82807 
+##       Clostridium sphenoides et rel.        Clostridium symbiosum et rel.         Coprococcus eutactus et rel.        Dorea formicigenerans et rel.    Lachnospira pectinoschiza et rel. 
+##                            139.35439                            331.90175                            222.15088                            176.07368                            127.75439 
+##   Oscillospira guillermondii et rel. Outgrouping clostridium cluster XIVa          Ruminococcus bromii et rel.        Ruminococcus callidus et rel.           Ruminococcus obeum et rel. 
+##                           1560.27368                             91.93684                            100.09123                            103.61754                            449.28421 
 ##       Sporobacter termitidis et rel.     Subdoligranulum variable at rel.           Uncultured Clostridiales I          Uncultured Clostridiales II 
 ##                            423.71579                            442.34737                            191.28772                            152.83509</code></pre>
 </div>
@@ -313,8 +323,8 @@ objects, try answering:</p>
 plot below represents a different feature (e.g., taxon, gene, metabolite…).
 The abundance varies smoothly over time, and in the first three panels, the
 trends differ by group assignment.</p>
-<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="index.html#cb17-1" tabindex="-1"></a><span class="fu">data</span>(exper_ts)</span>
-<span id="cb17-2"><a href="index.html#cb17-2" tabindex="-1"></a><span class="fu">exper_lineplot</span>(exper_ts)</span></code></pre></div>
+<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="index.html#cb25-1" tabindex="-1"></a><span class="fu">data</span>(exper_ts)</span>
+<span id="cb25-2"><a href="index.html#cb25-2" tabindex="-1"></a><span class="fu">exper_lineplot</span>(exper_ts)</span></code></pre></div>
 <pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
 <pre><code>## Warning: Removed 12 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
@@ -324,15 +334,15 @@ The second gives an R formula syntax-style specification of GAMLSS parameters
 (mean and SD, in this case) dependence on sample properties. The last argument
 gives the type of model to fit, in this case, a Gaussian location-shape-scale
 model.</p>
-<div class="sourceCode" id="cb20"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb20-1"><a href="index.html#cb20-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(exper_ts, <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>) <span class="sc">*</span> group, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb20-2"><a href="index.html#cb20-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
-<pre><code>## [==============================================&gt;-----------------------------------------------------------------------------------------------] 2/6 ETA:
-## 1s[======================================================================&gt;-----------------------------------------------------------------------] 3/6 ETA:
-## 1s[==============================================================================================&gt;-----------------------------------------------] 4/6 ETA:
-## 0s[=====================================================================================================================&gt;------------------------] 5/6 ETA:
-## 0s[==============================================================================================================================================] 6/6 ETA: 0s</code></pre>
-<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="index.html#cb22-1" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
-<span id="cb22-2"><a href="index.html#cb22-2" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="index.html#cb28-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(exper_ts, <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>) <span class="sc">*</span> group, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb28-2"><a href="index.html#cb28-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<pre><code>## [==============================================================&gt;-----------------------------------------------------------------------------------------------------------------------------] 2/6 ETA:
+## 1s[=============================================================================================&gt;----------------------------------------------------------------------------------------------] 3/6 ETA:
+## 1s[============================================================================================================================&gt;---------------------------------------------------------------] 4/6 ETA:
+## 0s[============================================================================================================================================================&gt;-------------------------------] 5/6 ETA:
+## 0s[============================================================================================================================================================================================] 6/6 ETA: 0s</code></pre>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="index.html#cb30-1" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb30-2"><a href="index.html#cb30-2" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
 <pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
 <pre><code>## Warning: Removed 5 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
@@ -340,30 +350,30 @@ model.</p>
 group type. Can you define a simulator where the groups have no effect on the
 trends for the first two panels? This is the basis for defining synthetic
 negative controls.</p>
-<div class="sourceCode" id="cb25"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb25-1"><a href="index.html#cb25-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
-<span id="cb25-2"><a href="index.html#cb25-2" tabindex="-1"></a>  scDesigner<span class="sc">::</span><span class="fu">mutate</span>(</span>
-<span id="cb25-3"><a href="index.html#cb25-3" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
-<span id="cb25-4"><a href="index.html#cb25-4" tabindex="-1"></a>     <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)</span>
-<span id="cb25-5"><a href="index.html#cb25-5" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb25-6"><a href="index.html#cb25-6" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
-<span id="cb25-7"><a href="index.html#cb25-7" tabindex="-1"></a></span>
-<span id="cb25-8"><a href="index.html#cb25-8" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
-<span id="cb25-9"><a href="index.html#cb25-9" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="index.html#cb33-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb33-2"><a href="index.html#cb33-2" tabindex="-1"></a>  scDesigner<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb33-3"><a href="index.html#cb33-3" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb33-4"><a href="index.html#cb33-4" tabindex="-1"></a>     <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)</span>
+<span id="cb33-5"><a href="index.html#cb33-5" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb33-6"><a href="index.html#cb33-6" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
+<span id="cb33-7"><a href="index.html#cb33-7" tabindex="-1"></a></span>
+<span id="cb33-8"><a href="index.html#cb33-8" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb33-9"><a href="index.html#cb33-9" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
 <p><strong>Solution</strong>: We can modify the formula so that it no longer has an interaction
 with group. We just need to remove the <code>* group</code> from the original formula in our updated
 link function. To ensure that this only applies to the first two panels, we use
 1:2 in the first argument of <code>mutate</code>. This first argument specifies which
 features to apply the new formula to.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="index.html#cb26-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
-<span id="cb26-2"><a href="index.html#cb26-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="index.html#cb26-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
-<span id="cb26-4"><a href="index.html#cb26-4" tabindex="-1"></a></span>
-<span id="cb26-5"><a href="index.html#cb26-5" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
-<span id="cb26-6"><a href="index.html#cb26-6" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="index.html#cb34-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb34-2"><a href="index.html#cb34-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb34-3"><a href="index.html#cb34-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
+<span id="cb34-4"><a href="index.html#cb34-4" tabindex="-1"></a></span>
+<span id="cb34-5"><a href="index.html#cb34-5" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb34-6"><a href="index.html#cb34-6" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
 <pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
 <pre><code>## Warning: Removed 5 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="index.html#cb29-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="index.html#cb37-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
@@ -382,45 +392,30 @@ features to apply the new formula to.</p>
 ##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] lubridate_1.9.3                 stringr_1.5.1                   readr_2.1.5                     tidyverse_2.0.0                
-##  [5] RefManageR_1.4.0                knitr_1.47                      TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1              
-##  [9] XVector_0.44.0                  SingleCellExperiment_1.26.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
-## [13] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                    
-## [17] patchwork_1.2.0                 mixOmics_6.28.0                 lattice_0.22-6                  MASS_7.3-60.2                  
-## [21] glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                    gamboostLSS_2.0-7              
-## [25] mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                    
-## [29] SummarizedExperiment_1.34.0     Biobase_2.64.0                  GenomicRanges_1.56.0            GenomeInfoDb_1.40.0            
-## [33] IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0             MatrixGenerics_1.16.0          
-## [37] matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
+##  [1] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1               XVector_0.44.0                  SingleCellExperiment_1.26.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
+##  [7] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                     patchwork_1.2.0                 mixOmics_6.28.0                
+## [13] lattice_0.22-6                  MASS_7.3-60.2                   glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                    gamboostLSS_2.0-7              
+## [19] mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                     SummarizedExperiment_1.34.0     Biobase_2.64.0                 
+## [25] GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0             MatrixGenerics_1.16.0          
+## [31] matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] minpack.lm_1.2-4            rpart_4.1.23                lifecycle_1.0.4             Rdpack_2.6                  edgeR_4.2.0                
-##   [6] doParallel_1.0.17           MultiAssayExperiment_1.30.2 insight_0.20.1              backports_1.5.0             magrittr_2.0.3             
-##  [11] limma_3.60.2                sass_0.4.9                  rmarkdown_2.27              jquerylib_0.1.4             yaml_2.3.8                 
-##  [16] RColorBrewer_1.1-3          ADGofTest_0.3               abind_1.4-5                 zlibbioc_1.50.0             expm_0.999-9               
-##  [21] quadprog_1.5-8              pspline_1.0-20              kde1d_1.0.7                 rgl_1.3.1                   yulab.utils_0.1.4          
-##  [26] pracma_2.4.4                GenomeInfoDbData_1.2.12     ggrepel_0.9.5               tidytree_0.4.6              ellipse_0.5.0              
-##  [31] RSpectra_0.16-1             codetools_0.2-20            DelayedArray_0.30.1         xml2_1.3.6                  shapes_1.2.7               
-##  [36] tidyselect_1.2.1            shape_1.4.6.1               UCSC.utils_1.0.0            farver_2.1.2                randtoolbox_2.0.4          
-##  [41] base64enc_0.1-3             jsonlite_1.8.8              Formula_1.2-5               survival_3.7-0              iterators_1.0.14           
-##  [46] systemfonts_1.1.0           foreach_1.5.2               tools_4.4.0                 progress_1.2.3              ragg_1.3.2                 
-##  [51] treeio_1.28.0               Rcpp_1.0.12                 rARPACK_0.11-0              BiocBaseUtils_1.6.0         gridExtra_2.3              
-##  [56] SparseArray_1.4.8           xfun_0.44                   distributional_0.4.0        withr_3.0.0                 numDeriv_2016.8-1.1        
-##  [61] fastmap_1.2.0               fansi_1.0.6                 digest_0.6.35               timechange_0.3.0            R6_2.5.1                   
-##  [66] textshaping_0.4.0           colorspace_2.1-0            inum_1.0-5                  copula_1.1-3                flare_1.7.0.1              
-##  [71] utf8_1.2.4                  generics_0.1.3              corpcor_1.6.10              prettyunits_1.2.0           pulsar_0.3.11              
-##  [76] httr_1.4.7                  htmlwidgets_1.6.4           S4Arrays_1.4.1              scatterplot3d_0.3-44        rngWELL_0.10-9             
-##  [81] pkgconfig_2.0.3             geigen_2.3                  gtable_0.3.5                pcaPP_2.0-4                 htmltools_0.5.8.1          
-##  [86] bookdown_0.39.1             scales_1.3.0                SHT_0.1.8                   rstudioapi_0.16.0           tzdb_0.4.0                 
-##  [91] reshape2_1.4.4              nlme_3.1-164                cachem_1.1.0                libcoin_1.0-10              pillar_1.9.0               
-##  [96] grid_4.4.0                  vctrs_0.6.5                 VGAM_1.1-11                 huge_1.3.5                  gamlss.dist_6.1-1          
-## [101] evaluate_0.23               mvtnorm_1.2-5               cli_3.6.2                   locfit_1.5-9.9              compiler_4.4.0             
-## [106] rlang_1.1.4                 crayon_1.5.2                labeling_0.4.3              plyr_1.8.9                  fs_1.6.4                   
-## [111] stringi_1.8.4               BiocParallel_1.38.0         nnls_1.5                    assertthat_0.2.1            rvinecopulib_0.6.3.1.1     
-## [116] munsell_0.5.1               gsl_2.1-8                   lazyeval_0.2.2              glmnet_4.1-8                Matrix_1.7-0               
-## [121] hms_1.1.3                   stabledist_0.7-1            statmod_1.5.0               highr_0.11                  rbibutils_2.2.16           
-## [126] partykit_1.2-20             igraph_2.0.3                memoise_2.0.1               bslib_0.7.0.9000            bibtex_0.5.1               
-## [131] ape_5.8</code></pre>
+##   [1] libcoin_1.0-10          RColorBrewer_1.1-3      rstudioapi_0.16.0       jsonlite_1.8.8          shape_1.4.6.1           magrittr_2.0.3          farver_2.1.2            rmarkdown_2.27         
+##   [9] fs_1.6.4                zlibbioc_1.50.0         vctrs_0.6.5             memoise_2.0.1           base64enc_0.1-3         progress_1.2.3          htmltools_0.5.8.1       S4Arrays_1.4.1         
+##  [17] distributional_0.4.0    SparseArray_1.4.8       Formula_1.2-5           sass_0.4.9              pracma_2.4.4            bslib_0.7.0.9000        htmlwidgets_1.6.4       plyr_1.8.9             
+##  [25] copula_1.1-3            cachem_1.1.0            igraph_2.0.3            lifecycle_1.0.4         minpack.lm_1.2-4        iterators_1.0.14        pkgconfig_2.0.3         Matrix_1.7-0           
+##  [33] R6_2.5.1                fastmap_1.2.0           GenomeInfoDbData_1.2.12 rbibutils_2.2.16        numDeriv_2016.8-1.1     digest_0.6.35           colorspace_2.1-0        rARPACK_0.11-0         
+##  [41] RSpectra_0.16-1         kde1d_1.0.7             ellipse_0.5.0           labeling_0.4.3          pspline_1.0-20          fansi_1.0.6             nnls_1.5                httr_1.4.7             
+##  [49] abind_1.4-5             compiler_4.4.0          gsl_2.1-8               withr_3.0.0             doParallel_1.0.17       BiocParallel_1.38.0     highr_0.11              DelayedArray_0.30.1    
+##  [57] corpcor_1.6.10          scatterplot3d_0.3-44    tools_4.4.0             ape_5.8                 quadprog_1.5-8          stabledist_0.7-1        nlme_3.1-164            inum_1.0-5             
+##  [65] grid_4.4.0              reshape2_1.4.4          generics_0.1.3          gtable_0.3.5            flare_1.7.0.1           hms_1.1.3               huge_1.3.5              utf8_1.2.4             
+##  [73] ggrepel_0.9.5           foreach_1.5.2           pillar_1.9.0            stringr_1.5.1           yulab.utils_0.1.4       limma_3.60.2            partykit_1.2-20         treeio_1.28.0          
+##  [81] survival_3.7-0          tidyselect_1.2.1        ADGofTest_0.3           locfit_1.5-9.9          knitr_1.47              gridExtra_2.3           bookdown_0.39.1         edgeR_4.2.0            
+##  [89] xfun_0.44               expm_0.999-9            statmod_1.5.0           geigen_2.3              stringi_1.8.4           VGAM_1.1-11             UCSC.utils_1.0.0        lazyeval_0.2.2         
+##  [97] yaml_2.3.8              evaluate_0.23           codetools_0.2-20        SHT_0.1.8               cli_3.6.2               rpart_4.1.23            Rdpack_2.6              munsell_0.5.1          
+## [105] jquerylib_0.1.4         pulsar_0.3.11           Rcpp_1.0.12             rngWELL_0.10-9          randtoolbox_2.0.4       assertthat_0.2.1        rgl_1.3.1               prettyunits_1.2.0      
+## [113] gamlss.dist_6.1-1       glmnet_4.1-8            tidytree_0.4.6          mvtnorm_1.2-5           scales_1.3.0            pcaPP_2.0-4             insight_0.20.1          crayon_1.5.2           
+## [121] shapes_1.2.7            rlang_1.1.4             rvinecopulib_0.6.3.1.1</code></pre>
 
 </div>
 </div>

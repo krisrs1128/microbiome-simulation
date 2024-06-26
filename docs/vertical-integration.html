@@ -23,7 +23,7 @@
 <meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
 
 
-<meta name="date" content="2024-06-25" />
+<meta name="date" content="2024-06-26" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -233,8 +233,8 @@ not. The question is how either sepsis, antibiotics, or their interaction
 affects the microbiome viewed through these three assays. The data are printed
 below, they have already been filtered and CLR transformed following the MOFA
 vignette.</p>
-<div class="sourceCode" id="cb79"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb79-1"><a href="vertical-integration.html#cb79-1" tabindex="-1"></a><span class="fu">data</span>(icu)</span>
-<span id="cb79-2"><a href="vertical-integration.html#cb79-2" tabindex="-1"></a>icu</span></code></pre></div>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="vertical-integration.html#cb87-1" tabindex="-1"></a><span class="fu">data</span>(icu)</span>
+<span id="cb87-2"><a href="vertical-integration.html#cb87-2" tabindex="-1"></a>icu</span></code></pre></div>
 <pre><code>## $Bacteria
 ## class: SummarizedExperiment 
 ## dim: 180 57 
@@ -272,10 +272,10 @@ can read
 The output plot below shows that each assay differs across groups, and this is
 quantitatively summarized by the high estimated weights between each category
 and the estimated PLS directions.</p>
-<div class="sourceCode" id="cb81"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb81-1"><a href="vertical-integration.html#cb81-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu)</span>
-<span id="cb81-2"><a href="vertical-integration.html#cb81-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="vertical-integration.html#cb89-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu)</span>
+<span id="cb89-2"><a href="vertical-integration.html#cb89-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
-<div class="sourceCode" id="cb82"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb82-1"><a href="vertical-integration.html#cb82-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="vertical-integration.html#cb90-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
 <pre><code>##              comp1     comp2
 ## Bacteria 0.8580402 0.8191458
 ## Fungi    0.6513668 0.4845247
@@ -288,7 +288,7 @@ purrr package. This function gives a one-line replacement for simple for-loops;
 it is analogous to list comprehensions in python. It can be useful many places
 besides the topic of this tutorial. For example, if we want to convert the
 vector <code>c(1, 2, 3)</code> into <code>c(1, 4, 9)</code>, we can use this map:</p>
-<div class="sourceCode" id="cb84"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb84-1"><a href="vertical-integration.html#cb84-1" tabindex="-1"></a><span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="vertical-integration.html#cb92-1" tabindex="-1"></a><span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
 <pre><code>## [[1]]
 ## [1] 1
 ## 
@@ -300,7 +300,7 @@ vector <code>c(1, 2, 3)</code> into <code>c(1, 4, 9)</code>, we can use this map
 <p>The <code>~</code> notation is shorthand for defining a function, and the <code>.</code> represents
 the current vector element. More generally, we can apply map to lists. This
 line will update the list so that 1 is added to each element.</p>
-<div class="sourceCode" id="cb86"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb86-1"><a href="vertical-integration.html#cb86-1" tabindex="-1"></a><span class="fu">map</span>(<span class="fu">list</span>(<span class="at">a =</span> <span class="dv">1</span>, <span class="at">b =</span> <span class="dv">2</span>, <span class="at">c =</span> <span class="dv">3</span>), <span class="sc">~</span> . <span class="sc">+</span> <span class="dv">1</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="vertical-integration.html#cb94-1" tabindex="-1"></a><span class="fu">map</span>(<span class="fu">list</span>(<span class="at">a =</span> <span class="dv">1</span>, <span class="at">b =</span> <span class="dv">2</span>, <span class="at">c =</span> <span class="dv">3</span>), <span class="sc">~</span> . <span class="sc">+</span> <span class="dv">1</span>)</span></code></pre></div>
 <pre><code>## $a
 ## [1] 2
 ## 
@@ -312,18 +312,18 @@ line will update the list so that 1 is added to each element.</p>
 <p><strong>Exercise</strong>: To test your understanding, can you write a map that computes the
 *mean for each
 vector in the list <code>x</code> below? What about the mean of the 10 smallest elements?</p>
-<div class="sourceCode" id="cb88"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb88-1"><a href="vertical-integration.html#cb88-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">a =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">b =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">1</span>))</span></code></pre></div>
+<div class="sourceCode" id="cb96"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb96-1"><a href="vertical-integration.html#cb96-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">a =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">b =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">1</span>))</span></code></pre></div>
 <button onclick="myFunction(&#39;q-map&#39;)">
 Show solution
 </button>
 <div id="q-map" style="display:none">
-<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="vertical-integration.html#cb89-1" tabindex="-1"></a><span class="fu">map</span>(x, mean)</span></code></pre></div>
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="vertical-integration.html#cb97-1" tabindex="-1"></a><span class="fu">map</span>(x, mean)</span></code></pre></div>
 <pre><code>## $a
 ## [1] 0.1177328
 ## 
 ## $b
 ## [1] 1.128995</code></pre>
-<div class="sourceCode" id="cb91"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb91-1"><a href="vertical-integration.html#cb91-1" tabindex="-1"></a><span class="fu">map</span>(x, <span class="sc">~</span> <span class="fu">mean</span>(<span class="fu">sort</span>(.)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]))</span></code></pre></div>
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="vertical-integration.html#cb99-1" tabindex="-1"></a><span class="fu">map</span>(x, <span class="sc">~</span> <span class="fu">mean</span>(<span class="fu">sort</span>(.)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]))</span></code></pre></div>
 <pre><code>## $a
 ## [1] -1.920247
 ## 
@@ -343,22 +343,22 @@ setes of parameters for each of the four observed groups. This is not as nuanced
 as learning separate effects for sepsis and antibiotics, but it will be enough
 for illustration. We have used <code>map</code> to estimate a simulator for each assay in
 the <code>icu</code> list.</p>
-<div class="sourceCode" id="cb93"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb93-1"><a href="vertical-integration.html#cb93-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">map</span>(</span>
-<span id="cb93-2"><a href="vertical-integration.html#cb93-2" tabindex="-1"></a>  icu,</span>
-<span id="cb93-3"><a href="vertical-integration.html#cb93-3" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">setup_simulator</span>(., <span class="sc">~</span>Category, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb93-4"><a href="vertical-integration.html#cb93-4" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span>
-<span id="cb93-5"><a href="vertical-integration.html#cb93-5" tabindex="-1"></a>)</span></code></pre></div>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="vertical-integration.html#cb101-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">map</span>(</span>
+<span id="cb101-2"><a href="vertical-integration.html#cb101-2" tabindex="-1"></a>  icu,</span>
+<span id="cb101-3"><a href="vertical-integration.html#cb101-3" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">setup_simulator</span>(., <span class="sc">~</span>Category, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb101-4"><a href="vertical-integration.html#cb101-4" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span>
+<span id="cb101-5"><a href="vertical-integration.html#cb101-5" tabindex="-1"></a>)</span></code></pre></div>
 <p>So far, we haven’t tried removing any relationships present in the 16S assay,
 and indeed our integrative analysis output on the simulated data looks
 comparable to that from the original study.</p>
-<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="vertical-integration.html#cb94-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb94-2"><a href="vertical-integration.html#cb94-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
-<span id="cb94-3"><a href="vertical-integration.html#cb94-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
-<span id="cb94-4"><a href="vertical-integration.html#cb94-4" tabindex="-1"></a></span>
-<span id="cb94-5"><a href="vertical-integration.html#cb94-5" tabindex="-1"></a>fit_sim <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
-<span id="cb94-6"><a href="vertical-integration.html#cb94-6" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit_sim)</span></code></pre></div>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="vertical-integration.html#cb102-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb102-2"><a href="vertical-integration.html#cb102-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb102-3"><a href="vertical-integration.html#cb102-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
+<span id="cb102-4"><a href="vertical-integration.html#cb102-4" tabindex="-1"></a></span>
+<span id="cb102-5"><a href="vertical-integration.html#cb102-5" tabindex="-1"></a>fit_sim <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
+<span id="cb102-6"><a href="vertical-integration.html#cb102-6" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit_sim)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
-<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="vertical-integration.html#cb95-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="vertical-integration.html#cb103-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
 <pre><code>##              comp1     comp2
 ## Bacteria 0.8580402 0.8191458
 ## Fungi    0.6513668 0.4845247
@@ -366,18 +366,18 @@ comparable to that from the original study.</p>
 <p><strong>Exercise</strong>: Modify the simulator above so that the 16S group no longer depends
 on disease cateogry. This will allow us to study how the integrative analysis
 output changes when the data are not alignable.</p>
-<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="vertical-integration.html#cb97-1" tabindex="-1"></a>null_simulator <span class="ot">&lt;-</span> simulator</span>
-<span id="cb97-2"><a href="vertical-integration.html#cb97-2" tabindex="-1"></a><span class="co"># fill this in</span></span>
-<span id="cb97-3"><a href="vertical-integration.html#cb97-3" tabindex="-1"></a><span class="co"># null_simulator[[1]] &lt;- ???</span></span></code></pre></div>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="vertical-integration.html#cb105-1" tabindex="-1"></a>null_simulator <span class="ot">&lt;-</span> simulator</span>
+<span id="cb105-2"><a href="vertical-integration.html#cb105-2" tabindex="-1"></a><span class="co"># fill this in</span></span>
+<span id="cb105-3"><a href="vertical-integration.html#cb105-3" tabindex="-1"></a><span class="co"># null_simulator[[1]] &lt;- ???</span></span></code></pre></div>
 <p><strong>Solution</strong>: We need to define a new link that no longer depends on <code>Category</code>. One solution
 is to modify the existing simulator in place using <code>mutate</code>.</p>
-<div class="sourceCode" id="cb98"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb98-1"><a href="vertical-integration.html#cb98-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> simulator[[<span class="dv">1</span>]] <span class="sc">|&gt;</span></span>
-<span id="cb98-2"><a href="vertical-integration.html#cb98-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">180</span>, <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb98-3"><a href="vertical-integration.html#cb98-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="vertical-integration.html#cb106-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> simulator[[<span class="dv">1</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb106-2"><a href="vertical-integration.html#cb106-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">180</span>, <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb106-3"><a href="vertical-integration.html#cb106-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 <p>Since we are modifying all taxa, a simpler solution is to just define a
 new simulator from scratch.</p>
-<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="vertical-integration.html#cb99-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(icu[[<span class="dv">1</span>]], <span class="sc">~</span><span class="dv">1</span>, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb99-2"><a href="vertical-integration.html#cb99-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="vertical-integration.html#cb107-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(icu[[<span class="dv">1</span>]], <span class="sc">~</span><span class="dv">1</span>, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb107-2"><a href="vertical-integration.html#cb107-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
 </div>
 <div id="simulation-results" class="section level2 hasAnchor" number="6.4">
 <h2><span class="header-section-number">6.4</span> Simulation Results<a href="vertical-integration.html#simulation-results" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -397,13 +397,13 @@ power by focusing only on class-associated assays. Nonetheless, the block
 sPLS-DA also seems relatively robust – considering the dramatic change in the
 microbiome table, the output for the remaining tables still surfaces interesting
 relationships.</p>
-<div class="sourceCode" id="cb100"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb100-1"><a href="vertical-integration.html#cb100-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(null_simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb100-2"><a href="vertical-integration.html#cb100-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
-<span id="cb100-3"><a href="vertical-integration.html#cb100-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
-<span id="cb100-4"><a href="vertical-integration.html#cb100-4" tabindex="-1"></a>fit_null <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
-<span id="cb100-5"><a href="vertical-integration.html#cb100-5" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="vertical-integration.html#cb108-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(null_simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb108-2"><a href="vertical-integration.html#cb108-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb108-3"><a href="vertical-integration.html#cb108-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
+<span id="cb108-4"><a href="vertical-integration.html#cb108-4" tabindex="-1"></a>fit_null <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
+<span id="cb108-5"><a href="vertical-integration.html#cb108-5" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
-<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="vertical-integration.html#cb101-1" tabindex="-1"></a>fit_null<span class="sc">$</span>weights</span></code></pre></div>
+<div class="sourceCode" id="cb109"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb109-1"><a href="vertical-integration.html#cb109-1" tabindex="-1"></a>fit_null<span class="sc">$</span>weights</span></code></pre></div>
 <pre><code>##              comp1     comp2
 ## Bacteria 0.5886651 0.6873822
 ## Fungi    0.7647532 0.6900530
@@ -415,47 +415,47 @@ relationships.</p>
 <p>How do the canonical correlations compare between the real data and a reference
 null? First, we can compute the CCA canonical correlations using the real
 Bacteria and Virus data.</p>
-<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="vertical-integration.html#cb103-1" tabindex="-1"></a>merged <span class="ot">&lt;-</span> simulator[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)] <span class="sc">|&gt;</span></span>
-<span id="cb103-2"><a href="vertical-integration.html#cb103-2" tabindex="-1"></a>  <span class="fu">join_copula</span>(<span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.01</span>))</span>
-<span id="cb103-3"><a href="vertical-integration.html#cb103-3" tabindex="-1"></a></span>
-<span id="cb103-4"><a href="vertical-integration.html#cb103-4" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">sample</span>(merged) <span class="sc">|&gt;</span></span>
-<span id="cb103-5"><a href="vertical-integration.html#cb103-5" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
-<span id="cb103-6"><a href="vertical-integration.html#cb103-6" tabindex="-1"></a>  <span class="fu">t</span>()</span>
-<span id="cb103-7"><a href="vertical-integration.html#cb103-7" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">map</span>(icu, rownames)</span>
-<span id="cb103-8"><a href="vertical-integration.html#cb103-8" tabindex="-1"></a>cca_result <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy[, ix[[<span class="dv">1</span>]]], xy[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="vertical-integration.html#cb111-1" tabindex="-1"></a>merged <span class="ot">&lt;-</span> simulator[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)] <span class="sc">|&gt;</span></span>
+<span id="cb111-2"><a href="vertical-integration.html#cb111-2" tabindex="-1"></a>  <span class="fu">join_copula</span>(<span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.01</span>))</span>
+<span id="cb111-3"><a href="vertical-integration.html#cb111-3" tabindex="-1"></a></span>
+<span id="cb111-4"><a href="vertical-integration.html#cb111-4" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">sample</span>(merged) <span class="sc">|&gt;</span></span>
+<span id="cb111-5"><a href="vertical-integration.html#cb111-5" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb111-6"><a href="vertical-integration.html#cb111-6" tabindex="-1"></a>  <span class="fu">t</span>()</span>
+<span id="cb111-7"><a href="vertical-integration.html#cb111-7" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">map</span>(icu, rownames)</span>
+<span id="cb111-8"><a href="vertical-integration.html#cb111-8" tabindex="-1"></a>cca_result <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy[, ix[[<span class="dv">1</span>]]], xy[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)</span></code></pre></div>
 <p>Next, we define a reference null and compute canonical correlations on ten
 replicates from this null. To define the reference null, we zero out any
 correlations across tables. We then draw 100 samples from the resulting
 distribution and compute canonical correlations for each.</p>
-<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="vertical-integration.html#cb104-1" tabindex="-1"></a>rho_null <span class="ot">&lt;-</span> <span class="fu">copula_parameters</span>(merged)</span>
-<span id="cb104-2"><a href="vertical-integration.html#cb104-2" tabindex="-1"></a><span class="fu">dimnames</span>(rho_null) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">colnames</span>(xy), <span class="fu">colnames</span>(xy))</span>
-<span id="cb104-3"><a href="vertical-integration.html#cb104-3" tabindex="-1"></a>rho_null[ix[[<span class="dv">1</span>]], ix[[<span class="dv">3</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb104-4"><a href="vertical-integration.html#cb104-4" tabindex="-1"></a>rho_null[ix[[<span class="dv">3</span>]], ix[[<span class="dv">1</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
-<span id="cb104-5"><a href="vertical-integration.html#cb104-5" tabindex="-1"></a></span>
-<span id="cb104-6"><a href="vertical-integration.html#cb104-6" tabindex="-1"></a>null_cancor <span class="ot">&lt;-</span> merged <span class="sc">|&gt;</span></span>
-<span id="cb104-7"><a href="vertical-integration.html#cb104-7" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho_null)</span>
-<span id="cb104-8"><a href="vertical-integration.html#cb104-8" tabindex="-1"></a></span>
-<span id="cb104-9"><a href="vertical-integration.html#cb104-9" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">100</span></span>
-<span id="cb104-10"><a href="vertical-integration.html#cb104-10" tabindex="-1"></a>cancors <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb104-11"><a href="vertical-integration.html#cb104-11" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="fu">seq_len</span>(B)) {</span>
-<span id="cb104-12"><a href="vertical-integration.html#cb104-12" tabindex="-1"></a>  xy_null <span class="ot">&lt;-</span> <span class="fu">sample</span>(null_cancor) <span class="sc">|&gt;</span></span>
-<span id="cb104-13"><a href="vertical-integration.html#cb104-13" tabindex="-1"></a>    <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
-<span id="cb104-14"><a href="vertical-integration.html#cb104-14" tabindex="-1"></a>    <span class="fu">t</span>()</span>
-<span id="cb104-15"><a href="vertical-integration.html#cb104-15" tabindex="-1"></a></span>
-<span id="cb104-16"><a href="vertical-integration.html#cb104-16" tabindex="-1"></a>  cancors[[<span class="fu">glue</span>(<span class="st">&quot;sim_{b}&quot;</span>)]] <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy_null[, ix[[<span class="dv">1</span>]]], xy_null[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)<span class="sc">$</span>cor</span>
-<span id="cb104-17"><a href="vertical-integration.html#cb104-17" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="vertical-integration.html#cb112-1" tabindex="-1"></a>rho_null <span class="ot">&lt;-</span> <span class="fu">copula_parameters</span>(merged)</span>
+<span id="cb112-2"><a href="vertical-integration.html#cb112-2" tabindex="-1"></a><span class="fu">dimnames</span>(rho_null) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">colnames</span>(xy), <span class="fu">colnames</span>(xy))</span>
+<span id="cb112-3"><a href="vertical-integration.html#cb112-3" tabindex="-1"></a>rho_null[ix[[<span class="dv">1</span>]], ix[[<span class="dv">3</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb112-4"><a href="vertical-integration.html#cb112-4" tabindex="-1"></a>rho_null[ix[[<span class="dv">3</span>]], ix[[<span class="dv">1</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb112-5"><a href="vertical-integration.html#cb112-5" tabindex="-1"></a></span>
+<span id="cb112-6"><a href="vertical-integration.html#cb112-6" tabindex="-1"></a>null_cancor <span class="ot">&lt;-</span> merged <span class="sc">|&gt;</span></span>
+<span id="cb112-7"><a href="vertical-integration.html#cb112-7" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho_null)</span>
+<span id="cb112-8"><a href="vertical-integration.html#cb112-8" tabindex="-1"></a></span>
+<span id="cb112-9"><a href="vertical-integration.html#cb112-9" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb112-10"><a href="vertical-integration.html#cb112-10" tabindex="-1"></a>cancors <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb112-11"><a href="vertical-integration.html#cb112-11" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="fu">seq_len</span>(B)) {</span>
+<span id="cb112-12"><a href="vertical-integration.html#cb112-12" tabindex="-1"></a>  xy_null <span class="ot">&lt;-</span> <span class="fu">sample</span>(null_cancor) <span class="sc">|&gt;</span></span>
+<span id="cb112-13"><a href="vertical-integration.html#cb112-13" tabindex="-1"></a>    <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb112-14"><a href="vertical-integration.html#cb112-14" tabindex="-1"></a>    <span class="fu">t</span>()</span>
+<span id="cb112-15"><a href="vertical-integration.html#cb112-15" tabindex="-1"></a></span>
+<span id="cb112-16"><a href="vertical-integration.html#cb112-16" tabindex="-1"></a>  cancors[[<span class="fu">glue</span>(<span class="st">&quot;sim_{b}&quot;</span>)]] <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy_null[, ix[[<span class="dv">1</span>]]], xy_null[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)<span class="sc">$</span>cor</span>
+<span id="cb112-17"><a href="vertical-integration.html#cb112-17" tabindex="-1"></a>}</span></code></pre></div>
 <p>To help with later visualization, we combine both the real and reference
 canonical correlations into a tidy data.frame. These are visualized in a hidden
 chunk below – if you want to see the source code, you can review it
 <a href="https://github.com/krisrs1128/microbiome-simulation/blob/main/book/04-integration.Rmd">here</a>.</p>
-<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="vertical-integration.html#cb105-1" tabindex="-1"></a>cancors[[<span class="st">&quot;true&quot;</span>]] <span class="ot">&lt;-</span> cca_result<span class="sc">$</span>cor</span>
-<span id="cb105-2"><a href="vertical-integration.html#cb105-2" tabindex="-1"></a>contrast_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(cancors, <span class="at">.id =</span> <span class="st">&quot;rep&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb105-3"><a href="vertical-integration.html#cb105-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>rep, <span class="at">names_to =</span> <span class="st">&quot;loading&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb105-4"><a href="vertical-integration.html#cb105-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
-<span id="cb105-5"><a href="vertical-integration.html#cb105-5" tabindex="-1"></a>    <span class="at">source =</span> <span class="fu">grepl</span>(<span class="st">&quot;true&quot;</span>, rep),</span>
-<span id="cb105-6"><a href="vertical-integration.html#cb105-6" tabindex="-1"></a>    <span class="at">loading =</span> <span class="fu">as.integer</span>(loading)</span>
-<span id="cb105-7"><a href="vertical-integration.html#cb105-7" tabindex="-1"></a>  )</span>
-<span id="cb105-8"><a href="vertical-integration.html#cb105-8" tabindex="-1"></a><span class="fu">head</span>(contrast_data)</span></code></pre></div>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="vertical-integration.html#cb113-1" tabindex="-1"></a>cancors[[<span class="st">&quot;true&quot;</span>]] <span class="ot">&lt;-</span> cca_result<span class="sc">$</span>cor</span>
+<span id="cb113-2"><a href="vertical-integration.html#cb113-2" tabindex="-1"></a>contrast_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(cancors, <span class="at">.id =</span> <span class="st">&quot;rep&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb113-3"><a href="vertical-integration.html#cb113-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>rep, <span class="at">names_to =</span> <span class="st">&quot;loading&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb113-4"><a href="vertical-integration.html#cb113-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb113-5"><a href="vertical-integration.html#cb113-5" tabindex="-1"></a>    <span class="at">source =</span> <span class="fu">grepl</span>(<span class="st">&quot;true&quot;</span>, rep),</span>
+<span id="cb113-6"><a href="vertical-integration.html#cb113-6" tabindex="-1"></a>    <span class="at">loading =</span> <span class="fu">as.integer</span>(loading)</span>
+<span id="cb113-7"><a href="vertical-integration.html#cb113-7" tabindex="-1"></a>  )</span>
+<span id="cb113-8"><a href="vertical-integration.html#cb113-8" tabindex="-1"></a><span class="fu">head</span>(contrast_data)</span></code></pre></div>
 <pre><code>## # A tibble: 6 × 4
 ##   rep   loading value source
 ##   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;lgl&gt; 
@@ -466,7 +466,7 @@ chunk below – if you want to see the source code, you can review it
 ## 5 sim_1       5 0.823 FALSE 
 ## 6 sim_1       6 0.809 FALSE</code></pre>
 <p><img src="simulation_for_microbiome_files/figure-html/contrast-vis-1.png" width="672" /></p>
-<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="vertical-integration.html#cb107-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="vertical-integration.html#cb115-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
