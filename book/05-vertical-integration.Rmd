@@ -60,7 +60,7 @@ plotIndiv(fit)
 fit$weights
 ```
 
-# Interlude: Using map
+## Interlude: Using map
 
 In the examples below, we'll find it helpful to use the function `map` in the
 purrr package. This function gives a one-line replacement for simple for-loops;

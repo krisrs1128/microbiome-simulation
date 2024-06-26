@@ -10,10 +10,6 @@ vertical (across assays) integration. We'll have a brief interlude on the `map`
 function in the `purrr`, which is helpful for concisely writing code that would
 otherwise need for loops (e.g., over batches or assays).
 
-As usual, let's load the libraries we'll need. Remember that instructions for
-installing `MIGsim` and `scDesigner` are documented in the repository
-[README](https://github.com/krisrs1128/intro-to-simulation/).
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
 set.seed(20240603)

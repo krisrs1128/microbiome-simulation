@@ -58,11 +58,11 @@ theme_set(theme_classic())
 
 ## Using `SummarizedExperiment`
 
-`scDesigner`'s interface is built with `SummarizedExperiment` in mind. These
-data structures simplify manipulation of sequencing experiments. For example,
+`SummarizedExperiment` data structures simplify manipulation of sequencing
+experiments, and we'll be using them throughout these tutorials. For example,
 they distinguish between molecule counts, which are stored in the `assay` slot,
 and sample descriptors, which are stored in `colData`. At the same time, these
-separate components are nicely synchronized. For example, subsetting samples
+separate components are nicely synchronized.  For example, subsetting samples
 from one of these tables automatically subsets the other.
 
 The line below loads a small subset of genera from the
