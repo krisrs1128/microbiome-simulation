@@ -8,7 +8,7 @@ good sample size for a sparse partial least squares discriminant analysis
 (sPLS-DA) of the Type I Diabetes (T1D) gut microbiome.
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 set.seed(202406)
 ```
 
@@ -126,7 +126,7 @@ correlation_hist(t1d, sim_exper)
 :::
 
 ```{r t1d_contrast_boxplot}
-contrast_boxplot(t1d, sim_exper, ~ . ~ reorder(outcome2, value))
+contrast_boxplot(t1d, sim_exper, ~. ~ reorder(outcome2, value))
 ```
 
 ```{r correlation_plot}
@@ -149,21 +149,20 @@ keep_pairs <- pairs_data |>
 p1 <- pairs_data |>
   filter(pair %in% keep_pairs) |>
   ggplot() +
-    geom_point(aes(feature1, feature2, col = source), alpha = 0.5, size = 1) +
-    scale_color_manual(values = c("#038C8C", "#D93636")) +
-    guides(color = guide_legend(override.aes = list(alpha = 1, size = 2))) +
-    labs(title = "A", col = "Source", x = expression("Feature"~j), y = expression("Feature"~j^"'")) +
-    facet_wrap(~ reorder(pair, -correlation), ncol = 6, scales = "free") +
-    theme(
-      strip.text = element_text(size = 7),
-      axis.text = element_text(size = 8)
-    )
+  geom_point(aes(feature1, feature2, col = source), alpha = 0.5, size = 1) +
+  scale_color_manual(values = c("#038C8C", "#D93636")) +
+  guides(color = guide_legend(override.aes = list(alpha = 1, size = 2))) +
+  labs(title = "A", col = "Source", x = expression("Feature" ~ j), y = expression("Feature" ~ j^"'")) +
+  facet_wrap(~ reorder(pair, -correlation), ncol = 6, scales = "free") +
+  theme(
+    strip.text = element_text(size = 7),
+    axis.text = element_text(size = 8)
+  )
 ```
-
 
 ```{r collect_plots_multivariate}
 ft_order <- hclust(dist(assay(t1d)))$order
-p2 <- correlation_heatmap(rhos$real, ft_order) + 
+p2 <- correlation_heatmap(rhos$real, ft_order) +
   labs(title = "B  Real") +
   (correlation_heatmap(rhos$sim, ft_order) +
     labs(title = "Simulated") +
@@ -175,6 +174,47 @@ p2 <- correlation_heatmap(rhos$real, ft_order) +
 
 ```{r save_multivariate, echo = FALSE}
 ggsave("multivariate_evaluation_qualitative.svg", width = 10, height = 8)
+```
+
+How did we choose this threshold? You can compare the correlations more
+systematically using this loop:
+
+```{r thresholding_metrics}
+bivariate_metrics <- \(thr, n_rep = 5) {
+  # refit the simulator with current threshold
+  simulator <- setup_simulator(
+    t1d,
+    link_formula = ~outcome2,
+    family = ~ GaussianLSS(),
+    copula_def = copula_adaptive(thr = thr)
+  ) |>
+    estimate(mstop = 100)
+
+  # compute metrics on five samples
+  err <- list()
+  for (i in 1:n_rep) {
+    sim_exper <- sample(simulator)[rownames(t1d), ]
+    rhos <- list(sim = cor(t(assay(sim_exper))), real = cor(t(assay(t1d))))
+    err[[i]] <- data.frame(
+      frobenius = sqrt(mean((rhos$sim - rhos$real)^2)),
+      ks = ks.test(rhos$sim, rhos$real)$statistic,
+      thr = thr
+    )
+  }
+
+  do.call(rbind, err)
+}
+```
+
+```{r metrics_results}
+errors <- seq(.001, 0.2, length.out = 10) |>
+  map_dfr(bivariate_metrics) |>
+  pivot_longer(-thr, names_to = "metric")
+
+ggplot(errors) +
+  geom_point(aes(thr, value)) +
+  facet_wrap(~metric, scales = "free_y") +
+  labs(x = "Threshold", y = "Metric Value")
 ```
 
 ## PLS-DA Power Analysis
@@ -227,7 +267,7 @@ for (i in seq_len(nrow(config))) {
 association with T1D: `link = ~ 1` instead of `link = ~ outcome2`. To speed up
 the computation, we organized the `mutate` calls so that we don't need to
 re-estimate proteins whose effects were removed in a previous iteration.
-```{r power-analysis-loop-soln, eval = TRUE}
+```{r power-analysis-loop-soln, eval = FALSE}
 for (i in seq_len(nrow(config))) {
   if (i == 1 || config$n_null[i] != config$n_null[i - 1]) {
     simulator <- simulator |>
@@ -240,30 +280,26 @@ for (i in seq_len(nrow(config))) {
   print(glue("run {i}/{nrow(config)}"))
 }
 ```
+
+```{r load_config}
+config <- readRDS(url("https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds"))
+```
 :::
 
 We can visualize variation in performance. 
 
-```{r visualize-power, eval = TRUE}
-# config |>
-#   group_by(sample_size, n_null) |>
-#   summarise(min = min(metrics), max = max(metrics), median = median(metrics)) |>
-#   ggplot(aes(sample_size, fill = factor(n_null))) +
-#     geom_ribbon(aes(ymin = min, ymax = max)) +
-#     geom_line(aes(y = median))
+```{r visualize-power}
+p3 <- ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
+  stat_pointinterval(position = "dodge") +
+  scale_color_scico_d(palette = "managua") +
+  labs(x = "Sample Size", y = "AUC", color = "# Nulls", title = "C")
 
-# ggplot(config, aes(factor(sample_size), metrics, fill = factor(n_null))) +
-#   geom_boxplot()
-
-# ggplot(config, aes(interaction(n_null, factor(sample_size)), metrics, col = factor(n_null))) +
-#   stat_boxplot()
-
-ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
-  stat_pointinterval(position = "dodge")
+(p1 / p2 / p3) +
+  plot_layout(guides = "collect", heights = c(1.2, 2, 1))
 ```
 
 ```{r save_multivariate_curve, echo = FALSE}
-ggsave("multivariate_power_curve.svg", width = 4, height = 4)
+ggsave("multivariate_power_curve.svg", width = 10, height = 7.5)
 ```
 
 **Discussion**: Interpret the visualization above. How do you think analysis
