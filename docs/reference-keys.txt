@@ -10,6 +10,7 @@ interpreting-pls-da
 estimation
 evaluation
 pls-da-power-analysis
+comparison-with-t-test-calculation
 microbiome-networks
 estimation-1
 evaluation-1

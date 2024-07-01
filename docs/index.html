@@ -157,6 +157,7 @@ code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warni
 <li class="chapter" data-level="3.2" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#estimation"><i class="fa fa-check"></i><b>3.2</b> Estimation</a></li>
 <li class="chapter" data-level="3.3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#evaluation"><i class="fa fa-check"></i><b>3.3</b> Evaluation</a></li>
 <li class="chapter" data-level="3.4" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#pls-da-power-analysis"><i class="fa fa-check"></i><b>3.4</b> PLS-DA Power Analysis</a></li>
+<li class="chapter" data-level="3.5" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#comparison-with-t-test-calculation"><i class="fa fa-check"></i><b>3.5</b> Comparison with <span class="math inline">\(t\)</span>-test calculation</a></li>
 </ul></li>
 <li class="chapter" data-level="4" data-path="microbiome-networks.html"><a href="microbiome-networks.html"><i class="fa fa-check"></i><b>4</b> Microbiome Networks</a>
 <ul>
@@ -230,15 +231,16 @@ throughout these book. You can install it by running:</p>
 <span id="cb2-10"><a href="index.html#cb2-10" tabindex="-1"></a>  <span class="fu">library</span>(glue)</span>
 <span id="cb2-11"><a href="index.html#cb2-11" tabindex="-1"></a>  <span class="fu">library</span>(mixOmics)</span>
 <span id="cb2-12"><a href="index.html#cb2-12" tabindex="-1"></a>  <span class="fu">library</span>(patchwork)</span>
-<span id="cb2-13"><a href="index.html#cb2-13" tabindex="-1"></a>  <span class="fu">library</span>(scico)</span>
-<span id="cb2-14"><a href="index.html#cb2-14" tabindex="-1"></a>  <span class="fu">library</span>(splines)</span>
-<span id="cb2-15"><a href="index.html#cb2-15" tabindex="-1"></a>  <span class="fu">library</span>(tibble)</span>
-<span id="cb2-16"><a href="index.html#cb2-16" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)</span>
-<span id="cb2-17"><a href="index.html#cb2-17" tabindex="-1"></a>  <span class="fu">library</span>(MIGsim)</span>
-<span id="cb2-18"><a href="index.html#cb2-18" tabindex="-1"></a>  <span class="fu">library</span>(purrr)</span>
-<span id="cb2-19"><a href="index.html#cb2-19" tabindex="-1"></a>  <span class="fu">library</span>(scDesigner)</span>
-<span id="cb2-20"><a href="index.html#cb2-20" tabindex="-1"></a>})</span>
-<span id="cb2-21"><a href="index.html#cb2-21" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span></code></pre></div>
+<span id="cb2-13"><a href="index.html#cb2-13" tabindex="-1"></a>  <span class="fu">library</span>(pwr)</span>
+<span id="cb2-14"><a href="index.html#cb2-14" tabindex="-1"></a>  <span class="fu">library</span>(scico)</span>
+<span id="cb2-15"><a href="index.html#cb2-15" tabindex="-1"></a>  <span class="fu">library</span>(splines)</span>
+<span id="cb2-16"><a href="index.html#cb2-16" tabindex="-1"></a>  <span class="fu">library</span>(tibble)</span>
+<span id="cb2-17"><a href="index.html#cb2-17" tabindex="-1"></a>  <span class="fu">library</span>(tidyr)</span>
+<span id="cb2-18"><a href="index.html#cb2-18" tabindex="-1"></a>  <span class="fu">library</span>(MIGsim)</span>
+<span id="cb2-19"><a href="index.html#cb2-19" tabindex="-1"></a>  <span class="fu">library</span>(purrr)</span>
+<span id="cb2-20"><a href="index.html#cb2-20" tabindex="-1"></a>  <span class="fu">library</span>(scDesigner)</span>
+<span id="cb2-21"><a href="index.html#cb2-21" tabindex="-1"></a>})</span>
+<span id="cb2-22"><a href="index.html#cb2-22" tabindex="-1"></a><span class="fu">theme_set</span>(<span class="fu">theme_classic</span>())</span></code></pre></div>
 </div>
 <div id="using-summarizedexperiment" class="section level2 hasAnchor" number="1.2">
 <h2><span class="header-section-number">1.2</span> Using <code>SummarizedExperiment</code><a href="index.html#using-summarizedexperiment" class="anchor-section" aria-label="Anchor link to header"></a></h2>
@@ -336,14 +338,15 @@ gives the type of model to fit, in this case, a Gaussian location-shape-scale
 model.</p>
 <div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="index.html#cb28-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(exper_ts, <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>) <span class="sc">*</span> group, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
 <span id="cb28-2"><a href="index.html#cb28-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
-<pre><code>## [=============================================================================================&gt;----------------------------------------------------------------------------------------------] 3/6 ETA:
+<pre><code>## [==============================================================&gt;-----------------------------------------------------------------------------------------------------------------------------] 2/6 ETA:
+## 1s[=============================================================================================&gt;----------------------------------------------------------------------------------------------] 3/6 ETA:
 ## 1s[============================================================================================================================&gt;---------------------------------------------------------------] 4/6 ETA:
 ## 0s[============================================================================================================================================================&gt;-------------------------------] 5/6 ETA:
 ## 0s[============================================================================================================================================================================================] 6/6 ETA: 0s</code></pre>
 <div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="index.html#cb30-1" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
 <span id="cb30-2"><a href="index.html#cb30-2" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
 <pre><code>## Joining with `by = join_by(newdata_index)`</code></pre>
-<pre><code>## Warning: Removed 7 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<pre><code>## Warning: Removed 4 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-6-1.png" width="672" /></p>
 <p><strong>Exercise</strong>: Right now, each panel allows for an interaction between the trend and
 group type. Can you define a simulator where the groups have no effect on the
@@ -352,7 +355,7 @@ negative controls.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="index.html#cb33-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
 <span id="cb33-2"><a href="index.html#cb33-2" tabindex="-1"></a>  scDesigner<span class="sc">::</span><span class="fu">mutate</span>(</span>
 <span id="cb33-3"><a href="index.html#cb33-3" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
-<span id="cb33-4"><a href="index.html#cb33-4" tabindex="-1"></a>     <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)</span>
+<span id="cb33-4"><a href="index.html#cb33-4" tabindex="-1"></a>    <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)</span>
 <span id="cb33-5"><a href="index.html#cb33-5" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
 <span id="cb33-6"><a href="index.html#cb33-6" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
 <span id="cb33-7"><a href="index.html#cb33-7" tabindex="-1"></a></span>
@@ -392,11 +395,11 @@ features to apply the new formula to.</p>
 ## 
 ## other attached packages:
 ##  [1] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1               XVector_0.44.0                  SingleCellExperiment_1.26.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
-##  [7] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                     patchwork_1.2.0                 mixOmics_6.28.0                
-## [13] lattice_0.22-6                  MASS_7.3-60.2                   glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                    gamboostLSS_2.0-7              
-## [19] mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                     SummarizedExperiment_1.34.0     Biobase_2.64.0                 
-## [25] GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0             MatrixGenerics_1.16.0          
-## [31] matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
+##  [7] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                     pwr_1.3-0                       patchwork_1.2.0                
+## [13] mixOmics_6.28.0                 lattice_0.22-6                  MASS_7.3-60.2                   glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                   
+## [19] gamboostLSS_2.0-7               mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                     SummarizedExperiment_1.34.0    
+## [25] Biobase_2.64.0                  GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0            
+## [31] MatrixGenerics_1.16.0           matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
 ## 
 ## loaded via a namespace (and not attached):
 ##   [1] libcoin_1.0-10          RColorBrewer_1.1-3      rstudioapi_0.16.0       jsonlite_1.8.8          shape_1.4.6.1           magrittr_2.0.3          farver_2.1.2            rmarkdown_2.27         
