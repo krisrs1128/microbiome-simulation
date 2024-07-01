@@ -38,8 +38,8 @@ pca_batch(anaerobic, facet = FALSE) +
     y = "PC2 [16.2% Varianced Explained]"
   )
 ```
-```{r, echo = FALSE, eval = FALSE}
-ggsave("~/Downloads/original_batch_effects.png", width = 5, height = 3)
+```{r, echo = FALSE, eval = TRUE}
+ggsave("original_batch_effects.svg", width = 5, height = 3)
 ```
 
 You can learn more about the general microbiome batch effect integration problem
@@ -169,7 +169,7 @@ map_dfr(p, ~ .$data, .id = "source") |>
   scale_color_manual(values = c("#191C59", "#f20732", "#04B2D9")) +
   labs(col = "Treatment") +
   facet_grid(source ~ reorder(batch, PC1))
-ggsave("~/Downloads/batch_corrected.png", width = 8, height = 3, dpi=400)
+ggsave("batch_corrected.svg", width = 8, height = 3)
 ```
 
 ```{r, evaluate-predictions}

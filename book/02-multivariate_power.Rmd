@@ -173,8 +173,8 @@ p2 <- correlation_heatmap(rhos$real, ft_order) +
   plot_layout(guides = "collect", heights = c(1.2, 2))
 ```
 
-```{r save_multivariate, eval = FALSE, echo = FALSE}
-ggsave("~/Downloads/multivariate_evaluation_qualitative.png", width = 10, height = 8, dpi = 500)
+```{r save_multivariate, echo = FALSE}
+ggsave("multivariate_evaluation_qualitative.svg", width = 10, height = 8)
 ```
 
 ## PLS-DA Power Analysis
@@ -260,6 +260,10 @@ We can visualize variation in performance.
 
 ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
   stat_pointinterval(position = "dodge")
+```
+
+```{r save_multivariate_curve, echo = FALSE}
+ggsave("multivariate_power_curve.svg", width = 4, height = 4)
 ```
 
 **Discussion**: Interpret the visualization above. How do you think analysis

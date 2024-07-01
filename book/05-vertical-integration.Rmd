@@ -202,7 +202,7 @@ bind_rows(
       legend.position = "bottom",
       strip.text.y = element_text(angle = 0)
     )
-ggsave("~/Downloads/multiblock_calibration.png", width = 6, height = 4)
+ggsave("multiblock_calibration.svg", width = 6, height = 4)
 ```
 
 ## Alignability

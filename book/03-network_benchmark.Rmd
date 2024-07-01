@@ -250,7 +250,7 @@ p2 <- map_dfr(example_rho, ~ {
 (p2 / p1)  +
   plot_layout(heights = c(1, 2))
 
-ggsave("~/Downloads/network_comparison.png", height = 4, width = 9)
+ggsave("network_comparison.svg", height = 4, width = 9)
 ```
 
 
