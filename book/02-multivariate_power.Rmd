@@ -125,7 +125,6 @@ correlation_hist(t1d, sim_exper)
 ```
 :::
 
-
 ```{r t1d_contrast_boxplot}
 contrast_boxplot(t1d, sim_exper, ~ . ~ reorder(outcome2, value))
 ```
@@ -194,8 +193,8 @@ configurations of interest are stored in the `config` matrix below.
 
 ```{r power-analysis-params}
 config <- expand.grid(
-  sample_size = floor(seq(15, 150, length.out = 5)),
-  n_rep = 1:3,
+  sample_size = floor(seq(20, 200, length.out = 5)),
+  n_rep = 1:20,
   n_null = floor(seq(317, 417, length.out = 4)),
   metrics = NA
 )
@@ -228,7 +227,7 @@ for (i in seq_len(nrow(config))) {
 association with T1D: `link = ~ 1` instead of `link = ~ outcome2`. To speed up
 the computation, we organized the `mutate` calls so that we don't need to
 re-estimate proteins whose effects were removed in a previous iteration.
-```{r power-analysis-loop-soln, eval = FALSE}
+```{r power-analysis-loop-soln, eval = TRUE}
 for (i in seq_len(nrow(config))) {
   if (i == 1 || config$n_null[i] != config$n_null[i - 1]) {
     simulator <- simulator |>
@@ -245,10 +244,22 @@ for (i in seq_len(nrow(config))) {
 
 We can visualize variation in performance. 
 
-```{r visualize-power, eval = FALSE}
-ggplot(config, aes(sample_size, metrics, col = factor(n_null))) +
-  geom_point() +
-  facet_wrap(~n_null)
+```{r visualize-power, eval = TRUE}
+# config |>
+#   group_by(sample_size, n_null) |>
+#   summarise(min = min(metrics), max = max(metrics), median = median(metrics)) |>
+#   ggplot(aes(sample_size, fill = factor(n_null))) +
+#     geom_ribbon(aes(ymin = min, ymax = max)) +
+#     geom_line(aes(y = median))
+
+# ggplot(config, aes(factor(sample_size), metrics, fill = factor(n_null))) +
+#   geom_boxplot()
+
+# ggplot(config, aes(interaction(n_null, factor(sample_size)), metrics, col = factor(n_null))) +
+#   stat_boxplot()
+
+ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
+  stat_pointinterval(position = "dodge")
 ```
 
 **Discussion**: Interpret the visualization above. How do you think analysis
@@ -265,6 +276,47 @@ then we may already achieve good power with ~ 100 samples. However, if we
 imagine our effect might be sparser in our future experiment, then this figure
 would give us good justification for arguing for a larger number of samples, in
 order to ensure we can discover a disease-associated proteomics signature.
+
+## Comparison with $t$-test calculation
+
+What if we had based our power analysis using theory from $t$-tests? We might be
+hopeful that this theory might give a sample size that is also good enough for
+the sPLS-DA. To make this concrete, suppose that we will test all 427 taxa using
+a two-sample $t$-test with a Benjamini-Hochberg correction for multiple testing.
+Suppose that we are in the sparse case, with only 10 nonnull taxa.  As a
+hypothetical true signal strength, we use the observed signal strength of the
+tenth most significant taxon from the real data,
+
+```{r}
+subset_size <- 10
+y <- colData(t1d)$outcome2
+x <- assay(t1d)[t1d_order[subset_size], ]
+test_result <- t.test(x[y == "T1D"], x[y == "healthy"])
+signal_strength <- test_result$statistic
+signal_strength
+```
+
+How many samples would we need in order to achieve 80% power in this setting?
+Accounting for multiple testing, we would need this taxon to be significant at
+the level $\frac{10 \alpha}{427}$, which gives us,
+```{r traditional_power}
+result <- pwr.t.test(power = 0.8, d = signal_strength, sig.level = 0.05 * subset_size / nrow(t1d))
+result$n
+```
+
+So, according to this power analysis, we only need 11 samples each for the
+healthy and disease groups. In comparison to our earlier analysis using sPLS-DA,
+this is very optimistic. In the case where only 10 taxa are significant, then
+when we had 20 samples total, the AUC was in the range $\left[\right]$, which is
+only slightly better than random guessing. This is a case where a $t$-test power
+calculation would make us overoptimistic about the number of samples that are
+required. Both the data generation (two shifted normal distributions) and
+analysis ($t$-tests with BH correction) mechanisms assumed by this power
+analysis are suspect, and in this case it makes a difference. All power analysis
+requires some simplification, but the fact that a more realistic simulator
+points us towards noticeably larger sample sizes is an indication that we should
+not trust the $t$-test calculation and instead suggest the larger sample sample
+from our sPLS-DA specific analysis.
 
 ```{r}
 sessionInfo()

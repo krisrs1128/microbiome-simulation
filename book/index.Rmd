@@ -45,6 +45,7 @@ suppressPackageStartupMessages({
   library(glue)
   library(mixOmics)
   library(patchwork)
+  library(pwr)
   library(scico)
   library(splines)
   library(tibble)
