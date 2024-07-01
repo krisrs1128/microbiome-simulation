@@ -23,7 +23,7 @@
 <meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
 
 
-<meta name="date" content="2024-06-26" />
+<meta name="date" content="2024-07-01" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -220,8 +220,8 @@ rounds 1 and 2 of the <a href="https://journals.asm.org/doi/10.1128/msystems.000
 Project</a>. We will
 simulate data with known correlation structure and taxa-level marginals
 estimated from the study data. The block below reads in the data.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="microbiome-networks.html#cb60-1" tabindex="-1"></a><span class="fu">data</span>(amgut)</span>
-<span id="cb60-2"><a href="microbiome-networks.html#cb60-2" tabindex="-1"></a>amgut</span></code></pre></div>
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="microbiome-networks.html#cb62-1" tabindex="-1"></a><span class="fu">data</span>(amgut)</span>
+<span id="cb62-2"><a href="microbiome-networks.html#cb62-2" tabindex="-1"></a>amgut</span></code></pre></div>
 <pre><code>## class: SummarizedExperiment 
 ## dim: 45 261 
 ## metadata(0):
@@ -237,13 +237,13 @@ The data structure below captures all the simulator components, and we can swap
 pieces in and out to modify the form of the simulator. For example, if we
 wanted, we could <code>mutate</code> the family and link function associated with
 particular features.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="microbiome-networks.html#cb62-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
-<span id="cb62-2"><a href="microbiome-networks.html#cb62-2" tabindex="-1"></a>  amgut,</span>
-<span id="cb62-3"><a href="microbiome-networks.html#cb62-3" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">log</span>(sequencing_depth) <span class="sc">+</span> BMI,</span>
-<span id="cb62-4"><a href="microbiome-networks.html#cb62-4" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">ZINBLSS</span>()</span>
-<span id="cb62-5"><a href="microbiome-networks.html#cb62-5" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb62-6"><a href="microbiome-networks.html#cb62-6" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb62-7"><a href="microbiome-networks.html#cb62-7" tabindex="-1"></a>sim</span></code></pre></div>
+<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="microbiome-networks.html#cb64-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb64-2"><a href="microbiome-networks.html#cb64-2" tabindex="-1"></a>  amgut,</span>
+<span id="cb64-3"><a href="microbiome-networks.html#cb64-3" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">log</span>(sequencing_depth) <span class="sc">+</span> BMI,</span>
+<span id="cb64-4"><a href="microbiome-networks.html#cb64-4" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">ZINBLSS</span>()</span>
+<span id="cb64-5"><a href="microbiome-networks.html#cb64-5" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb64-6"><a href="microbiome-networks.html#cb64-6" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb64-7"><a href="microbiome-networks.html#cb64-7" tabindex="-1"></a>sim</span></code></pre></div>
 <pre><code>## [Marginals]
 ## Plan:
 ## # A tibble: 6 × 3
@@ -282,8 +282,8 @@ workflow that applied to the original data can be applied to the simulated one
 without any changes. Notice also that <code>sample</code> defaults to drawing samples from
 the same design as the original input experiment (we’ll modify this using the
 <code>new_data</code> argument in a minute).</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="microbiome-networks.html#cb64-1" tabindex="-1"></a>simulated <span class="ot">&lt;-</span> <span class="fu">sample</span>(sim)</span>
-<span id="cb64-2"><a href="microbiome-networks.html#cb64-2" tabindex="-1"></a>simulated</span></code></pre></div>
+<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="microbiome-networks.html#cb66-1" tabindex="-1"></a>simulated <span class="ot">&lt;-</span> <span class="fu">sample</span>(sim)</span>
+<span id="cb66-2"><a href="microbiome-networks.html#cb66-2" tabindex="-1"></a>simulated</span></code></pre></div>
 <pre><code>## class: SummarizedExperiment 
 ## dim: 45 261 
 ## metadata(0):
@@ -302,18 +302,18 @@ objects in this way. Notice that the simulated data tends to overestimate the
 number of zeros in the high-abundance taxa. To refine the simulator, we should
 probably replace the zero-inflated negative binomial with ordinary negative
 binomials for these poorly fitted taxa.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="microbiome-networks.html#cb66-1" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
-<span id="cb66-2"><a href="microbiome-networks.html#cb66-2" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">pivot_experiment</span>(amgut),</span>
-<span id="cb66-3"><a href="microbiome-networks.html#cb66-3" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">pivot_experiment</span>(simulated),</span>
-<span id="cb66-4"><a href="microbiome-networks.html#cb66-4" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">&quot;source&quot;</span></span>
-<span id="cb66-5"><a href="microbiome-networks.html#cb66-5" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb66-6"><a href="microbiome-networks.html#cb66-6" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">%in%</span> <span class="fu">rownames</span>(simulated)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]) <span class="sc">|&gt;</span></span>
-<span id="cb66-7"><a href="microbiome-networks.html#cb66-7" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb66-8"><a href="microbiome-networks.html#cb66-8" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
-<span id="cb66-9"><a href="microbiome-networks.html#cb66-9" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> value), <span class="at">fill =</span> source),</span>
-<span id="cb66-10"><a href="microbiome-networks.html#cb66-10" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.8</span></span>
-<span id="cb66-11"><a href="microbiome-networks.html#cb66-11" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb66-12"><a href="microbiome-networks.html#cb66-12" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">reorder</span>(feature, value), <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="microbiome-networks.html#cb68-1" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
+<span id="cb68-2"><a href="microbiome-networks.html#cb68-2" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">pivot_experiment</span>(amgut),</span>
+<span id="cb68-3"><a href="microbiome-networks.html#cb68-3" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">pivot_experiment</span>(simulated),</span>
+<span id="cb68-4"><a href="microbiome-networks.html#cb68-4" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">&quot;source&quot;</span></span>
+<span id="cb68-5"><a href="microbiome-networks.html#cb68-5" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb68-6"><a href="microbiome-networks.html#cb68-6" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">%in%</span> <span class="fu">rownames</span>(simulated)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]) <span class="sc">|&gt;</span></span>
+<span id="cb68-7"><a href="microbiome-networks.html#cb68-7" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb68-8"><a href="microbiome-networks.html#cb68-8" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
+<span id="cb68-9"><a href="microbiome-networks.html#cb68-9" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> value), <span class="at">fill =</span> source),</span>
+<span id="cb68-10"><a href="microbiome-networks.html#cb68-10" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.8</span></span>
+<span id="cb68-11"><a href="microbiome-networks.html#cb68-11" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb68-12"><a href="microbiome-networks.html#cb68-12" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">reorder</span>(feature, value), <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/histogram-critique-1.png" width="864" /></p>
 <p>Are the learned relationships with BMI plausible? We can compare scatterplots of
 the real and simulated data against this variable. Note that, by default, the
@@ -321,29 +321,29 @@ ribbons will be evaluated along all variables, which makes for the jagged
 ribbons (neighboring values for BMI might have different sequencing depth,
 potentially leading to quite different predictions). To remove this artifact, we
 can assume that all samples had exactly the same sequencing depth.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="microbiome-networks.html#cb67-1" tabindex="-1"></a>new_data <span class="ot">&lt;-</span> <span class="fu">colData</span>(amgut) <span class="sc">|&gt;</span></span>
-<span id="cb67-2"><a href="microbiome-networks.html#cb67-2" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<span id="cb67-3"><a href="microbiome-networks.html#cb67-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sequencing_depth =</span> <span class="fl">2e4</span>)</span>
-<span id="cb67-4"><a href="microbiome-networks.html#cb67-4" tabindex="-1"></a><span class="fu">plot</span>(sim, <span class="st">&quot;BMI&quot;</span>, <span class="fu">sample</span>(sim, <span class="at">new_data =</span> new_data), <span class="at">new_data =</span> new_data)</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="microbiome-networks.html#cb69-1" tabindex="-1"></a>new_data <span class="ot">&lt;-</span> <span class="fu">colData</span>(amgut) <span class="sc">|&gt;</span></span>
+<span id="cb69-2"><a href="microbiome-networks.html#cb69-2" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
+<span id="cb69-3"><a href="microbiome-networks.html#cb69-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sequencing_depth =</span> <span class="fl">2e4</span>)</span>
+<span id="cb69-4"><a href="microbiome-networks.html#cb69-4" tabindex="-1"></a><span class="fu">plot</span>(sim, <span class="st">&quot;BMI&quot;</span>, <span class="fu">sample</span>(sim, <span class="at">new_data =</span> new_data), <span class="at">new_data =</span> new_data)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/bmi-scatter-1.png" width="1152" /></p>
 <p>We next visualize the correlation matrix estimated by the simulator’s copula
 model. There are a few pairs of taxa that are very highly correlated, and there
 are also a few taxa that seem to have higher correlation across a large number
 of taxa (e.g., the taxon in row 34). There is no obvious banding or block
 structure in this real data, though.</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="microbiome-networks.html#cb68-1" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">copula_parameters</span>(sim)</span>
-<span id="cb68-2"><a href="microbiome-networks.html#cb68-2" tabindex="-1"></a><span class="fu">heatmap</span>(rho)</span></code></pre></div>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="microbiome-networks.html#cb70-1" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">copula_parameters</span>(sim)</span>
+<span id="cb70-2"><a href="microbiome-networks.html#cb70-2" tabindex="-1"></a><span class="fu">heatmap</span>(rho)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/correlation-heatmap-1.png" width="480" /></p>
 <p>The pair below is one of those with high positive correlation. You can replace
 the selection with the commented out line to see what one of the anticorrelated
 pairs of taxa looks like.</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="microbiome-networks.html#cb69-1" tabindex="-1"></a><span class="co">#taxa &lt;- rownames(amgut)[c(33, 43)]</span></span>
-<span id="cb69-2"><a href="microbiome-networks.html#cb69-2" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">rownames</span>(amgut)[<span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">25</span>)]</span>
-<span id="cb69-3"><a href="microbiome-networks.html#cb69-3" tabindex="-1"></a><span class="fu">pivot_experiment</span>(amgut) <span class="sc">|&gt;</span></span>
-<span id="cb69-4"><a href="microbiome-networks.html#cb69-4" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">%in%</span> taxa) <span class="sc">|&gt;</span></span>
-<span id="cb69-5"><a href="microbiome-networks.html#cb69-5" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> feature) <span class="sc">|&gt;</span></span>
-<span id="cb69-6"><a href="microbiome-networks.html#cb69-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb69-7"><a href="microbiome-networks.html#cb69-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> .data[[taxa[<span class="dv">1</span>]]]), <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> .data[[taxa[<span class="dv">2</span>]]])))</span></code></pre></div>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="microbiome-networks.html#cb71-1" tabindex="-1"></a><span class="co">#taxa &lt;- rownames(amgut)[c(33, 43)]</span></span>
+<span id="cb71-2"><a href="microbiome-networks.html#cb71-2" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">rownames</span>(amgut)[<span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">25</span>)]</span>
+<span id="cb71-3"><a href="microbiome-networks.html#cb71-3" tabindex="-1"></a><span class="fu">pivot_experiment</span>(amgut) <span class="sc">|&gt;</span></span>
+<span id="cb71-4"><a href="microbiome-networks.html#cb71-4" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">%in%</span> taxa) <span class="sc">|&gt;</span></span>
+<span id="cb71-5"><a href="microbiome-networks.html#cb71-5" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> feature) <span class="sc">|&gt;</span></span>
+<span id="cb71-6"><a href="microbiome-networks.html#cb71-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb71-7"><a href="microbiome-networks.html#cb71-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> .data[[taxa[<span class="dv">1</span>]]]), <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> .data[[taxa[<span class="dv">2</span>]]])))</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/correlation_pairs-1.png" width="480" /></p>
 </div>
 <div id="block-covariance" class="section level2 hasAnchor" number="4.3">
@@ -352,43 +352,43 @@ pairs of taxa looks like.</p>
 diagonal matrix. In this example, the off-diagonal correlations are 0.6. We can
 use <code>mutate_correlation</code> to swap this new correlation matrix into our earlier
 simulator.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="microbiome-networks.html#cb70-1" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.4</span>, .<span class="dv">6</span>, <span class="fl">0.8</span>) <span class="sc">|&gt;</span></span>
-<span id="cb70-2"><a href="microbiome-networks.html#cb70-2" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">matrix</span>(., <span class="at">nrow =</span> <span class="dv">15</span>, <span class="at">ncol =</span> <span class="dv">15</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb70-3"><a href="microbiome-networks.html#cb70-3" tabindex="-1"></a>  Matrix<span class="sc">::</span><span class="fu">bdiag</span>() <span class="sc">|&gt;</span></span>
-<span id="cb70-4"><a href="microbiome-networks.html#cb70-4" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
-<span id="cb70-5"><a href="microbiome-networks.html#cb70-5" tabindex="-1"></a><span class="fu">diag</span>(rho) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb70-6"><a href="microbiome-networks.html#cb70-6" tabindex="-1"></a></span>
-<span id="cb70-7"><a href="microbiome-networks.html#cb70-7" tabindex="-1"></a>simulated <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
-<span id="cb70-8"><a href="microbiome-networks.html#cb70-8" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho) <span class="sc">|&gt;</span></span>
-<span id="cb70-9"><a href="microbiome-networks.html#cb70-9" tabindex="-1"></a>  <span class="fu">sample</span>()</span>
-<span id="cb70-10"><a href="microbiome-networks.html#cb70-10" tabindex="-1"></a></span>
-<span id="cb70-11"><a href="microbiome-networks.html#cb70-11" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">assay</span>(simulated))</span></code></pre></div>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="microbiome-networks.html#cb72-1" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.4</span>, .<span class="dv">6</span>, <span class="fl">0.8</span>) <span class="sc">|&gt;</span></span>
+<span id="cb72-2"><a href="microbiome-networks.html#cb72-2" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">matrix</span>(., <span class="at">nrow =</span> <span class="dv">15</span>, <span class="at">ncol =</span> <span class="dv">15</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb72-3"><a href="microbiome-networks.html#cb72-3" tabindex="-1"></a>  Matrix<span class="sc">::</span><span class="fu">bdiag</span>() <span class="sc">|&gt;</span></span>
+<span id="cb72-4"><a href="microbiome-networks.html#cb72-4" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb72-5"><a href="microbiome-networks.html#cb72-5" tabindex="-1"></a><span class="fu">diag</span>(rho) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb72-6"><a href="microbiome-networks.html#cb72-6" tabindex="-1"></a></span>
+<span id="cb72-7"><a href="microbiome-networks.html#cb72-7" tabindex="-1"></a>simulated <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb72-8"><a href="microbiome-networks.html#cb72-8" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho) <span class="sc">|&gt;</span></span>
+<span id="cb72-9"><a href="microbiome-networks.html#cb72-9" tabindex="-1"></a>  <span class="fu">sample</span>()</span>
+<span id="cb72-10"><a href="microbiome-networks.html#cb72-10" tabindex="-1"></a></span>
+<span id="cb72-11"><a href="microbiome-networks.html#cb72-11" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">assay</span>(simulated))</span></code></pre></div>
 <p>Let’s first look at the <a href="https://github.com/zdk123/SpiecEasi"><code>SpiecEasi</code> covariance estimate</a>. This is a variant of the
 graphical lasso that is designed to be well-adapted to microbiome data. The good
 news is that it does warn that the default choices of <span class="math inline">\(\lambda\)</span> are too large,
 which is correct in this case. Unfortunately, it took a while to get this
 answer, and we had already been quite generous in allowing it to fit 10 choices
 of <span class="math inline">\(\lambda\)</span>.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="microbiome-networks.html#cb71-1" tabindex="-1"></a>rho_se <span class="ot">&lt;-</span> <span class="fu">spiec.easi</span>(x, <span class="at">nlambda =</span> <span class="dv">10</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span>  </span>
-<span id="cb71-2"><a href="microbiome-networks.html#cb71-2" tabindex="-1"></a>  <span class="fu">getOptCov</span>() <span class="sc">|&gt;</span></span>
-<span id="cb71-3"><a href="microbiome-networks.html#cb71-3" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
-<span id="cb71-4"><a href="microbiome-networks.html#cb71-4" tabindex="-1"></a>  <span class="fu">cov2cor</span>()</span>
-<span id="cb71-5"><a href="microbiome-networks.html#cb71-5" tabindex="-1"></a><span class="fu">heatmap</span>(rho_se)</span></code></pre></div>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="microbiome-networks.html#cb73-1" tabindex="-1"></a>rho_se <span class="ot">&lt;-</span> <span class="fu">spiec.easi</span>(x, <span class="at">nlambda =</span> <span class="dv">10</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span>  </span>
+<span id="cb73-2"><a href="microbiome-networks.html#cb73-2" tabindex="-1"></a>  <span class="fu">getOptCov</span>() <span class="sc">|&gt;</span></span>
+<span id="cb73-3"><a href="microbiome-networks.html#cb73-3" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
+<span id="cb73-4"><a href="microbiome-networks.html#cb73-4" tabindex="-1"></a>  <span class="fu">cov2cor</span>()</span>
+<span id="cb73-5"><a href="microbiome-networks.html#cb73-5" tabindex="-1"></a><span class="fu">heatmap</span>(rho_se)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/spieceasi-1.png" width="672" /></p>
 <p>Let’s instead use the Ledoit-Wolf estimator on the log-transformed data. The
 results make much more sense.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="microbiome-networks.html#cb72-1" tabindex="-1"></a>rho_lw <span class="ot">&lt;-</span> <span class="fu">CovEst.2003LW</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> x))<span class="sc">$</span>S <span class="sc">|&gt;</span></span>
-<span id="cb72-2"><a href="microbiome-networks.html#cb72-2" tabindex="-1"></a>  <span class="fu">cov2cor</span>()</span>
-<span id="cb72-3"><a href="microbiome-networks.html#cb72-3" tabindex="-1"></a><span class="fu">heatmap</span>(rho_lw)</span></code></pre></div>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="microbiome-networks.html#cb74-1" tabindex="-1"></a>rho_lw <span class="ot">&lt;-</span> <span class="fu">CovEst.2003LW</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> x))<span class="sc">$</span>S <span class="sc">|&gt;</span></span>
+<span id="cb74-2"><a href="microbiome-networks.html#cb74-2" tabindex="-1"></a>  <span class="fu">cov2cor</span>()</span>
+<span id="cb74-3"><a href="microbiome-networks.html#cb74-3" tabindex="-1"></a><span class="fu">heatmap</span>(rho_lw)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/lw-1.png" width="672" /></p>
 <p>Since color comparisons are difficult to evaluate precisely, we can also make a
 scatterplot comparing the different covariance estimators.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="microbiome-networks.html#cb73-1" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">truth =</span> <span class="fu">c</span>(rho), <span class="at">se =</span> <span class="fu">c</span>(rho_se), <span class="at">lw =</span> <span class="fu">c</span>(rho_lw)) <span class="sc">|&gt;</span></span>
-<span id="cb73-2"><a href="microbiome-networks.html#cb73-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>truth, <span class="at">values_to =</span> <span class="st">&quot;estimate&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb73-3"><a href="microbiome-networks.html#cb73-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb73-4"><a href="microbiome-networks.html#cb73-4" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(truth, estimate, <span class="at">col =</span> name), <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb73-5"><a href="microbiome-networks.html#cb73-5" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb73-6"><a href="microbiome-networks.html#cb73-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>name)</span></code></pre></div>
+<div class="sourceCode" id="cb75"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb75-1"><a href="microbiome-networks.html#cb75-1" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">truth =</span> <span class="fu">c</span>(rho), <span class="at">se =</span> <span class="fu">c</span>(rho_se), <span class="at">lw =</span> <span class="fu">c</span>(rho_lw)) <span class="sc">|&gt;</span></span>
+<span id="cb75-2"><a href="microbiome-networks.html#cb75-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>truth, <span class="at">values_to =</span> <span class="st">&quot;estimate&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb75-3"><a href="microbiome-networks.html#cb75-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb75-4"><a href="microbiome-networks.html#cb75-4" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(truth, estimate, <span class="at">col =</span> name), <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb75-5"><a href="microbiome-networks.html#cb75-5" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb75-6"><a href="microbiome-networks.html#cb75-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>name)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/covariance_metrics-1.png" width="672" /></p>
 </div>
 <div id="generalization" class="section level2 hasAnchor" number="4.4">
@@ -396,22 +396,22 @@ scatterplot comparing the different covariance estimators.</p>
 <p>What about other network structures? We can use the same logic to evaluate
 several network regimes. For example, the block below defines correlation
 matrices associated with scale-free and banded structures.</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="microbiome-networks.html#cb74-1" tabindex="-1"></a><span class="fu">data</span>(example_rho)</span>
-<span id="cb74-2"><a href="microbiome-networks.html#cb74-2" tabindex="-1"></a>rho_hat <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb74-3"><a href="microbiome-networks.html#cb74-3" tabindex="-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_along</span>(example_rho)) {</span>
-<span id="cb74-4"><a href="microbiome-networks.html#cb74-4" tabindex="-1"></a>  x <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
-<span id="cb74-5"><a href="microbiome-networks.html#cb74-5" tabindex="-1"></a>    <span class="fu">mutate_correlation</span>(example_rho[[r]]) <span class="sc">|&gt;</span></span>
-<span id="cb74-6"><a href="microbiome-networks.html#cb74-6" tabindex="-1"></a>    scDesigner<span class="sc">::</span><span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
-<span id="cb74-7"><a href="microbiome-networks.html#cb74-7" tabindex="-1"></a>    <span class="fu">assay</span>()</span>
-<span id="cb74-8"><a href="microbiome-networks.html#cb74-8" tabindex="-1"></a></span>
-<span id="cb74-9"><a href="microbiome-networks.html#cb74-9" tabindex="-1"></a>  rho_se <span class="ot">&lt;-</span> <span class="fu">spiec.easi</span>(<span class="fu">t</span>(x), <span class="at">nlambda =</span> <span class="dv">10</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span>  </span>
-<span id="cb74-10"><a href="microbiome-networks.html#cb74-10" tabindex="-1"></a>    <span class="fu">getOptCov</span>() <span class="sc">|&gt;</span></span>
-<span id="cb74-11"><a href="microbiome-networks.html#cb74-11" tabindex="-1"></a>    <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
-<span id="cb74-12"><a href="microbiome-networks.html#cb74-12" tabindex="-1"></a>    <span class="fu">cov2cor</span>()</span>
-<span id="cb74-13"><a href="microbiome-networks.html#cb74-13" tabindex="-1"></a>  rho_lw <span class="ot">&lt;-</span> <span class="fu">CovEst.2003LW</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">t</span>(x)))<span class="sc">$</span>S <span class="sc">|&gt;</span></span>
-<span id="cb74-14"><a href="microbiome-networks.html#cb74-14" tabindex="-1"></a>    <span class="fu">cov2cor</span>()</span>
-<span id="cb74-15"><a href="microbiome-networks.html#cb74-15" tabindex="-1"></a>  rho_hat[[<span class="fu">names</span>(example_rho)[r]]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">se =</span> rho_se, <span class="at">lw =</span> rho_lw)</span>
-<span id="cb74-16"><a href="microbiome-networks.html#cb74-16" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb76"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb76-1"><a href="microbiome-networks.html#cb76-1" tabindex="-1"></a><span class="fu">data</span>(example_rho)</span>
+<span id="cb76-2"><a href="microbiome-networks.html#cb76-2" tabindex="-1"></a>rho_hat <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb76-3"><a href="microbiome-networks.html#cb76-3" tabindex="-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_along</span>(example_rho)) {</span>
+<span id="cb76-4"><a href="microbiome-networks.html#cb76-4" tabindex="-1"></a>  x <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb76-5"><a href="microbiome-networks.html#cb76-5" tabindex="-1"></a>    <span class="fu">mutate_correlation</span>(example_rho[[r]]) <span class="sc">|&gt;</span></span>
+<span id="cb76-6"><a href="microbiome-networks.html#cb76-6" tabindex="-1"></a>    scDesigner<span class="sc">::</span><span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb76-7"><a href="microbiome-networks.html#cb76-7" tabindex="-1"></a>    <span class="fu">assay</span>()</span>
+<span id="cb76-8"><a href="microbiome-networks.html#cb76-8" tabindex="-1"></a></span>
+<span id="cb76-9"><a href="microbiome-networks.html#cb76-9" tabindex="-1"></a>  rho_se <span class="ot">&lt;-</span> <span class="fu">spiec.easi</span>(<span class="fu">t</span>(x), <span class="at">nlambda =</span> <span class="dv">10</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span>  </span>
+<span id="cb76-10"><a href="microbiome-networks.html#cb76-10" tabindex="-1"></a>    <span class="fu">getOptCov</span>() <span class="sc">|&gt;</span></span>
+<span id="cb76-11"><a href="microbiome-networks.html#cb76-11" tabindex="-1"></a>    <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
+<span id="cb76-12"><a href="microbiome-networks.html#cb76-12" tabindex="-1"></a>    <span class="fu">cov2cor</span>()</span>
+<span id="cb76-13"><a href="microbiome-networks.html#cb76-13" tabindex="-1"></a>  rho_lw <span class="ot">&lt;-</span> <span class="fu">CovEst.2003LW</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">t</span>(x)))<span class="sc">$</span>S <span class="sc">|&gt;</span></span>
+<span id="cb76-14"><a href="microbiome-networks.html#cb76-14" tabindex="-1"></a>    <span class="fu">cov2cor</span>()</span>
+<span id="cb76-15"><a href="microbiome-networks.html#cb76-15" tabindex="-1"></a>  rho_hat[[<span class="fu">names</span>(example_rho)[r]]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">se =</span> rho_se, <span class="at">lw =</span> rho_lw)</span>
+<span id="cb76-16"><a href="microbiome-networks.html#cb76-16" tabindex="-1"></a>}</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/visualize-difference-1.png" width="672" /></p>
 <p>This example shows that, when we start with real template data, it’s not too
 hard to setup a benchmarking experiment. It’s generally easier to reconfigure
