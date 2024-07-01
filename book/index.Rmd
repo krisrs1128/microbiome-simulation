@@ -138,7 +138,7 @@ negative controls.
 sim <- sim |>
   scDesigner::mutate(
     1:2,
-     link = ~ ns(time, df = 7)
+    link = ~ ns(time, df = 7)
   ) |>
   estimate(nu = 0.01, mstop = 1000)
 
@@ -167,6 +167,6 @@ sessionInfo()
 ```{r include=FALSE}
 # automatically create a bib database for R packages
 knitr::write_bib(c(
-  .packages(), 'bookdown', 'knitr', 'rmarkdown'
-), 'packages.bib')
+  .packages(), "bookdown", "knitr", "rmarkdown"
+), "packages.bib")
 ```
