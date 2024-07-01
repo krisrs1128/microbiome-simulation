@@ -1,7 +1,7 @@
 # Vertical Integration
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 set.seed(20240603)
 ```
 
@@ -190,18 +190,18 @@ bind_rows(
 ) |>
   mutate(source = factor(source, levels = c("Original Data", "Full Simulation", "No Effect on Bacteria"))) |>
   ggplot() +
-    geom_vline(xintercept = 0) +
-    geom_hline(yintercept = 0) +
-    geom_point(aes(x, y, col = group), size = 0.8) +
-    scale_color_manual(values = c("#F28241", "#038C7F", "#D96CB3", "#3097BF")) +
-    facet_grid(source ~ Block) +
-    guides(col = guide_legend(nrow = 2, override.aes = list(size = 2))) +
-    labs(col = "Group", x = "multiblock sPLS-DA Dim. 1", y = "multiblock sPLS-DA Dim. 2") +
-    theme(
-      panel.border = element_rect(fill = NA), 
-      legend.position = "bottom",
-      strip.text.y = element_text(angle = 0)
-    )
+  geom_vline(xintercept = 0) +
+  geom_hline(yintercept = 0) +
+  geom_point(aes(x, y, col = group), size = 0.8) +
+  scale_color_manual(values = c("#F28241", "#038C7F", "#D96CB3", "#3097BF")) +
+  facet_grid(source ~ Block) +
+  guides(col = guide_legend(nrow = 2, override.aes = list(size = 2))) +
+  labs(col = "Group", x = "multiblock sPLS-DA Dim. 1", y = "multiblock sPLS-DA Dim. 2") +
+  theme(
+    panel.border = element_rect(fill = NA),
+    legend.position = "bottom",
+    strip.text.y = element_text(angle = 0)
+  )
 ggsave("multiblock_calibration.svg", width = 6, height = 4)
 ```
 
@@ -268,7 +268,7 @@ ggplot(contrast_data, aes(loading, value)) +
   geom_jitter(
     data = filter(contrast_data, !source),
     height = 0,
-    size = 0.3, 
+    size = 0.3,
     alpha = 0.5,
     col = "#D9C8B4"
   ) +
@@ -278,8 +278,8 @@ ggplot(contrast_data, aes(loading, value)) +
     col = "#BF4E83"
   ) +
   labs(
-    x = expression("Dimension"~k),
-    y = expression("Canonical Correlation"~rho[k]),
+    x = expression("Dimension" ~ k),
+    y = expression("Canonical Correlation" ~ rho[k]),
     col = "Source"
   ) +
   scale_x_continuous(expand = c(0, 0)) +

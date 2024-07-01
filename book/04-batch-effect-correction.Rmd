@@ -11,7 +11,7 @@ function in the `purrr`, which is helpful for concisely writing code that would
 otherwise need for loops (e.g., over batches or assays).
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 set.seed(20240603)
 ```
 
@@ -38,7 +38,7 @@ pca_batch(anaerobic, facet = FALSE) +
     y = "PC2 [16.2% Varianced Explained]"
   )
 ```
-```{r, echo = FALSE, eval = TRUE}
+```{r, echo = FALSE}
 ggsave("original_batch_effects.svg", width = 5, height = 3)
 ```
 
@@ -161,10 +161,10 @@ map_dfr(p, ~ .$data, .id = "source") |>
   mutate(
     source = forcats::fct_recode(source, ComBat = "combat", `RUV-III` = "ruv", Simulation = "sim"),
     source = factor(source, levels = c("Simulation", "RUV-III", "ComBat"))
-    ) |>
+  ) |>
   ggplot(aes(col = factor(treatment))) +
-  geom_vline(xintercept =  0) +
-  geom_hline(yintercept =  0) +
+  geom_vline(xintercept = 0) +
+  geom_hline(yintercept = 0) +
   geom_point(aes(PC1, PC2)) +
   scale_color_manual(values = c("#191C59", "#f20732", "#04B2D9")) +
   labs(col = "Treatment") +

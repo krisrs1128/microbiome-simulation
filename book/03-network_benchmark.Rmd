@@ -13,6 +13,11 @@ use when, since the problem is unsupervised. Even when thorough simulation
 benchmarking studies are available, it's often not obvious how well those
 simulation setups match our problems of interest.
 
+```{r, include = FALSE}
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+set.seed(202406)
+```
+
 ## Estimation
 
 Let's use simulation to benchmark network estimation methods using data from
@@ -110,7 +115,7 @@ the selection with the commented out line to see what one of the anticorrelated
 pairs of taxa looks like.
 
 ```{r correlation_pairs, fig.width = 5, fig.height = 5}
-#taxa <- rownames(amgut)[c(33, 43)]
+# taxa <- rownames(amgut)[c(33, 43)]
 taxa <- rownames(amgut)[c(14, 25)]
 pivot_experiment(amgut) |>
   filter(feature %in% taxa) |>
@@ -148,7 +153,7 @@ answer, and we had already been quite generous in allowing it to fit 10 choices
 of $\lambda$.
 
 ```{r spieceasi}
-rho_se <- spiec.easi(x, nlambda = 10, pulsar.params = list(rep.num = 1)) |>  
+rho_se <- spiec.easi(x, nlambda = 10, pulsar.params = list(rep.num = 1)) |>
   getOptCov() |>
   as.matrix() |>
   cov2cor()
@@ -191,7 +196,7 @@ for (r in seq_along(example_rho)) {
     scDesigner::sample() |>
     assay()
 
-  rho_se <- spiec.easi(t(x), nlambda = 10, pulsar.params = list(rep.num = 1)) |>  
+  rho_se <- spiec.easi(t(x), nlambda = 10, pulsar.params = list(rep.num = 1)) |>
     getOptCov() |>
     as.matrix() |>
     cov2cor()
@@ -214,7 +219,7 @@ p1 <- reshape_correlations(rho_hat) |>
     x = "True Correlation",
     y = "Estimated Correlation",
     col = "Method",
-    title = "(B)"
+    title = "B"
   )
 
 p2 <- map_dfr(example_rho, ~ {
@@ -223,15 +228,15 @@ p2 <- map_dfr(example_rho, ~ {
     pivot_longer(-i) |>
     mutate(j = as.integer(stringr::str_extract(name, "[0-9]+")))
 }, .id = "structure") |>
-    mutate(
-      structure = case_when(
-        structure == "banded" ~ "Banded",
-        structure == "block" ~ "Block",
-        structure == "erdos_renyi" ~ "Erdos Renyi",
-        structure == "scale_free" ~ "Scale-Free",
-        structure == "small_world" ~ "Small-World"
-      )
-    ) |>
+  mutate(
+    structure = case_when(
+      structure == "banded" ~ "Banded",
+      structure == "block" ~ "Block",
+      structure == "erdos_renyi" ~ "Erdos Renyi",
+      structure == "scale_free" ~ "Scale-Free",
+      structure == "small_world" ~ "Small-World"
+    )
+  ) |>
   filter(value < 1) |>
   ggplot() +
   geom_tile(aes(
@@ -240,14 +245,14 @@ p2 <- map_dfr(example_rho, ~ {
     fill = value
   )) +
   scale_x_discrete(expand = c(0, 0)) +
-  labs(x = NULL, y = NULL, title = "(A)", fill = "Correlation", col = "Correlation") +
+  labs(x = NULL, y = NULL, title = "A", fill = "Correlation", col = "Correlation") +
   scale_y_discrete(expand = c(0, 0)) +
   scale_fill_scico(palette = "vik", direction = -1) +
   scale_color_scico(palette = "vik", direction = -1) +
   coord_fixed() +
   facet_wrap(~ reorder(structure, value), ncol = 5)
 
-(p2 / p1)  +
+(p2 / p1) +
   plot_layout(heights = c(1, 2))
 
 ggsave("network_comparison.svg", height = 4, width = 9)
