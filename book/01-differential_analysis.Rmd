@@ -54,8 +54,9 @@ combined <- bind_rows(
 
 ggplot(combined) +
   geom_boxplot(
-    aes(log(1 + value), reorder(feature, value, median), fill = bmi_group)
+    aes(value, reorder(feature, value, median), fill = bmi_group)
   ) +
+  scale_x_sqrt() +
   facet_grid(. ~ source)
 ```
 
@@ -97,7 +98,7 @@ Now that we have ground truth associations, we'll evaluate LIMMA-voom for
 differential analysis. We consider sample sizes ranging from 50 to 1200, and we
 simulate 10 datasets for each sample size.
 
-```{r, run-loop, eval = FALSE}
+```{r, run-loop, eval = TRUE}
 config <- expand.grid(
   sample_size = floor(seq(50, 1200, length.out = 5)),
   n_rep = 1:10
@@ -124,7 +125,7 @@ though the variance in this proportion can be quite high. We can also see that
 we would have quite good power with $n \geq 625$ samples, but the worst case
 scenarios can be quite poor for anything with fewer samples.
 
-```{r, visualize-da-power, eval = FALSE}
+```{r, visualize-da-power, eval = TRUE}
 bind_rows(results, .id = "run") |>
   left_join(config) |>
   ggplot() +

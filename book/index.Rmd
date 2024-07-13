@@ -29,10 +29,13 @@ throughout these book. You can install it by running:
 ```{r, eval = FALSE}
 devtools::install_github("krisrs1128/intro-to-simulation/MIGsim")
 ```
+```{r knitr, echo = FALSE}
+knitr::opts_chunk$set(message = FALSE)
+```
 
 This block loads all packages that will be used in this book.
 
-```{r}
+```{r load_packages}
 suppressPackageStartupMessages({
   library(CovTools)
   library(SpiecEasi)
@@ -44,6 +47,7 @@ suppressPackageStartupMessages({
   library(ggplot2)
   library(glue)
   library(mixOmics)
+  library(mutoss)
   library(patchwork)
   library(pwr)
   library(scico)

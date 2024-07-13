@@ -267,7 +267,7 @@ for (i in seq_len(nrow(config))) {
 association with T1D: `link = ~ 1` instead of `link = ~ outcome2`. To speed up
 the computation, we organized the `mutate` calls so that we don't need to
 re-estimate proteins whose effects were removed in a previous iteration.
-```{r power-analysis-loop-soln, eval = FALSE}
+```{r power-analysis-loop-soln, eval = TRUE}
 for (i in seq_len(nrow(config))) {
   if (i == 1 || config$n_null[i] != config$n_null[i - 1]) {
     simulator <- simulator |>
@@ -282,7 +282,7 @@ for (i in seq_len(nrow(config))) {
 ```
 
 ```{r load_config}
-config <- readRDS(url("https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds"))
+#config <- readRDS(url("https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds"))
 ```
 :::
 
@@ -316,6 +316,12 @@ then we may already achieve good power with ~ 100 samples. However, if we
 imagine our effect might be sparser in our future experiment, then this figure
 would give us good justification for arguing for a larger number of samples, in
 order to ensure we can discover a disease-associated proteomics signature.
+
+```{r}
+ix <- colData(t1d)$outcome2 == "T1D"
+p_vals <- apply(assay(t1d), 1, \(x) t.test(x[ix], x[-ix])$p.value)
+storey_pi0_est(p_vals, 0.5)$pi0
+```
 
 ## Comparison with $t$-test calculation
 
