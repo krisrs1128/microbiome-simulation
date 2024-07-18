@@ -67,6 +67,7 @@ suppressPackageStartupMessages({
   library(ANCOMBC)
   library(edgeR)
   library(ggrepel)
+  library(ggpubr)
 })
 theme_set(theme_classic())
 ```
