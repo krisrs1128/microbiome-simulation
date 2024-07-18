@@ -119,8 +119,8 @@ In addition to visual evaluation, we can also perform a narrow evaluation using 
 data. In the RUV model, we estimate the treatment effect for each feature in simulation and real data sets and are plotted in the scatter plot along with the correlation value between the two. As seen in the figure there is good agreement with the parameter estimations from the two datasets with a correlation value of 0.66.
 
 ```{r}
-fit_sim <- ruv::RUV4(t(assay(anaerobic_sim)), colData(anaerobic_sim)$treatment, k = 10)
-fit_org <- ruv::RUV4(t(assay(anaerobic)), colData(anaerobic)$treatment, k = 10)
+fit_sim <- ruv::RUV4(t(assay(anaerobic_sim)), colData(anaerobic_sim)$treatment, k = 0)
+fit_org <- ruv::RUV4(t(assay(anaerobic)), colData(anaerobic)$treatment, k = 0)
 
 
 bind_cols(org = c(fit_org$betahat), sim = c(fit_sim$betahat)) |>
