@@ -2,7 +2,8 @@
 
 ```{r, include = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
-set.seed(202406)
+set.seed(2123)
+source("DA_wrapper.R")
 ```
 
 Before we consider simulating entire microbial communities, with their complex
@@ -18,53 +19,151 @@ Let's load the necessary packages. Instructions for `scDesigner` and `MIGsim`
 can be found in the pre-workshop announcement.  `SummarizedExperiment` is on
 Bioconductor, and all other packages are on CRAN.
 
-Let's train a simulator to fit the Atlas dataset. We'll use two
-covariates. `bmi_group` is the main covariate of interest -- we want to see how
-microbiome composition varies among people with different BMI. The `log_depth`
-term is used to adjust for differential sequencing depths. We found it helpful
+Let's train a simulator to fit the Atlas dataset. We'll use `bmi_group` as the 
+covariate of interest -- we want to see how microbiome composition varies among 
+people with different BMI. We found it helpful
 to fixed zero inflation across the population (`nu`), so we have set `nu = ~1`.
 Finally, since we want to eventually evaluate testing methods that are designed
 for count data, we have used the (Z)ero (I)nflated (N)egative (B)inomial
 location-shape-scale model.
 
-```{r atlas-estimation}
-data(atlas)
+```{r}
+data(atlas1006, package = "microbiome")
+atlas <- makeTreeSEFromPhyloseq(atlas1006) |>
+ filter(time == 0) |>
+  dplyr::mutate(
+    bmi_group = case_when(
+      bmi_group == "severeobese" ~ "obese",
+      bmi_group == "morbidobese" ~ "obese",
+      bmi_group == "obese" ~ "obese",
+      bmi_group == "lean" ~ "lean",
+      bmi_group == "overweight" ~ "overweight",
+    )
+  ) |>
+  dplyr::filter(bmi_group %in% c("obese", "lean", "overweight")) |>
+  dplyr::mutate(
+    bmi_group = factor(bmi_group, levels = c("obese", "overweight", "lean"))
+  )
 
 fmla <- list(
-  mu = ~ bmi_group + log_depth,
-  sigma = ~ bmi_group + log_depth,
-  nu = ~1
+  mu = ~ bmi_group,
+  sigma = ~ bmi_group ,
+  nu =~1
 )
-sim <- setup_simulator(atlas, fmla, ~ ZINBLSS()) |>
-  estimate(nu = 0.01, mstop = 1000)
 ```
 
+We'll remove the genera which are never observed in this dataset. 
+
+```{r}
+colData(atlas)$log_depth <- log(colSums(assay(atlas)))
+zero_var <- apply(assay(atlas), 1, var) == 0
+atlas <- atlas[!zero_var, ]
+```
+
+Next we will select features that could work with ZINBF() estimation.
+```{r}
+select_i<-c(1:2)
+colData(atlas) <- colData(atlas)[, c("bmi_group", "sample")]
+
+for( i in 3:dim(atlas)[1]){
+  #print(select_i)
+  #print(glue::glue("{i}/{dim(atlas)[1]}"))
+  exper_tmp <- atlas[c(select_i, i),]
+  sim<-setup_simulator(
+  exper_tmp,
+  fmla,
+ ~ZINBF())
+
+   error_warning<-estimate(sim, control =gamlss.control(n.cyc = 20,
+                                   mu.step = 0.1))|>
+     tryCatch(warning=function(w)w, error=function(e)e)
+
+   if(is.na(class(error_warning)[2])){
+     select_i<-c(select_i, i)
+   }
+}
+
+```
+
+```{r, atlas-estimation}
+colData(atlas) <- colData(atlas)[, c("bmi_group", "sample")]
+atlas_filteres<- atlas[select_i,]
+
+sim<-setup_simulator(
+        atlas_filteres,
+        fmla,
+        ~ZINBF()) 
+
+
+sim<-estimate(sim, control =gamlss.control(n.cyc = 20,
+                                  mu.step = 0.1))
+```
 ## Critique
 
 **Exercise**: The block below combines the real and simulated experiments and
-visualizes their difference. With your neighbors, discuss how well the simulator
-approximates the original template.
+visualizes their difference both graphically and quantitatively. With your 
+neighbors, discuss how well the simulator approximates the original template.
 
 ```{r, contrast-simulators}
+real =atlas_filteres
+simulated = sample(sim)
 combined <- bind_rows(
-  real = pivot_experiment(atlas), # real data
-  simulated = pivot_experiment(sample(sim)), # simulated
+  real = pivot_experiment(real), # real data
+  simulated = pivot_experiment(simulated), # simulated
   .id = "source"
 )
 
-ggplot(combined) +
+top_features <- assay(atlas_filteres) |>
+                rowMeans() |> 
+                sort() |>
+                tail(10) |> 
+                names()
+
+top_combined<-combined |> 
+              filter(feature %in% top_features)
+
+ggplot(top_combined) +
   geom_boxplot(
-    aes(value, reorder(feature, value, median), fill = bmi_group)
+    aes(sqrt(value), reorder(feature, value, median), fill = bmi_group)
   ) +
-  scale_x_sqrt() +
-  facet_grid(. ~ source)
+  facet_grid(. ~ source)+
+  xlab("Square root transformed counts")+
+  ylab ("")+  
+  labs(fill='BMI group') + theme(legend.position = 'right')+
+  scale_fill_manual(values = rev(c("#9491D9", "#3F8C61", "#F24405")))
+```
+```{r}
+kdetest.group<-function(data){
+  
+  x <- data |> filter(source=="real")
+  y <- data |> filter(source=="simulated")
+  res<-kde.test(x1=x$value, x2=y$value)$pvalue
+  res
+}
+
+prop.accepted.H0<- sapply(c("lean", "overweight","obese"), 
+                          function(group){
+                            group_filter<- map(unique(combined$feature), 
+                                               ~combined |> 
+                                                 filter( feature==. 
+                                                         & bmi_group==group))
+                            adjpvalue <- sapply(1:length(select_i),
+                                              function(i){tryCatch( 
+                                                {kdetest.group(
+                                                  group_filter[[i]])},
+                                                error=function(e){NA})})|>
+                              p.adjust( method = "BH")
+                            sum(adjpvalue>0.05, na.rm = TRUE)/
+                              sum(!is.na(adjpvalue))})
+prop.accepted.H0
 ```
 
-**Solution**: The clearest difference is that, for these more abundant taxa, there there are
-not many low or zero counts. In contrast, the simulated data tend to have a long
-left tail (the many outlier circles on the left side of the boxplots),
-reflecting the fact that samples from the negative binomial distribution usually
-have support for all counts $\geq 0$.  Nonetheless, the ordering of abundances
+**Solution**: The simulated data are generally similar to the original data. 
+However, for some genera with positively skewed distributions and a high number 
+of outliers, such as *Prevotella melaninogenica et rel*, 
+the simulation reached its limits, explaining why the kernel density-based 
+two-sample test returned significant differences between the real and simulated 
+data for some genera. Nonetheless, the ordering of abundances
 between the groups typically agrees between the real and simulated data. The
 interquartile ranges for each taxon also seem to roughly match.
 
@@ -73,44 +172,59 @@ interquartile ranges for each taxon also seem to roughly match.
 To run a power analysis, we need to define datasets that have known ground
 truth.  Then, we can run any differential abundance methods we want and see how
 many of the true associations are recovered (and how many nulls are falsely
-rejected). To this end, we'll remove associations from 16 of the original 24
-genera, just like we removed group interactions in our spline fits above. We'll
-choose to remove the 16 that have the weakest associations in the original data.
-This is helpful because, even if we use `bmi_group` in our formula, if in
-reality there is no (or very weak) effect, then even if our simulator considers
-it as a true signal, the difference may be hard to detect. Eventually, our
-package will include functions for modifying these effects directly; at this
-point, though, we can only indirectly modify parameters by re-estimating them
-with new formulas.
+rejected). To this end, we'll remove associations from genera based on Wilcoxon 
+Rank Sum test.  We'll choose to remove the genera that have a q valuse<0.1
+in the original data.This is helpful because, even if we use `bmi_group` in our 
+formula, if in reality there is no (or very weak) effect, then even if our 
+simulator considers it as a true signal, the difference may be hard to detect. 
+Eventually, our package will include functions for modifying these effects 
+directly; at this point, though, we can only indirectly modify parameters by 
+re-estimating them with new formulas.
 
 ```{r, define-null}
-nulls <- differential_analysis(atlas, "LIMMA_voom") |>
-  rownames() |>
-  tail(16)
+wilcox_res <- differential_analysis(atlas_filteres, "wilcox-clr")
+nulls <- wilcox_res[wilcox_res$q_value.bmi_group.>0.1,] |> 
+          rownames()
 
-null_fmla <- list(mu = ~log_depth, sigma = ~log_depth, nu = ~1)
-sim <- sim |>
-  mutate(any_of(nulls), link = null_fmla) |>
-  estimate(nu = 0.01, mstop = 1000)
+sim<-sim|>mutate(any_of(nulls), link = ~ 1)
+sim<-estimate(sim, control =gamlss.control(n.cyc = 20,
+                                  mu.step = 0.1))
 ```
 
-Now that we have ground truth associations, we'll evaluate LIMMA-voom for
-differential analysis. We consider sample sizes ranging from 50 to 1200, and we
-simulate 10 datasets for each sample size.
+Now that we have ground truth associations, we'll evaluate LIMMA-voom, ANCOMBC, 
+DESeq2 for differential analysis. We consider sample sizes ranging from 50 to 
+1200, and we simulate 20 datasets for each sample size.
 
 ```{r, run-loop, eval = TRUE}
 config <- expand.grid(
   sample_size = floor(seq(50, 1200, length.out = 5)),
-  n_rep = 1:10
+  n_rep = 1:20
 ) |>
   mutate(run = as.character(row_number()))
 
+sample_n_<-function(sim_object, sample_size) {
+  n_original <- ncol(sim_object@template)
+  rep_ix <- rep(seq_len(n_original), each = ceiling(sample_size / n_original))
+  new_data <- colData(sim_object@template)[rep_ix[1:sample_size], ] |>
+    as_tibble() |>
+    mutate(
+      newdata_index = row_number()
+    )
+  
+  sim_return<-sample(sim_object, new_data = new_data)
+  return(sim_return)
+}
+
 results <- list()
 for (i in seq_len(nrow(config))) {
-  atlas_ <- sample_n(sim, config$sample_size[i])
-  results[[i]] <- differential_analysis(atlas_, "LIMMA_voom") |>
-    da_metrics(nulls, level = 0.3)
-  print(glue("{i}/{nrow(config)}"))
+  atlas_ <-sample_n_(sim, config$sample_size[i])
+  colnames(atlas_) <- paste0("Sample-", 1:config$sample_size[i])
+  results[[i]] <- sapply(c("LIMMA_voom","ANCOMBC", "DESeq2"), 
+                         function(m){
+                           differential_analysis(atlas_, m) |>
+                             da_metrics(nulls)}, 
+                         simplify = FALSE)
+  #print(glue::glue("{i}/{nrow(config)}"))
 }
 ```
 
@@ -120,24 +234,26 @@ the estimated power here is conservative, liberal, or about right?
 
 **Solution**: We'll use the `stat_pointinterval` function from the `ggdist` package to
 visualize the range of empirical power estimates across sample sizes. We can see
-that the average false discovery proportion is always controlled below 0.3,
-though the variance in this proportion can be quite high. We can also see that
+that the average false discovery proportion is always controlled below 0.1,
+though the variance in this proportion can be high. We can also see that
 we would have quite good power with $n \geq 625$ samples, but the worst case
 scenarios can be quite poor for anything with fewer samples.
 
 ```{r, visualize-da-power, eval = TRUE}
-bind_rows(results, .id = "run") |>
-  left_join(config) |>
-  ggplot() +
-  stat_pointinterval(aes(factor(sample_size), value)) +
-  facet_wrap(~metric, scales = "free")
+power_fdr<-sapply(1:100,function(i){
+            bind_rows(results[[i]], .id="method")},
+      simplify = FALSE)|>
+  bind_rows( .id="run") |>
+  dplyr::mutate(sample_size=rep(config$sample_size, each=6))
+  
+ggplot(power_fdr)+
+  tidybayes::stat_pointinterval(aes(factor(sample_size), value, group = method, colour = method),
+                                position = position_dodge(width = 0.8)) +
+  facet_wrap(~metric)+
+  xlab("Sample size")+
+  ylab("")+ scale_color_manual(values = wes_palette("Moonrise2", n = 3))+
+  labs(color='Method') + theme(legend.position = 'right')
 ```
-
-We expect that this result is somewhat conservative. This is because the
-original data have more symmetric distributions than our simulation, so limma's
-transformation to normality is likely easier to accomplish than in our more 
-highly skewed data.
-
 
 ```{r}
 sessionInfo()
