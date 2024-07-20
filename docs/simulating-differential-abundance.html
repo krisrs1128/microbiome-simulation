@@ -23,7 +23,7 @@
 <meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
 
 
-<meta name="date" content="2024-07-18" />
+<meta name="date" content="2024-07-20" />
 
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <meta name="apple-mobile-web-app-capable" content="yes" />
@@ -223,7 +223,7 @@ for count data, we have used the (Z)ero (I)nflated (N)egative (B)inomial
 location-shape-scale model.</p>
 <div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="simulating-differential-abundance.html#cb26-1" tabindex="-1"></a><span class="fu">data</span>(atlas1006, <span class="at">package =</span> <span class="st">&quot;microbiome&quot;</span>)</span>
 <span id="cb26-2"><a href="simulating-differential-abundance.html#cb26-2" tabindex="-1"></a>atlas <span class="ot">&lt;-</span> <span class="fu">makeTreeSEFromPhyloseq</span>(atlas1006) <span class="sc">|&gt;</span></span>
-<span id="cb26-3"><a href="simulating-differential-abundance.html#cb26-3" tabindex="-1"></a> <span class="fu">filter</span>(time <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
+<span id="cb26-3"><a href="simulating-differential-abundance.html#cb26-3" tabindex="-1"></a>  <span class="fu">filter</span>(time <span class="sc">==</span> <span class="dv">0</span>) <span class="sc">|&gt;</span></span>
 <span id="cb26-4"><a href="simulating-differential-abundance.html#cb26-4" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(</span>
 <span id="cb26-5"><a href="simulating-differential-abundance.html#cb26-5" tabindex="-1"></a>    <span class="at">bmi_group =</span> <span class="fu">case_when</span>(</span>
 <span id="cb26-6"><a href="simulating-differential-abundance.html#cb26-6" tabindex="-1"></a>      bmi_group <span class="sc">==</span> <span class="st">&quot;severeobese&quot;</span> <span class="sc">~</span> <span class="st">&quot;obese&quot;</span>,</span>
@@ -239,53 +239,59 @@ location-shape-scale model.</p>
 <span id="cb26-16"><a href="simulating-differential-abundance.html#cb26-16" tabindex="-1"></a>  )</span>
 <span id="cb26-17"><a href="simulating-differential-abundance.html#cb26-17" tabindex="-1"></a></span>
 <span id="cb26-18"><a href="simulating-differential-abundance.html#cb26-18" tabindex="-1"></a>fmla <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb26-19"><a href="simulating-differential-abundance.html#cb26-19" tabindex="-1"></a>  <span class="at">mu =</span> <span class="sc">~</span> bmi_group,</span>
-<span id="cb26-20"><a href="simulating-differential-abundance.html#cb26-20" tabindex="-1"></a>  <span class="at">sigma =</span> <span class="sc">~</span> bmi_group ,</span>
-<span id="cb26-21"><a href="simulating-differential-abundance.html#cb26-21" tabindex="-1"></a>  <span class="at">nu =</span><span class="sc">~</span><span class="dv">1</span></span>
+<span id="cb26-19"><a href="simulating-differential-abundance.html#cb26-19" tabindex="-1"></a>  <span class="at">mu =</span> <span class="sc">~</span>bmi_group,</span>
+<span id="cb26-20"><a href="simulating-differential-abundance.html#cb26-20" tabindex="-1"></a>  <span class="at">sigma =</span> <span class="sc">~</span>bmi_group,</span>
+<span id="cb26-21"><a href="simulating-differential-abundance.html#cb26-21" tabindex="-1"></a>  <span class="at">nu =</span> <span class="sc">~</span><span class="dv">1</span></span>
 <span id="cb26-22"><a href="simulating-differential-abundance.html#cb26-22" tabindex="-1"></a>)</span></code></pre></div>
 <p>We’ll remove the genera which are never observed in this dataset.</p>
 <div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="simulating-differential-abundance.html#cb27-1" tabindex="-1"></a><span class="fu">colData</span>(atlas)<span class="sc">$</span>log_depth <span class="ot">&lt;-</span> <span class="fu">log</span>(<span class="fu">colSums</span>(<span class="fu">assay</span>(atlas)))</span>
 <span id="cb27-2"><a href="simulating-differential-abundance.html#cb27-2" tabindex="-1"></a>zero_var <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">assay</span>(atlas), <span class="dv">1</span>, var) <span class="sc">==</span> <span class="dv">0</span></span>
 <span id="cb27-3"><a href="simulating-differential-abundance.html#cb27-3" tabindex="-1"></a>atlas <span class="ot">&lt;-</span> atlas[<span class="sc">!</span>zero_var, ]</span></code></pre></div>
 <p>Next we will select features that could work with ZINBF() estimation.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="simulating-differential-abundance.html#cb28-1" tabindex="-1"></a>select_i<span class="ot">&lt;-</span><span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
+<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="simulating-differential-abundance.html#cb28-1" tabindex="-1"></a>select_i <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>)</span>
 <span id="cb28-2"><a href="simulating-differential-abundance.html#cb28-2" tabindex="-1"></a><span class="fu">colData</span>(atlas) <span class="ot">&lt;-</span> <span class="fu">colData</span>(atlas)[, <span class="fu">c</span>(<span class="st">&quot;bmi_group&quot;</span>, <span class="st">&quot;sample&quot;</span>)]</span>
 <span id="cb28-3"><a href="simulating-differential-abundance.html#cb28-3" tabindex="-1"></a></span>
-<span id="cb28-4"><a href="simulating-differential-abundance.html#cb28-4" tabindex="-1"></a><span class="cf">for</span>( i <span class="cf">in</span> <span class="dv">3</span><span class="sc">:</span><span class="fu">dim</span>(atlas)[<span class="dv">1</span>]){</span>
-<span id="cb28-5"><a href="simulating-differential-abundance.html#cb28-5" tabindex="-1"></a>  <span class="co">#print(select_i)</span></span>
-<span id="cb28-6"><a href="simulating-differential-abundance.html#cb28-6" tabindex="-1"></a>  <span class="co">#print(glue::glue(&quot;{i}/{dim(atlas)[1]}&quot;))</span></span>
-<span id="cb28-7"><a href="simulating-differential-abundance.html#cb28-7" tabindex="-1"></a>  exper_tmp <span class="ot">&lt;-</span> atlas[<span class="fu">c</span>(select_i, i),]</span>
-<span id="cb28-8"><a href="simulating-differential-abundance.html#cb28-8" tabindex="-1"></a>  sim<span class="ot">&lt;-</span><span class="fu">setup_simulator</span>(</span>
-<span id="cb28-9"><a href="simulating-differential-abundance.html#cb28-9" tabindex="-1"></a>  exper_tmp,</span>
-<span id="cb28-10"><a href="simulating-differential-abundance.html#cb28-10" tabindex="-1"></a>  fmla,</span>
-<span id="cb28-11"><a href="simulating-differential-abundance.html#cb28-11" tabindex="-1"></a> <span class="sc">~</span><span class="fu">ZINBF</span>())</span>
-<span id="cb28-12"><a href="simulating-differential-abundance.html#cb28-12" tabindex="-1"></a></span>
-<span id="cb28-13"><a href="simulating-differential-abundance.html#cb28-13" tabindex="-1"></a>   error_warning<span class="ot">&lt;-</span><span class="fu">estimate</span>(sim, <span class="at">control =</span><span class="fu">gamlss.control</span>(<span class="at">n.cyc =</span> <span class="dv">20</span>,</span>
-<span id="cb28-14"><a href="simulating-differential-abundance.html#cb28-14" tabindex="-1"></a>                                   <span class="at">mu.step =</span> <span class="fl">0.1</span>))<span class="sc">|&gt;</span></span>
-<span id="cb28-15"><a href="simulating-differential-abundance.html#cb28-15" tabindex="-1"></a>     <span class="fu">tryCatch</span>(<span class="at">warning=</span><span class="cf">function</span>(w)w, <span class="at">error=</span><span class="cf">function</span>(e)e)</span>
-<span id="cb28-16"><a href="simulating-differential-abundance.html#cb28-16" tabindex="-1"></a></span>
-<span id="cb28-17"><a href="simulating-differential-abundance.html#cb28-17" tabindex="-1"></a>   <span class="cf">if</span>(<span class="fu">is.na</span>(<span class="fu">class</span>(error_warning)[<span class="dv">2</span>])){</span>
-<span id="cb28-18"><a href="simulating-differential-abundance.html#cb28-18" tabindex="-1"></a>     select_i<span class="ot">&lt;-</span><span class="fu">c</span>(select_i, i)</span>
-<span id="cb28-19"><a href="simulating-differential-abundance.html#cb28-19" tabindex="-1"></a>   }</span>
-<span id="cb28-20"><a href="simulating-differential-abundance.html#cb28-20" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb28-4"><a href="simulating-differential-abundance.html#cb28-4" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">3</span><span class="sc">:</span><span class="fu">dim</span>(atlas)[<span class="dv">1</span>]) {</span>
+<span id="cb28-5"><a href="simulating-differential-abundance.html#cb28-5" tabindex="-1"></a>  <span class="co"># print(select_i)</span></span>
+<span id="cb28-6"><a href="simulating-differential-abundance.html#cb28-6" tabindex="-1"></a>  <span class="co"># print(glue::glue(&quot;{i}/{dim(atlas)[1]}&quot;))</span></span>
+<span id="cb28-7"><a href="simulating-differential-abundance.html#cb28-7" tabindex="-1"></a>  exper_tmp <span class="ot">&lt;-</span> atlas[<span class="fu">c</span>(select_i, i), ]</span>
+<span id="cb28-8"><a href="simulating-differential-abundance.html#cb28-8" tabindex="-1"></a>  sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb28-9"><a href="simulating-differential-abundance.html#cb28-9" tabindex="-1"></a>    exper_tmp,</span>
+<span id="cb28-10"><a href="simulating-differential-abundance.html#cb28-10" tabindex="-1"></a>    fmla,</span>
+<span id="cb28-11"><a href="simulating-differential-abundance.html#cb28-11" tabindex="-1"></a>    <span class="sc">~</span> <span class="fu">ZINBF</span>()</span>
+<span id="cb28-12"><a href="simulating-differential-abundance.html#cb28-12" tabindex="-1"></a>  )</span>
+<span id="cb28-13"><a href="simulating-differential-abundance.html#cb28-13" tabindex="-1"></a></span>
+<span id="cb28-14"><a href="simulating-differential-abundance.html#cb28-14" tabindex="-1"></a>  error_warning <span class="ot">&lt;-</span> <span class="fu">estimate</span>(sim, <span class="at">control =</span> <span class="fu">gamlss.control</span>(</span>
+<span id="cb28-15"><a href="simulating-differential-abundance.html#cb28-15" tabindex="-1"></a>    <span class="at">n.cyc =</span> <span class="dv">20</span>,</span>
+<span id="cb28-16"><a href="simulating-differential-abundance.html#cb28-16" tabindex="-1"></a>    <span class="at">mu.step =</span> <span class="fl">0.1</span></span>
+<span id="cb28-17"><a href="simulating-differential-abundance.html#cb28-17" tabindex="-1"></a>  )) <span class="sc">|&gt;</span></span>
+<span id="cb28-18"><a href="simulating-differential-abundance.html#cb28-18" tabindex="-1"></a>    <span class="fu">tryCatch</span>(<span class="at">warning =</span> <span class="cf">function</span>(w) w, <span class="at">error =</span> <span class="cf">function</span>(e) e)</span>
+<span id="cb28-19"><a href="simulating-differential-abundance.html#cb28-19" tabindex="-1"></a></span>
+<span id="cb28-20"><a href="simulating-differential-abundance.html#cb28-20" tabindex="-1"></a>  <span class="cf">if</span> (<span class="fu">is.na</span>(<span class="fu">class</span>(error_warning)[<span class="dv">2</span>])) {</span>
+<span id="cb28-21"><a href="simulating-differential-abundance.html#cb28-21" tabindex="-1"></a>    select_i <span class="ot">&lt;-</span> <span class="fu">c</span>(select_i, i)</span>
+<span id="cb28-22"><a href="simulating-differential-abundance.html#cb28-22" tabindex="-1"></a>  }</span>
+<span id="cb28-23"><a href="simulating-differential-abundance.html#cb28-23" tabindex="-1"></a>}</span></code></pre></div>
 <div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="simulating-differential-abundance.html#cb29-1" tabindex="-1"></a><span class="fu">colData</span>(atlas) <span class="ot">&lt;-</span> <span class="fu">colData</span>(atlas)[, <span class="fu">c</span>(<span class="st">&quot;bmi_group&quot;</span>, <span class="st">&quot;sample&quot;</span>)]</span>
-<span id="cb29-2"><a href="simulating-differential-abundance.html#cb29-2" tabindex="-1"></a>atlas_filteres<span class="ot">&lt;-</span> atlas[select_i,]</span>
+<span id="cb29-2"><a href="simulating-differential-abundance.html#cb29-2" tabindex="-1"></a>atlas_filteres <span class="ot">&lt;-</span> atlas[select_i, ]</span>
 <span id="cb29-3"><a href="simulating-differential-abundance.html#cb29-3" tabindex="-1"></a></span>
-<span id="cb29-4"><a href="simulating-differential-abundance.html#cb29-4" tabindex="-1"></a>sim<span class="ot">&lt;-</span><span class="fu">setup_simulator</span>(</span>
-<span id="cb29-5"><a href="simulating-differential-abundance.html#cb29-5" tabindex="-1"></a>        atlas_filteres,</span>
-<span id="cb29-6"><a href="simulating-differential-abundance.html#cb29-6" tabindex="-1"></a>        fmla,</span>
-<span id="cb29-7"><a href="simulating-differential-abundance.html#cb29-7" tabindex="-1"></a>        <span class="sc">~</span><span class="fu">ZINBF</span>()) </span>
-<span id="cb29-8"><a href="simulating-differential-abundance.html#cb29-8" tabindex="-1"></a></span>
+<span id="cb29-4"><a href="simulating-differential-abundance.html#cb29-4" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb29-5"><a href="simulating-differential-abundance.html#cb29-5" tabindex="-1"></a>  atlas_filteres,</span>
+<span id="cb29-6"><a href="simulating-differential-abundance.html#cb29-6" tabindex="-1"></a>  fmla,</span>
+<span id="cb29-7"><a href="simulating-differential-abundance.html#cb29-7" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">ZINBF</span>()</span>
+<span id="cb29-8"><a href="simulating-differential-abundance.html#cb29-8" tabindex="-1"></a>)</span>
 <span id="cb29-9"><a href="simulating-differential-abundance.html#cb29-9" tabindex="-1"></a></span>
-<span id="cb29-10"><a href="simulating-differential-abundance.html#cb29-10" tabindex="-1"></a>sim<span class="ot">&lt;-</span><span class="fu">estimate</span>(sim, <span class="at">control =</span><span class="fu">gamlss.control</span>(<span class="at">n.cyc =</span> <span class="dv">20</span>,</span>
-<span id="cb29-11"><a href="simulating-differential-abundance.html#cb29-11" tabindex="-1"></a>                                  <span class="at">mu.step =</span> <span class="fl">0.1</span>))</span></code></pre></div>
+<span id="cb29-10"><a href="simulating-differential-abundance.html#cb29-10" tabindex="-1"></a></span>
+<span id="cb29-11"><a href="simulating-differential-abundance.html#cb29-11" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">estimate</span>(sim, <span class="at">control =</span> <span class="fu">gamlss.control</span>(</span>
+<span id="cb29-12"><a href="simulating-differential-abundance.html#cb29-12" tabindex="-1"></a>  <span class="at">n.cyc =</span> <span class="dv">20</span>,</span>
+<span id="cb29-13"><a href="simulating-differential-abundance.html#cb29-13" tabindex="-1"></a>  <span class="at">mu.step =</span> <span class="fl">0.1</span></span>
+<span id="cb29-14"><a href="simulating-differential-abundance.html#cb29-14" tabindex="-1"></a>))</span></code></pre></div>
 <div id="critique" class="section level2 hasAnchor" number="2.1">
 <h2><span class="header-section-number">2.1</span> Critique<a href="simulating-differential-abundance.html#critique" class="anchor-section" aria-label="Anchor link to header"></a></h2>
 <p><strong>Exercise</strong>: The block below combines the real and simulated experiments and
 visualizes their difference both graphically and quantitatively. With your
 neighbors, discuss how well the simulator approximates the original template.</p>
-<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="simulating-differential-abundance.html#cb30-1" tabindex="-1"></a>real <span class="ot">=</span>atlas_filteres</span>
-<span id="cb30-2"><a href="simulating-differential-abundance.html#cb30-2" tabindex="-1"></a>simulated <span class="ot">=</span> <span class="fu">sample</span>(sim)</span>
+<div class="sourceCode" id="cb30"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb30-1"><a href="simulating-differential-abundance.html#cb30-1" tabindex="-1"></a>real <span class="ot">&lt;-</span> atlas_filteres</span>
+<span id="cb30-2"><a href="simulating-differential-abundance.html#cb30-2" tabindex="-1"></a>simulated <span class="ot">&lt;-</span> <span class="fu">sample</span>(sim)</span>
 <span id="cb30-3"><a href="simulating-differential-abundance.html#cb30-3" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
 <span id="cb30-4"><a href="simulating-differential-abundance.html#cb30-4" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">pivot_experiment</span>(real), <span class="co"># real data</span></span>
 <span id="cb30-5"><a href="simulating-differential-abundance.html#cb30-5" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">pivot_experiment</span>(simulated), <span class="co"># simulated</span></span>
@@ -293,47 +299,62 @@ neighbors, discuss how well the simulator approximates the original template.</p
 <span id="cb30-7"><a href="simulating-differential-abundance.html#cb30-7" tabindex="-1"></a>)</span>
 <span id="cb30-8"><a href="simulating-differential-abundance.html#cb30-8" tabindex="-1"></a></span>
 <span id="cb30-9"><a href="simulating-differential-abundance.html#cb30-9" tabindex="-1"></a>top_features <span class="ot">&lt;-</span> <span class="fu">assay</span>(atlas_filteres) <span class="sc">|&gt;</span></span>
-<span id="cb30-10"><a href="simulating-differential-abundance.html#cb30-10" tabindex="-1"></a>                <span class="fu">rowMeans</span>() <span class="sc">|&gt;</span> </span>
-<span id="cb30-11"><a href="simulating-differential-abundance.html#cb30-11" tabindex="-1"></a>                <span class="fu">sort</span>() <span class="sc">|&gt;</span></span>
-<span id="cb30-12"><a href="simulating-differential-abundance.html#cb30-12" tabindex="-1"></a>                <span class="fu">tail</span>(<span class="dv">10</span>) <span class="sc">|&gt;</span> </span>
-<span id="cb30-13"><a href="simulating-differential-abundance.html#cb30-13" tabindex="-1"></a>                <span class="fu">names</span>()</span>
+<span id="cb30-10"><a href="simulating-differential-abundance.html#cb30-10" tabindex="-1"></a>  <span class="fu">rowMeans</span>() <span class="sc">|&gt;</span></span>
+<span id="cb30-11"><a href="simulating-differential-abundance.html#cb30-11" tabindex="-1"></a>  <span class="fu">sort</span>() <span class="sc">|&gt;</span></span>
+<span id="cb30-12"><a href="simulating-differential-abundance.html#cb30-12" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb30-13"><a href="simulating-differential-abundance.html#cb30-13" tabindex="-1"></a>  <span class="fu">names</span>()</span>
 <span id="cb30-14"><a href="simulating-differential-abundance.html#cb30-14" tabindex="-1"></a></span>
-<span id="cb30-15"><a href="simulating-differential-abundance.html#cb30-15" tabindex="-1"></a>top_combined<span class="ot">&lt;-</span>combined <span class="sc">|&gt;</span> </span>
-<span id="cb30-16"><a href="simulating-differential-abundance.html#cb30-16" tabindex="-1"></a>              <span class="fu">filter</span>(feature <span class="sc">%in%</span> top_features)</span>
+<span id="cb30-15"><a href="simulating-differential-abundance.html#cb30-15" tabindex="-1"></a>top_combined <span class="ot">&lt;-</span> combined <span class="sc">|&gt;</span></span>
+<span id="cb30-16"><a href="simulating-differential-abundance.html#cb30-16" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">%in%</span> top_features)</span>
 <span id="cb30-17"><a href="simulating-differential-abundance.html#cb30-17" tabindex="-1"></a></span>
 <span id="cb30-18"><a href="simulating-differential-abundance.html#cb30-18" tabindex="-1"></a><span class="fu">ggplot</span>(top_combined) <span class="sc">+</span></span>
 <span id="cb30-19"><a href="simulating-differential-abundance.html#cb30-19" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(</span>
 <span id="cb30-20"><a href="simulating-differential-abundance.html#cb30-20" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="fu">sqrt</span>(value), <span class="fu">reorder</span>(feature, value, median), <span class="at">fill =</span> bmi_group)</span>
 <span id="cb30-21"><a href="simulating-differential-abundance.html#cb30-21" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb30-22"><a href="simulating-differential-abundance.html#cb30-22" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> source)<span class="sc">+</span></span>
-<span id="cb30-23"><a href="simulating-differential-abundance.html#cb30-23" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Square root transformed counts&quot;</span>)<span class="sc">+</span></span>
-<span id="cb30-24"><a href="simulating-differential-abundance.html#cb30-24" tabindex="-1"></a>  <span class="fu">ylab</span> (<span class="st">&quot;&quot;</span>)<span class="sc">+</span>  </span>
-<span id="cb30-25"><a href="simulating-differential-abundance.html#cb30-25" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill=</span><span class="st">&#39;BMI group&#39;</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&#39;right&#39;</span>)<span class="sc">+</span></span>
-<span id="cb30-26"><a href="simulating-differential-abundance.html#cb30-26" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">rev</span>(<span class="fu">c</span>(<span class="st">&quot;#9491D9&quot;</span>, <span class="st">&quot;#3F8C61&quot;</span>, <span class="st">&quot;#F24405&quot;</span>)))</span></code></pre></div>
+<span id="cb30-22"><a href="simulating-differential-abundance.html#cb30-22" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> source) <span class="sc">+</span></span>
+<span id="cb30-23"><a href="simulating-differential-abundance.html#cb30-23" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Square root transformed counts&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-24"><a href="simulating-differential-abundance.html#cb30-24" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-25"><a href="simulating-differential-abundance.html#cb30-25" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">fill =</span> <span class="st">&quot;BMI group&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-26"><a href="simulating-differential-abundance.html#cb30-26" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>) <span class="sc">+</span></span>
+<span id="cb30-27"><a href="simulating-differential-abundance.html#cb30-27" tabindex="-1"></a>  <span class="fu">scale_fill_manual</span>(<span class="at">values =</span> <span class="fu">rev</span>(<span class="fu">c</span>(<span class="st">&quot;#9491D9&quot;</span>, <span class="st">&quot;#3F8C61&quot;</span>, <span class="st">&quot;#F24405&quot;</span>)))</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/contrast-simulators-1.png" width="672" /></p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="simulating-differential-abundance.html#cb31-1" tabindex="-1"></a>kdetest.group<span class="ot">&lt;-</span><span class="cf">function</span>(data){</span>
-<span id="cb31-2"><a href="simulating-differential-abundance.html#cb31-2" tabindex="-1"></a>  </span>
-<span id="cb31-3"><a href="simulating-differential-abundance.html#cb31-3" tabindex="-1"></a>  x <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(source<span class="sc">==</span><span class="st">&quot;real&quot;</span>)</span>
-<span id="cb31-4"><a href="simulating-differential-abundance.html#cb31-4" tabindex="-1"></a>  y <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(source<span class="sc">==</span><span class="st">&quot;simulated&quot;</span>)</span>
-<span id="cb31-5"><a href="simulating-differential-abundance.html#cb31-5" tabindex="-1"></a>  res<span class="ot">&lt;-</span><span class="fu">kde.test</span>(<span class="at">x1=</span>x<span class="sc">$</span>value, <span class="at">x2=</span>y<span class="sc">$</span>value)<span class="sc">$</span>pvalue</span>
-<span id="cb31-6"><a href="simulating-differential-abundance.html#cb31-6" tabindex="-1"></a>  res</span>
-<span id="cb31-7"><a href="simulating-differential-abundance.html#cb31-7" tabindex="-1"></a>}</span>
-<span id="cb31-8"><a href="simulating-differential-abundance.html#cb31-8" tabindex="-1"></a></span>
-<span id="cb31-9"><a href="simulating-differential-abundance.html#cb31-9" tabindex="-1"></a>prop.accepted.H0<span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="st">&quot;lean&quot;</span>, <span class="st">&quot;overweight&quot;</span>,<span class="st">&quot;obese&quot;</span>), </span>
-<span id="cb31-10"><a href="simulating-differential-abundance.html#cb31-10" tabindex="-1"></a>                          <span class="cf">function</span>(group){</span>
-<span id="cb31-11"><a href="simulating-differential-abundance.html#cb31-11" tabindex="-1"></a>                            group_filter<span class="ot">&lt;-</span> <span class="fu">map</span>(<span class="fu">unique</span>(combined<span class="sc">$</span>feature), </span>
-<span id="cb31-12"><a href="simulating-differential-abundance.html#cb31-12" tabindex="-1"></a>                                               <span class="sc">~</span>combined <span class="sc">|&gt;</span> </span>
-<span id="cb31-13"><a href="simulating-differential-abundance.html#cb31-13" tabindex="-1"></a>                                                 <span class="fu">filter</span>( feature<span class="sc">==</span>. </span>
-<span id="cb31-14"><a href="simulating-differential-abundance.html#cb31-14" tabindex="-1"></a>                                                         <span class="sc">&amp;</span> bmi_group<span class="sc">==</span>group))</span>
-<span id="cb31-15"><a href="simulating-differential-abundance.html#cb31-15" tabindex="-1"></a>                            adjpvalue <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(select_i),</span>
-<span id="cb31-16"><a href="simulating-differential-abundance.html#cb31-16" tabindex="-1"></a>                                              <span class="cf">function</span>(i){<span class="fu">tryCatch</span>( </span>
-<span id="cb31-17"><a href="simulating-differential-abundance.html#cb31-17" tabindex="-1"></a>                                                {<span class="fu">kdetest.group</span>(</span>
-<span id="cb31-18"><a href="simulating-differential-abundance.html#cb31-18" tabindex="-1"></a>                                                  group_filter[[i]])},</span>
-<span id="cb31-19"><a href="simulating-differential-abundance.html#cb31-19" tabindex="-1"></a>                                                <span class="at">error=</span><span class="cf">function</span>(e){<span class="cn">NA</span>})})<span class="sc">|&gt;</span></span>
-<span id="cb31-20"><a href="simulating-differential-abundance.html#cb31-20" tabindex="-1"></a>                              <span class="fu">p.adjust</span>( <span class="at">method =</span> <span class="st">&quot;BH&quot;</span>)</span>
-<span id="cb31-21"><a href="simulating-differential-abundance.html#cb31-21" tabindex="-1"></a>                            <span class="fu">sum</span>(adjpvalue<span class="sc">&gt;</span><span class="fl">0.05</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>)<span class="sc">/</span></span>
-<span id="cb31-22"><a href="simulating-differential-abundance.html#cb31-22" tabindex="-1"></a>                              <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(adjpvalue))})</span>
-<span id="cb31-23"><a href="simulating-differential-abundance.html#cb31-23" tabindex="-1"></a>prop.accepted.H0</span></code></pre></div>
+<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="simulating-differential-abundance.html#cb31-1" tabindex="-1"></a>kdetest.group <span class="ot">&lt;-</span> <span class="cf">function</span>(data) {</span>
+<span id="cb31-2"><a href="simulating-differential-abundance.html#cb31-2" tabindex="-1"></a>  x <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">&quot;real&quot;</span>)</span>
+<span id="cb31-3"><a href="simulating-differential-abundance.html#cb31-3" tabindex="-1"></a>  y <span class="ot">&lt;-</span> data <span class="sc">|&gt;</span> <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">&quot;simulated&quot;</span>)</span>
+<span id="cb31-4"><a href="simulating-differential-abundance.html#cb31-4" tabindex="-1"></a>  res <span class="ot">&lt;-</span> <span class="fu">kde.test</span>(<span class="at">x1 =</span> x<span class="sc">$</span>value, <span class="at">x2 =</span> y<span class="sc">$</span>value)<span class="sc">$</span>pvalue</span>
+<span id="cb31-5"><a href="simulating-differential-abundance.html#cb31-5" tabindex="-1"></a>  res</span>
+<span id="cb31-6"><a href="simulating-differential-abundance.html#cb31-6" tabindex="-1"></a>}</span>
+<span id="cb31-7"><a href="simulating-differential-abundance.html#cb31-7" tabindex="-1"></a></span>
+<span id="cb31-8"><a href="simulating-differential-abundance.html#cb31-8" tabindex="-1"></a>prop.accepted.H0 <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
+<span id="cb31-9"><a href="simulating-differential-abundance.html#cb31-9" tabindex="-1"></a>  <span class="fu">c</span>(<span class="st">&quot;lean&quot;</span>, <span class="st">&quot;overweight&quot;</span>, <span class="st">&quot;obese&quot;</span>),</span>
+<span id="cb31-10"><a href="simulating-differential-abundance.html#cb31-10" tabindex="-1"></a>  <span class="cf">function</span>(group) {</span>
+<span id="cb31-11"><a href="simulating-differential-abundance.html#cb31-11" tabindex="-1"></a>    group_filter <span class="ot">&lt;-</span> <span class="fu">map</span>(</span>
+<span id="cb31-12"><a href="simulating-differential-abundance.html#cb31-12" tabindex="-1"></a>      <span class="fu">unique</span>(combined<span class="sc">$</span>feature),</span>
+<span id="cb31-13"><a href="simulating-differential-abundance.html#cb31-13" tabindex="-1"></a>      <span class="sc">~</span> combined <span class="sc">|&gt;</span></span>
+<span id="cb31-14"><a href="simulating-differential-abundance.html#cb31-14" tabindex="-1"></a>        <span class="fu">filter</span>(feature <span class="sc">==</span> . <span class="sc">&amp;</span></span>
+<span id="cb31-15"><a href="simulating-differential-abundance.html#cb31-15" tabindex="-1"></a>          bmi_group <span class="sc">==</span> group)</span>
+<span id="cb31-16"><a href="simulating-differential-abundance.html#cb31-16" tabindex="-1"></a>    )</span>
+<span id="cb31-17"><a href="simulating-differential-abundance.html#cb31-17" tabindex="-1"></a>    adjpvalue <span class="ot">&lt;-</span> <span class="fu">sapply</span>(</span>
+<span id="cb31-18"><a href="simulating-differential-abundance.html#cb31-18" tabindex="-1"></a>      <span class="dv">1</span><span class="sc">:</span><span class="fu">length</span>(select_i),</span>
+<span id="cb31-19"><a href="simulating-differential-abundance.html#cb31-19" tabindex="-1"></a>      <span class="cf">function</span>(i) {</span>
+<span id="cb31-20"><a href="simulating-differential-abundance.html#cb31-20" tabindex="-1"></a>        <span class="fu">tryCatch</span>(</span>
+<span id="cb31-21"><a href="simulating-differential-abundance.html#cb31-21" tabindex="-1"></a>          {</span>
+<span id="cb31-22"><a href="simulating-differential-abundance.html#cb31-22" tabindex="-1"></a>            <span class="fu">kdetest.group</span>(</span>
+<span id="cb31-23"><a href="simulating-differential-abundance.html#cb31-23" tabindex="-1"></a>              group_filter[[i]]</span>
+<span id="cb31-24"><a href="simulating-differential-abundance.html#cb31-24" tabindex="-1"></a>            )</span>
+<span id="cb31-25"><a href="simulating-differential-abundance.html#cb31-25" tabindex="-1"></a>          },</span>
+<span id="cb31-26"><a href="simulating-differential-abundance.html#cb31-26" tabindex="-1"></a>          <span class="at">error =</span> <span class="cf">function</span>(e) {</span>
+<span id="cb31-27"><a href="simulating-differential-abundance.html#cb31-27" tabindex="-1"></a>            <span class="cn">NA</span></span>
+<span id="cb31-28"><a href="simulating-differential-abundance.html#cb31-28" tabindex="-1"></a>          }</span>
+<span id="cb31-29"><a href="simulating-differential-abundance.html#cb31-29" tabindex="-1"></a>        )</span>
+<span id="cb31-30"><a href="simulating-differential-abundance.html#cb31-30" tabindex="-1"></a>      }</span>
+<span id="cb31-31"><a href="simulating-differential-abundance.html#cb31-31" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb31-32"><a href="simulating-differential-abundance.html#cb31-32" tabindex="-1"></a>      <span class="fu">p.adjust</span>(<span class="at">method =</span> <span class="st">&quot;BH&quot;</span>)</span>
+<span id="cb31-33"><a href="simulating-differential-abundance.html#cb31-33" tabindex="-1"></a>    <span class="fu">sum</span>(adjpvalue <span class="sc">&gt;</span> <span class="fl">0.05</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>) <span class="sc">/</span></span>
+<span id="cb31-34"><a href="simulating-differential-abundance.html#cb31-34" tabindex="-1"></a>      <span class="fu">sum</span>(<span class="sc">!</span><span class="fu">is.na</span>(adjpvalue))</span>
+<span id="cb31-35"><a href="simulating-differential-abundance.html#cb31-35" tabindex="-1"></a>  }</span>
+<span id="cb31-36"><a href="simulating-differential-abundance.html#cb31-36" tabindex="-1"></a>)</span>
+<span id="cb31-37"><a href="simulating-differential-abundance.html#cb31-37" tabindex="-1"></a>prop.accepted.H0</span></code></pre></div>
 <pre><code>##       lean overweight      obese 
 ##  0.7241379  0.7471264  0.7441860</code></pre>
 <p><strong>Solution</strong>: The simulated data are generally similar to the original data.
@@ -359,12 +380,14 @@ Eventually, our package will include functions for modifying these effects
 directly; at this point, though, we can only indirectly modify parameters by
 re-estimating them with new formulas.</p>
 <div class="sourceCode" id="cb33"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb33-1"><a href="simulating-differential-abundance.html#cb33-1" tabindex="-1"></a>wilcox_res <span class="ot">&lt;-</span> <span class="fu">differential_analysis</span>(atlas_filteres, <span class="st">&quot;wilcox-clr&quot;</span>)</span>
-<span id="cb33-2"><a href="simulating-differential-abundance.html#cb33-2" tabindex="-1"></a>nulls <span class="ot">&lt;-</span> wilcox_res[wilcox_res<span class="sc">$</span>q_value.bmi_group.<span class="sc">&gt;</span><span class="fl">0.1</span>,] <span class="sc">|&gt;</span> </span>
-<span id="cb33-3"><a href="simulating-differential-abundance.html#cb33-3" tabindex="-1"></a>          <span class="fu">rownames</span>()</span>
+<span id="cb33-2"><a href="simulating-differential-abundance.html#cb33-2" tabindex="-1"></a>nulls <span class="ot">&lt;-</span> wilcox_res[wilcox_res<span class="sc">$</span>q_value.bmi_group. <span class="sc">&gt;</span> <span class="fl">0.1</span>, ] <span class="sc">|&gt;</span></span>
+<span id="cb33-3"><a href="simulating-differential-abundance.html#cb33-3" tabindex="-1"></a>  <span class="fu">rownames</span>()</span>
 <span id="cb33-4"><a href="simulating-differential-abundance.html#cb33-4" tabindex="-1"></a></span>
-<span id="cb33-5"><a href="simulating-differential-abundance.html#cb33-5" tabindex="-1"></a>sim<span class="ot">&lt;-</span>sim<span class="sc">|&gt;</span><span class="fu">mutate</span>(<span class="fu">any_of</span>(nulls), <span class="at">link =</span> <span class="sc">~</span> <span class="dv">1</span>)</span>
-<span id="cb33-6"><a href="simulating-differential-abundance.html#cb33-6" tabindex="-1"></a>sim<span class="ot">&lt;-</span><span class="fu">estimate</span>(sim, <span class="at">control =</span><span class="fu">gamlss.control</span>(<span class="at">n.cyc =</span> <span class="dv">20</span>,</span>
-<span id="cb33-7"><a href="simulating-differential-abundance.html#cb33-7" tabindex="-1"></a>                                  <span class="at">mu.step =</span> <span class="fl">0.1</span>))</span></code></pre></div>
+<span id="cb33-5"><a href="simulating-differential-abundance.html#cb33-5" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span> scDesigner<span class="sc">::</span><span class="fu">mutate</span>(<span class="fu">any_of</span>(nulls), <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>)</span>
+<span id="cb33-6"><a href="simulating-differential-abundance.html#cb33-6" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">estimate</span>(sim, <span class="at">control =</span> <span class="fu">gamlss.control</span>(</span>
+<span id="cb33-7"><a href="simulating-differential-abundance.html#cb33-7" tabindex="-1"></a>  <span class="at">n.cyc =</span> <span class="dv">20</span>,</span>
+<span id="cb33-8"><a href="simulating-differential-abundance.html#cb33-8" tabindex="-1"></a>  <span class="at">mu.step =</span> <span class="fl">0.1</span></span>
+<span id="cb33-9"><a href="simulating-differential-abundance.html#cb33-9" tabindex="-1"></a>))</span></code></pre></div>
 <p>Now that we have ground truth associations, we’ll evaluate LIMMA-voom, ANCOMBC,
 DESeq2 for differential analysis. We consider sample sizes ranging from 50 to
 1200, and we simulate 20 datasets for each sample size.</p>
@@ -374,7 +397,7 @@ DESeq2 for differential analysis. We consider sample sizes ranging from 50 to
 <span id="cb34-4"><a href="simulating-differential-abundance.html#cb34-4" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
 <span id="cb34-5"><a href="simulating-differential-abundance.html#cb34-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">run =</span> <span class="fu">as.character</span>(<span class="fu">row_number</span>()))</span>
 <span id="cb34-6"><a href="simulating-differential-abundance.html#cb34-6" tabindex="-1"></a></span>
-<span id="cb34-7"><a href="simulating-differential-abundance.html#cb34-7" tabindex="-1"></a>sample_n_<span class="ot">&lt;-</span><span class="cf">function</span>(sim_object, sample_size) {</span>
+<span id="cb34-7"><a href="simulating-differential-abundance.html#cb34-7" tabindex="-1"></a>sample_n_ <span class="ot">&lt;-</span> <span class="cf">function</span>(sim_object, sample_size) {</span>
 <span id="cb34-8"><a href="simulating-differential-abundance.html#cb34-8" tabindex="-1"></a>  n_original <span class="ot">&lt;-</span> <span class="fu">ncol</span>(sim_object<span class="sc">@</span>template)</span>
 <span id="cb34-9"><a href="simulating-differential-abundance.html#cb34-9" tabindex="-1"></a>  rep_ix <span class="ot">&lt;-</span> <span class="fu">rep</span>(<span class="fu">seq_len</span>(n_original), <span class="at">each =</span> <span class="fu">ceiling</span>(sample_size <span class="sc">/</span> n_original))</span>
 <span id="cb34-10"><a href="simulating-differential-abundance.html#cb34-10" tabindex="-1"></a>  new_data <span class="ot">&lt;-</span> <span class="fu">colData</span>(sim_object<span class="sc">@</span>template)[rep_ix[<span class="dv">1</span><span class="sc">:</span>sample_size], ] <span class="sc">|&gt;</span></span>
@@ -382,22 +405,24 @@ DESeq2 for differential analysis. We consider sample sizes ranging from 50 to
 <span id="cb34-12"><a href="simulating-differential-abundance.html#cb34-12" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
 <span id="cb34-13"><a href="simulating-differential-abundance.html#cb34-13" tabindex="-1"></a>      <span class="at">newdata_index =</span> <span class="fu">row_number</span>()</span>
 <span id="cb34-14"><a href="simulating-differential-abundance.html#cb34-14" tabindex="-1"></a>    )</span>
-<span id="cb34-15"><a href="simulating-differential-abundance.html#cb34-15" tabindex="-1"></a>  </span>
-<span id="cb34-16"><a href="simulating-differential-abundance.html#cb34-16" tabindex="-1"></a>  sim_return<span class="ot">&lt;-</span><span class="fu">sample</span>(sim_object, <span class="at">new_data =</span> new_data)</span>
+<span id="cb34-15"><a href="simulating-differential-abundance.html#cb34-15" tabindex="-1"></a></span>
+<span id="cb34-16"><a href="simulating-differential-abundance.html#cb34-16" tabindex="-1"></a>  sim_return <span class="ot">&lt;-</span> <span class="fu">sample</span>(sim_object, <span class="at">new_data =</span> new_data)</span>
 <span id="cb34-17"><a href="simulating-differential-abundance.html#cb34-17" tabindex="-1"></a>  <span class="fu">return</span>(sim_return)</span>
 <span id="cb34-18"><a href="simulating-differential-abundance.html#cb34-18" tabindex="-1"></a>}</span>
 <span id="cb34-19"><a href="simulating-differential-abundance.html#cb34-19" tabindex="-1"></a></span>
 <span id="cb34-20"><a href="simulating-differential-abundance.html#cb34-20" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
 <span id="cb34-21"><a href="simulating-differential-abundance.html#cb34-21" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
-<span id="cb34-22"><a href="simulating-differential-abundance.html#cb34-22" tabindex="-1"></a>  atlas_ <span class="ot">&lt;-</span><span class="fu">sample_n_</span>(sim, config<span class="sc">$</span>sample_size[i])</span>
+<span id="cb34-22"><a href="simulating-differential-abundance.html#cb34-22" tabindex="-1"></a>  atlas_ <span class="ot">&lt;-</span> <span class="fu">sample_n_</span>(sim, config<span class="sc">$</span>sample_size[i])</span>
 <span id="cb34-23"><a href="simulating-differential-abundance.html#cb34-23" tabindex="-1"></a>  <span class="fu">colnames</span>(atlas_) <span class="ot">&lt;-</span> <span class="fu">paste0</span>(<span class="st">&quot;Sample-&quot;</span>, <span class="dv">1</span><span class="sc">:</span>config<span class="sc">$</span>sample_size[i])</span>
-<span id="cb34-24"><a href="simulating-differential-abundance.html#cb34-24" tabindex="-1"></a>  results[[i]] <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="st">&quot;LIMMA_voom&quot;</span>,<span class="st">&quot;ANCOMBC&quot;</span>, <span class="st">&quot;DESeq2&quot;</span>), </span>
-<span id="cb34-25"><a href="simulating-differential-abundance.html#cb34-25" tabindex="-1"></a>                         <span class="cf">function</span>(m){</span>
-<span id="cb34-26"><a href="simulating-differential-abundance.html#cb34-26" tabindex="-1"></a>                           <span class="fu">differential_analysis</span>(atlas_, m) <span class="sc">|&gt;</span></span>
-<span id="cb34-27"><a href="simulating-differential-abundance.html#cb34-27" tabindex="-1"></a>                             <span class="fu">da_metrics</span>(nulls)}, </span>
-<span id="cb34-28"><a href="simulating-differential-abundance.html#cb34-28" tabindex="-1"></a>                         <span class="at">simplify =</span> <span class="cn">FALSE</span>)</span>
-<span id="cb34-29"><a href="simulating-differential-abundance.html#cb34-29" tabindex="-1"></a>  <span class="co">#print(glue::glue(&quot;{i}/{nrow(config)}&quot;))</span></span>
-<span id="cb34-30"><a href="simulating-differential-abundance.html#cb34-30" tabindex="-1"></a>}</span></code></pre></div>
+<span id="cb34-24"><a href="simulating-differential-abundance.html#cb34-24" tabindex="-1"></a>  results[[i]] <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="fu">c</span>(<span class="st">&quot;LIMMA_voom&quot;</span>, <span class="st">&quot;ANCOMBC&quot;</span>, <span class="st">&quot;DESeq2&quot;</span>),</span>
+<span id="cb34-25"><a href="simulating-differential-abundance.html#cb34-25" tabindex="-1"></a>    <span class="cf">function</span>(m) {</span>
+<span id="cb34-26"><a href="simulating-differential-abundance.html#cb34-26" tabindex="-1"></a>      <span class="fu">differential_analysis</span>(atlas_, m) <span class="sc">|&gt;</span></span>
+<span id="cb34-27"><a href="simulating-differential-abundance.html#cb34-27" tabindex="-1"></a>        <span class="fu">da_metrics</span>(nulls)</span>
+<span id="cb34-28"><a href="simulating-differential-abundance.html#cb34-28" tabindex="-1"></a>    },</span>
+<span id="cb34-29"><a href="simulating-differential-abundance.html#cb34-29" tabindex="-1"></a>    <span class="at">simplify =</span> <span class="cn">FALSE</span></span>
+<span id="cb34-30"><a href="simulating-differential-abundance.html#cb34-30" tabindex="-1"></a>  )</span>
+<span id="cb34-31"><a href="simulating-differential-abundance.html#cb34-31" tabindex="-1"></a>  <span class="co"># print(glue::glue(&quot;{i}/{nrow(config)}&quot;))</span></span>
+<span id="cb34-32"><a href="simulating-differential-abundance.html#cb34-32" tabindex="-1"></a>}</span></code></pre></div>
 <p><strong>Exercise</strong>: Visualize the results. How would you interpret the results of the
 power analysis? Based on your earlier critique of the simulator, do you think
 the estimated power here is conservative, liberal, or about right?</p>
@@ -407,19 +432,24 @@ that the average false discovery proportion is always controlled below 0.1,
 though the variance in this proportion can be high. We can also see that
 we would have quite good power with <span class="math inline">\(n \geq 625\)</span> samples, but the worst case
 scenarios can be quite poor for anything with fewer samples.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="simulating-differential-abundance.html#cb35-1" tabindex="-1"></a>power_fdr<span class="ot">&lt;-</span><span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>,<span class="cf">function</span>(i){</span>
-<span id="cb35-2"><a href="simulating-differential-abundance.html#cb35-2" tabindex="-1"></a>            <span class="fu">bind_rows</span>(results[[i]], <span class="at">.id=</span><span class="st">&quot;method&quot;</span>)},</span>
-<span id="cb35-3"><a href="simulating-differential-abundance.html#cb35-3" tabindex="-1"></a>      <span class="at">simplify =</span> <span class="cn">FALSE</span>)<span class="sc">|&gt;</span></span>
-<span id="cb35-4"><a href="simulating-differential-abundance.html#cb35-4" tabindex="-1"></a>  <span class="fu">bind_rows</span>( <span class="at">.id=</span><span class="st">&quot;run&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb35-5"><a href="simulating-differential-abundance.html#cb35-5" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sample_size=</span><span class="fu">rep</span>(config<span class="sc">$</span>sample_size, <span class="at">each=</span><span class="dv">6</span>))</span>
-<span id="cb35-6"><a href="simulating-differential-abundance.html#cb35-6" tabindex="-1"></a>  </span>
-<span id="cb35-7"><a href="simulating-differential-abundance.html#cb35-7" tabindex="-1"></a><span class="fu">ggplot</span>(power_fdr)<span class="sc">+</span></span>
-<span id="cb35-8"><a href="simulating-differential-abundance.html#cb35-8" tabindex="-1"></a>  tidybayes<span class="sc">::</span><span class="fu">stat_pointinterval</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(sample_size), value, <span class="at">group =</span> method, <span class="at">colour =</span> method),</span>
-<span id="cb35-9"><a href="simulating-differential-abundance.html#cb35-9" tabindex="-1"></a>                                <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.8</span>)) <span class="sc">+</span></span>
-<span id="cb35-10"><a href="simulating-differential-abundance.html#cb35-10" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>metric)<span class="sc">+</span></span>
-<span id="cb35-11"><a href="simulating-differential-abundance.html#cb35-11" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Sample size&quot;</span>)<span class="sc">+</span></span>
-<span id="cb35-12"><a href="simulating-differential-abundance.html#cb35-12" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>)<span class="sc">+</span> <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">wes_palette</span>(<span class="st">&quot;Moonrise2&quot;</span>, <span class="at">n =</span> <span class="dv">3</span>))<span class="sc">+</span></span>
-<span id="cb35-13"><a href="simulating-differential-abundance.html#cb35-13" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color=</span><span class="st">&#39;Method&#39;</span>) <span class="sc">+</span> <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&#39;right&#39;</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="simulating-differential-abundance.html#cb35-1" tabindex="-1"></a>power_fdr <span class="ot">&lt;-</span> <span class="fu">sapply</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">100</span>, <span class="cf">function</span>(i) {</span>
+<span id="cb35-2"><a href="simulating-differential-abundance.html#cb35-2" tabindex="-1"></a>  <span class="fu">bind_rows</span>(results[[i]], <span class="at">.id =</span> <span class="st">&quot;method&quot;</span>)</span>
+<span id="cb35-3"><a href="simulating-differential-abundance.html#cb35-3" tabindex="-1"></a>},</span>
+<span id="cb35-4"><a href="simulating-differential-abundance.html#cb35-4" tabindex="-1"></a><span class="at">simplify =</span> <span class="cn">FALSE</span></span>
+<span id="cb35-5"><a href="simulating-differential-abundance.html#cb35-5" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb35-6"><a href="simulating-differential-abundance.html#cb35-6" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">&quot;run&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb35-7"><a href="simulating-differential-abundance.html#cb35-7" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">mutate</span>(<span class="at">sample_size =</span> <span class="fu">rep</span>(config<span class="sc">$</span>sample_size, <span class="at">each =</span> <span class="dv">6</span>))</span>
+<span id="cb35-8"><a href="simulating-differential-abundance.html#cb35-8" tabindex="-1"></a></span>
+<span id="cb35-9"><a href="simulating-differential-abundance.html#cb35-9" tabindex="-1"></a><span class="fu">ggplot</span>(power_fdr) <span class="sc">+</span></span>
+<span id="cb35-10"><a href="simulating-differential-abundance.html#cb35-10" tabindex="-1"></a>  tidybayes<span class="sc">::</span><span class="fu">stat_pointinterval</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(sample_size), value, <span class="at">group =</span> method, <span class="at">colour =</span> method),</span>
+<span id="cb35-11"><a href="simulating-differential-abundance.html#cb35-11" tabindex="-1"></a>    <span class="at">position =</span> <span class="fu">position_dodge</span>(<span class="at">width =</span> <span class="fl">0.8</span>)</span>
+<span id="cb35-12"><a href="simulating-differential-abundance.html#cb35-12" tabindex="-1"></a>  ) <span class="sc">+</span></span>
+<span id="cb35-13"><a href="simulating-differential-abundance.html#cb35-13" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>metric) <span class="sc">+</span></span>
+<span id="cb35-14"><a href="simulating-differential-abundance.html#cb35-14" tabindex="-1"></a>  <span class="fu">xlab</span>(<span class="st">&quot;Sample size&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-15"><a href="simulating-differential-abundance.html#cb35-15" tabindex="-1"></a>  <span class="fu">ylab</span>(<span class="st">&quot;&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-16"><a href="simulating-differential-abundance.html#cb35-16" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">wes_palette</span>(<span class="st">&quot;Moonrise2&quot;</span>, <span class="at">n =</span> <span class="dv">3</span>)) <span class="sc">+</span></span>
+<span id="cb35-17"><a href="simulating-differential-abundance.html#cb35-17" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">color =</span> <span class="st">&quot;Method&quot;</span>) <span class="sc">+</span></span>
+<span id="cb35-18"><a href="simulating-differential-abundance.html#cb35-18" tabindex="-1"></a>  <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;right&quot;</span>)</span></code></pre></div>
 <p><img src="simulation_for_microbiome_files/figure-html/visualize-da-power-1.png" width="672" /></p>
 <div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="simulating-differential-abundance.html#cb36-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
 <pre><code>## R version 4.3.2 (2023-10-31)
@@ -437,57 +467,199 @@ scenarios can be quite poor for anything with fewer samples.</p>
 ## tzcode source: internal
 ## 
 ## attached base packages:
-##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+##  [1] splines   parallel  stats4    stats     graphics  grDevices
+##  [7] utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] TreeSummarizedExperiment_2.10.0 Biostrings_2.70.3               XVector_0.42.0                 
-##  [4] SingleCellExperiment_1.24.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
-##  [7] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                   
-## [10] scico_1.5.0                     pwr_1.3-0                       patchwork_1.2.0                
-## [13] mutoss_0.1-13                   mvtnorm_1.2-5                   mixOmics_6.26.0                
-## [16] lattice_0.22-6                  MASS_7.3-60.0.1                 glue_1.7.0                     
-## [19] ggplot2_3.5.1                   ggdist_3.3.2                    gamboostLSS_2.0-7              
-## [22] mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                  
-## [25] dplyr_1.1.4                     SummarizedExperiment_1.32.0     Biobase_2.62.0                 
-## [28] GenomicRanges_1.54.1            GenomeInfoDb_1.38.8             IRanges_2.36.0                 
-## [31] S4Vectors_0.40.2                BiocGenerics_0.48.1             MatrixGenerics_1.14.0          
-## [34] matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
+##  [1] doRNG_1.8.6                    
+##  [2] rngtools_1.5.2                 
+##  [3] foreach_1.5.2                  
+##  [4] ggpubr_0.6.0                   
+##  [5] ggrepel_0.9.5                  
+##  [6] edgeR_4.0.16                   
+##  [7] limma_3.58.1                   
+##  [8] ANCOMBC_2.4.0                  
+##  [9] stringr_1.5.1                  
+## [10] ks_1.14.2                      
+## [11] tidySummarizedExperiment_1.12.0
+## [12] ttservice_0.4.1                
+## [13] SimBench_0.99.1                
+## [14] wesanderson_0.3.7              
+## [15] mia_1.10.0                     
+## [16] MultiAssayExperiment_1.28.0    
+## [17] TreeSummarizedExperiment_2.10.0
+## [18] Biostrings_2.70.3              
+## [19] XVector_0.42.0                 
+## [20] SingleCellExperiment_1.24.0    
+## [21] gamlss_5.4-22                  
+## [22] nlme_3.1-165                   
+## [23] gamlss.dist_6.1-1              
+## [24] gamlss.data_6.0-6              
+## [25] scDesigner_0.0.0.9000          
+## [26] purrr_1.0.2                    
+## [27] MIGsim_0.0.0.9000              
+## [28] tidyr_1.3.1                    
+## [29] tibble_3.2.1                   
+## [30] scico_1.5.0                    
+## [31] pwr_1.3-0                      
+## [32] patchwork_1.2.0                
+## [33] mutoss_0.1-13                  
+## [34] mvtnorm_1.2-5                  
+## [35] mixOmics_6.26.0                
+## [36] lattice_0.22-6                 
+## [37] MASS_7.3-60.0.1                
+## [38] glue_1.7.0                     
+## [39] ggplot2_3.5.1                  
+## [40] ggdist_3.3.2                   
+## [41] gamboostLSS_2.0-7              
+## [42] mboost_2.9-10                  
+## [43] stabs_0.6-4                    
+## [44] forcats_1.0.0                  
+## [45] dplyr_1.1.4                    
+## [46] SummarizedExperiment_1.32.0    
+## [47] Biobase_2.62.0                 
+## [48] GenomicRanges_1.54.1           
+## [49] GenomeInfoDb_1.38.8            
+## [50] IRanges_2.36.0                 
+## [51] S4Vectors_0.40.2               
+## [52] BiocGenerics_0.48.1            
+## [53] MatrixGenerics_1.14.0          
+## [54] matrixStats_1.3.0              
+## [55] SpiecEasi_1.1.3                
+## [56] CovTools_0.5.4                 
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] bitops_1.0-7            minpack.lm_1.2-4        rpart_4.1.23            lifecycle_1.0.4        
-##   [5] Rdpack_2.6              edgeR_4.0.16            doParallel_1.0.17       insight_0.20.1         
-##   [9] magrittr_2.0.3          limma_3.58.1            sass_0.4.9              rmarkdown_2.27         
-##  [13] jquerylib_0.1.4         yaml_2.3.9              plotrix_3.8-4           RColorBrewer_1.1-3     
-##  [17] ADGofTest_0.3           multcomp_1.4-25         abind_1.4-5             zlibbioc_1.48.2        
-##  [21] expm_0.999-9            quadprog_1.5-8          pspline_1.0-20          kde1d_1.0.7            
-##  [25] RCurl_1.98-1.16         yulab.utils_0.1.4       rgl_1.3.1               pracma_2.4.4           
-##  [29] TH.data_1.1-2           sandwich_3.1-0          GenomeInfoDbData_1.2.11 ggrepel_0.9.5          
-##  [33] tidytree_0.4.6          ellipse_0.5.0           RSpectra_0.16-1         svglite_2.1.3          
-##  [37] codetools_0.2-20        DelayedArray_0.28.0     shapes_1.2.7            tidyselect_1.2.1       
-##  [41] shape_1.4.6.1           farver_2.1.2            randtoolbox_2.0.4       base64enc_0.1-3        
-##  [45] jsonlite_1.8.8          multtest_2.58.0         Formula_1.2-5           survival_3.7-0         
-##  [49] iterators_1.0.14        systemfonts_1.1.0       foreach_1.5.2           tools_4.3.2            
-##  [53] progress_1.2.3          ragg_1.3.2              treeio_1.26.0           Rcpp_1.0.12            
-##  [57] rARPACK_0.11-0          gridExtra_2.3           Rttf2pt1_1.3.12         SparseArray_1.2.4      
-##  [61] xfun_0.45               distributional_0.4.0    withr_3.0.0             numDeriv_2016.8-1.1    
-##  [65] fastmap_1.2.0           fansi_1.0.6             digest_0.6.36           R6_2.5.1               
-##  [69] textshaping_0.4.0       colorspace_2.1-0        inum_1.0-5              copula_1.1-3           
-##  [73] flare_1.7.0.1           utf8_1.2.4              generics_0.1.3          corpcor_1.6.10         
-##  [77] prettyunits_1.2.0       pulsar_0.3.11           htmlwidgets_1.6.4       S4Arrays_1.2.1         
-##  [81] scatterplot3d_0.3-44    rngWELL_0.10-9          pkgconfig_2.0.3         geigen_2.3             
-##  [85] gtable_0.3.5            pcaPP_2.0-4             htmltools_0.5.8.1       bookdown_0.40          
-##  [89] scales_1.3.0            SHT_0.1.8               knitr_1.48              rstudioapi_0.16.0      
-##  [93] reshape2_1.4.4          nlme_3.1-165            cachem_1.1.0            zoo_1.8-12             
-##  [97] stringr_1.5.1           libcoin_1.0-10          extrafont_0.19          pillar_1.9.0           
-## [101] grid_4.3.2              vctrs_0.6.5             VGAM_1.1-11             huge_1.3.5             
-## [105] extrafontdb_1.0         gamlss.dist_6.1-1       evaluate_0.24.0         cli_3.6.3              
-## [109] locfit_1.5-9.10         compiler_4.3.2          rlang_1.1.4             crayon_1.5.3           
-## [113] labeling_0.4.3          fs_1.6.4                plyr_1.8.9              stringi_1.8.4          
-## [117] BiocParallel_1.36.0     nnls_1.5                assertthat_0.2.1        rvinecopulib_0.6.3.1.1 
-## [121] munsell_0.5.1           gsl_2.1-8               lazyeval_0.2.2          glmnet_4.1-8           
-## [125] Matrix_1.6-5            hms_1.1.3               stabledist_0.7-1        statmod_1.5.0          
-## [129] highr_0.11              rbibutils_2.2.16        memoise_2.0.1           partykit_1.2-20        
-## [133] igraph_2.0.3            bslib_0.7.0             ape_5.8</code></pre>
+##   [1] igraph_2.0.3                ica_1.0-3                  
+##   [3] plotly_4.10.4               Formula_1.2-5              
+##   [5] scater_1.30.1               zlibbioc_1.48.2            
+##   [7] tidyselect_1.2.1            bit_4.0.5                  
+##   [9] doParallel_1.0.17           pspline_1.0-20             
+##  [11] blob_1.2.4                  S4Arrays_1.2.1             
+##  [13] png_0.1-8                   plotrix_3.8-4              
+##  [15] cli_3.6.3                   CVXR_1.0-14                
+##  [17] pulsar_0.3.11               arrayhelpers_1.1-0         
+##  [19] multtest_2.58.0             goftest_1.2-3              
+##  [21] bluster_1.12.0              BiocNeighbors_1.20.2       
+##  [23] uwot_0.2.2                  mime_0.12                  
+##  [25] evaluate_0.24.0             tidytree_0.4.6             
+##  [27] leiden_0.4.3.1              stringi_1.8.4              
+##  [29] backports_1.5.0             lmerTest_3.1-3             
+##  [31] gsl_2.1-8                   Exact_3.2                  
+##  [33] httpuv_1.6.15               AnnotationDbi_1.64.1       
+##  [35] magrittr_2.0.3              mclust_6.1.1               
+##  [37] ADGofTest_0.3               pcaPP_2.0-4                
+##  [39] sctransform_0.4.1           rootSolve_1.8.2.4          
+##  [41] ggbeeswarm_0.7.2            DBI_1.2.3                  
+##  [43] jquerylib_0.1.4             withr_3.0.0                
+##  [45] corpcor_1.6.10              class_7.3-22               
+##  [47] lmtest_0.9-40               compositions_2.0-8         
+##  [49] htmlwidgets_1.6.4           fs_1.6.4                   
+##  [51] labeling_0.4.3              SparseArray_1.2.4          
+##  [53] DEoptimR_1.1-3              DESeq2_1.42.1              
+##  [55] cellranger_1.1.0            tidybayes_3.0.6            
+##  [57] extrafont_0.19              flare_1.7.0.1              
+##  [59] lmom_3.0                    reticulate_1.37.0          
+##  [61] minpack.lm_1.2-4            geigen_2.3                 
+##  [63] zoo_1.8-12                  knitr_1.48                 
+##  [65] nnls_1.5                    svUnit_1.0.6               
+##  [67] SHT_0.1.8                   decontam_1.22.0            
+##  [69] fansi_1.0.6                 grid_4.3.2                 
+##  [71] rhdf5_2.46.1                data.table_1.15.4          
+##  [73] ruv_0.9.7.1                 vegan_2.6-6.1              
+##  [75] RSpectra_0.16-1             irlba_2.3.5.1              
+##  [77] extrafontdb_1.0             fastDummies_1.7.3          
+##  [79] DescTools_0.99.54           ellipsis_0.3.2             
+##  [81] ade4_1.7-22                 lazyeval_0.2.2             
+##  [83] yaml_2.3.9                  survival_3.7-0             
+##  [85] scattermore_1.2             crayon_1.5.3               
+##  [87] tensorA_0.36.2.1            phyloseq_1.46.0            
+##  [89] RcppAnnoy_0.0.22            RColorBrewer_1.1-3         
+##  [91] progressr_0.14.0            later_1.3.2                
+##  [93] ggridges_0.5.6              codetools_0.2-20           
+##  [95] base64enc_0.1-3             Seurat_5.1.0               
+##  [97] KEGGREST_1.42.0             Rtsne_0.17                 
+##  [99] shape_1.4.6.1               randtoolbox_2.0.4          
+## [101] foreign_0.8-87              pkgconfig_2.0.3            
+## [103] scatterplot3d_0.3-44        spatstat.sparse_3.1-0      
+## [105] ape_5.8                     viridisLite_0.4.2          
+## [107] xtable_1.8-4                highr_0.11                 
+## [109] car_3.1-2                   fastcluster_1.2.6          
+## [111] plyr_1.8.9                  httr_1.4.7                 
+## [113] rbibutils_2.2.16            tools_4.3.2                
+## [115] globals_0.16.3              SeuratObject_5.0.2         
+## [117] kde1d_1.0.7                 beeswarm_0.4.0             
+## [119] htmlTable_2.4.2             broom_1.0.6                
+## [121] checkmate_2.3.1             lme4_1.1-35.5              
+## [123] rgl_1.3.1                   assertthat_0.2.1           
+## [125] rngWELL_0.10-9              digest_0.6.36              
+## [127] bayesm_3.1-6                permute_0.9-7              
+## [129] numDeriv_2016.8-1.1         bookdown_0.40              
+## [131] Matrix_1.6-5                farver_2.1.2               
+## [133] reshape2_1.4.4              yulab.utils_0.1.4          
+## [135] viridis_0.6.5               DirichletMultinomial_1.44.0
+## [137] rpart_4.1.23                cachem_1.1.0               
+## [139] polyclip_1.10-6             WGCNA_1.72-5               
+## [141] Hmisc_5.1-3                 generics_0.1.3             
+## [143] dynamicTreeCut_1.63-1       parallelly_1.37.1          
+## [145] biomformat_1.30.0           statmod_1.5.0              
+## [147] impute_1.76.0               huge_1.3.5                 
+## [149] RcppHNSW_0.6.0              ScaledMatrix_1.10.0        
+## [151] minqa_1.2.7                 carData_3.0-5              
+## [153] pbapply_1.7-2               glmnet_4.1-8               
+## [155] spam_2.10-0                 utf8_1.2.4                 
+## [157] gtools_3.9.5                shapes_1.2.7               
+## [159] readxl_1.4.3                preprocessCore_1.64.0      
+## [161] inum_1.0-5                  ggsignif_0.6.4             
+## [163] energy_1.7-11               gridExtra_2.3              
+## [165] shiny_1.8.1.1               GenomeInfoDbData_1.2.11    
+## [167] rhdf5filters_1.14.1         RCurl_1.98-1.16            
+## [169] memoise_2.0.1               rmarkdown_2.27             
+## [171] scales_1.3.0                stabledist_0.7-1           
+## [173] partykit_1.2-20             gld_2.6.6                  
+## [175] future_1.33.2               RANN_2.6.1                 
+## [177] spatstat.data_3.1-2         rstudioapi_0.16.0          
+## [179] cluster_2.1.6               spatstat.utils_3.0-5       
+## [181] hms_1.1.3                   fitdistrplus_1.1-11        
+## [183] munsell_0.5.1               cowplot_1.1.3              
+## [185] colorspace_2.1-0            ellipse_0.5.0              
+## [187] rlang_1.1.4                 quadprog_1.5-8             
+## [189] copula_1.1-3                DelayedMatrixStats_1.24.0  
+## [191] sparseMatrixStats_1.14.0    dotCall64_1.1-1            
+## [193] scuttle_1.12.0              mgcv_1.9-1                 
+## [195] xfun_0.45                   coda_0.19-4.1              
+## [197] e1071_1.7-14                TH.data_1.1-2              
+## [199] posterior_1.5.0             iterators_1.0.14           
+## [201] rARPACK_0.11-0              abind_1.4-5                
+## [203] libcoin_1.0-10              treeio_1.26.0              
+## [205] gmp_0.7-4                   Rhdf5lib_1.24.2            
+## [207] DECIPHER_2.30.0             bitops_1.0-7               
+## [209] Rdpack_2.6                  promises_1.3.0             
+## [211] RSQLite_2.3.7               sandwich_3.1-0             
+## [213] DelayedArray_0.28.0         proxy_0.4-27               
+## [215] Rmpfr_0.9-5                 GO.db_3.18.0               
+## [217] compiler_4.3.2              prettyunits_1.2.0          
+## [219] boot_1.3-30                 distributional_0.4.0       
+## [221] beachmat_2.18.1             listenv_0.9.1              
+## [223] Rcpp_1.0.12                 Rttf2pt1_1.3.12            
+## [225] BiocSingular_1.18.0         tensor_1.5                 
+## [227] progress_1.2.3              BiocParallel_1.36.0        
+## [229] insight_0.20.1              spatstat.random_3.2-3      
+## [231] R6_2.5.1                    fastmap_1.2.0              
+## [233] multcomp_1.4-25             rstatix_0.7.2              
+## [235] vipor_0.4.7                 ROCR_1.0-11                
+## [237] rsvd_1.0.5                  nnet_7.3-19                
+## [239] gtable_0.3.5                KernSmooth_2.23-24         
+## [241] miniUI_0.1.1.1              deldir_2.0-4               
+## [243] htmltools_0.5.8.1           ggthemes_5.1.0             
+## [245] bit64_4.0.5                 spatstat.explore_3.2-7     
+## [247] lifecycle_1.0.4             nloptr_2.1.1               
+## [249] sass_0.4.9                  vctrs_0.6.5                
+## [251] robustbase_0.99-3           VGAM_1.1-11                
+## [253] spatstat.geom_3.2-9         sp_2.1-4                   
+## [255] future.apply_1.11.2         pracma_2.4.4               
+## [257] rvinecopulib_0.6.3.1.1      bslib_0.7.0                
+## [259] pillar_1.9.0                locfit_1.5-9.10            
+## [261] jsonlite_1.8.8              expm_0.999-9</code></pre>
 
 </div>
 </div>

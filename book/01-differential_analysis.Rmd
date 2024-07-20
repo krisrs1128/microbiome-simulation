@@ -206,7 +206,7 @@ wilcox_res <- differential_analysis(atlas_filteres, "wilcox-clr")
 nulls <- wilcox_res[wilcox_res$q_value.bmi_group. > 0.1, ] |>
   rownames()
 
-sim <- sim |> mutate(any_of(nulls), link = ~1)
+sim <- sim |> scDesigner::mutate(any_of(nulls), link = ~1)
 sim <- estimate(sim, control = gamlss.control(
   n.cyc = 20,
   mu.step = 0.1
