@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="4.4 Generalization | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>4.4 Generalization | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="generalization" class="section level2" number="4.4">
+<h2><span class="header-section-number">4.4</span> Generalization</h2>
+<p>What about other network structures? We can use the same logic to evaluate
+several network regimes. For example, the block below defines correlation
+matrices associated with scale-free and banded structures.</p>
+<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="4.4-generalization.html#cb74-1" tabindex="-1"></a><span class="fu">data</span>(example_rho)</span>
+<span id="cb74-2"><a href="4.4-generalization.html#cb74-2" tabindex="-1"></a>rho_hat <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb74-3"><a href="4.4-generalization.html#cb74-3" tabindex="-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_along</span>(example_rho)) {</span>
+<span id="cb74-4"><a href="4.4-generalization.html#cb74-4" tabindex="-1"></a>  x <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb74-5"><a href="4.4-generalization.html#cb74-5" tabindex="-1"></a>    <span class="fu">mutate_correlation</span>(example_rho[[r]]) <span class="sc">|&gt;</span></span>
+<span id="cb74-6"><a href="4.4-generalization.html#cb74-6" tabindex="-1"></a>    scDesigner<span class="sc">::</span><span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb74-7"><a href="4.4-generalization.html#cb74-7" tabindex="-1"></a>    <span class="fu">assay</span>()</span>
+<span id="cb74-8"><a href="4.4-generalization.html#cb74-8" tabindex="-1"></a></span>
+<span id="cb74-9"><a href="4.4-generalization.html#cb74-9" tabindex="-1"></a>  rho_se <span class="ot">&lt;-</span> <span class="fu">spiec.easi</span>(<span class="fu">t</span>(x), <span class="at">nlambda =</span> <span class="dv">10</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb74-10"><a href="4.4-generalization.html#cb74-10" tabindex="-1"></a>    <span class="fu">getOptCov</span>() <span class="sc">|&gt;</span></span>
+<span id="cb74-11"><a href="4.4-generalization.html#cb74-11" tabindex="-1"></a>    <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
+<span id="cb74-12"><a href="4.4-generalization.html#cb74-12" tabindex="-1"></a>    <span class="fu">cov2cor</span>()</span>
+<span id="cb74-13"><a href="4.4-generalization.html#cb74-13" tabindex="-1"></a>  rho_lw <span class="ot">&lt;-</span> <span class="fu">CovEst.2003LW</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">t</span>(x)))<span class="sc">$</span>S <span class="sc">|&gt;</span></span>
+<span id="cb74-14"><a href="4.4-generalization.html#cb74-14" tabindex="-1"></a>    <span class="fu">cov2cor</span>()</span>
+<span id="cb74-15"><a href="4.4-generalization.html#cb74-15" tabindex="-1"></a>  rho_hat[[<span class="fu">names</span>(example_rho)[r]]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">se =</span> rho_se, <span class="at">lw =</span> rho_lw)</span>
+<span id="cb74-16"><a href="4.4-generalization.html#cb74-16" tabindex="-1"></a>}</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/visualize-difference-1.png" width="672" /></p>
+<p>This example shows that, when we start with real template data, it’s not too
+hard to setup a benchmarking experiment. It’s generally easier to reconfigure
+the components of an existing simulator than it is to specify all the simulation
+steps from scratch. There is the secondary bonus that the data tend to look
+close to real data of interest, at least up to the deliberate transformations
+needed to establish ground truth.</p>
+<p>We could imagine extending this example to include different data properties
+(sample sizes, variable block sizes and correlations, more general correlation
+structure) and estimation strategies (alternative transformations or
+estimators). Design changes could be implemented using <code>expand_colData</code>, changes
+in the signal can be specified as above with <code>mutate_correlation</code>, and any
+workflow can be used as long as it applies to a <code>SummarizedExperiment</code> object.</p>
+
+</div>
+<!-- </div> -->
+<p style="text-align: center;">
+<a href="4.3-block-covariance.html"><button class="btn btn-default">Previous</button></a>
+<a href="5-batch-effect-correction.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

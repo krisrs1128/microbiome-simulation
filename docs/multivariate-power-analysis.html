@@ -1,208 +1,67 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis</title>
-  <meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  <meta name="generator" content="bookdown 0.39.1 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis" />
-  <meta property="og:type" content="book" />
-  
-  <meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  <meta name="github-repo" content="rstudio/bookdown-demo" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis" />
-  
-  <meta name="twitter:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  
-
-<meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
-
-
-<meta name="date" content="2024-07-12" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="simulating-differential-abundance.html"/>
-<link rel="next" href="microbiome-networks.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-
-
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<style type="text/css">
-  
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis</title>
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao">
+<meta name="description" content="How can we choose sample sizes in more complex bioinformatic workflows, where we simultaneously analyze many features (taxa, genes, metabolites) in concert? While traditional, analytical power...">
+<meta name="generator" content="bookdown 0.40 with bs4_book()">
+<meta property="og:title" content="Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://krisrs1128.github.io/microbiome-simulation/multivariate-power-analysis.html">
+<meta property="og:description" content="How can we choose sample sizes in more complex bioinformatic workflows, where we simultaneously analyze many features (taxa, genes, metabolites) in concert? While traditional, analytical power...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis">
+<meta name="twitter:description" content="How can we choose sample sizes in more complex bioinformatic workflows, where we simultaneously analyze many features (taxa, genes, metabolites) in concert? While traditional, analytical power...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Simulation for Microbiome Analysis</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#setup"><i class="fa fa-check"></i><b>1.1</b> Setup</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#using-summarizedexperiment"><i class="fa fa-check"></i><b>1.2</b> Using <code>SummarizedExperiment</code></a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#warm-up-a-gaussian-example"><i class="fa fa-check"></i><b>1.3</b> Warm-up: A Gaussian Example</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html"><i class="fa fa-check"></i><b>2</b> Simulating Differential Abundance</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#critique"><i class="fa fa-check"></i><b>2.1</b> Critique</a></li>
-<li class="chapter" data-level="2.2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#power-analysis-loop"><i class="fa fa-check"></i><b>2.2</b> Power Analysis Loop</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html"><i class="fa fa-check"></i><b>3</b> Multivariate Power Analysis</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#interpreting-pls-da"><i class="fa fa-check"></i><b>3.1</b> Interpreting PLS-DA</a></li>
-<li class="chapter" data-level="3.2" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#estimation"><i class="fa fa-check"></i><b>3.2</b> Estimation</a></li>
-<li class="chapter" data-level="3.3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#evaluation"><i class="fa fa-check"></i><b>3.3</b> Evaluation</a></li>
-<li class="chapter" data-level="3.4" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#pls-da-power-analysis"><i class="fa fa-check"></i><b>3.4</b> PLS-DA Power Analysis</a></li>
-<li class="chapter" data-level="3.5" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#comparison-with-t-test-calculation"><i class="fa fa-check"></i><b>3.5</b> Comparison with <span class="math inline">\(t\)</span>-test calculation</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="microbiome-networks.html"><a href="microbiome-networks.html"><i class="fa fa-check"></i><b>4</b> Microbiome Networks</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="microbiome-networks.html"><a href="microbiome-networks.html#estimation-1"><i class="fa fa-check"></i><b>4.1</b> Estimation</a></li>
-<li class="chapter" data-level="4.2" data-path="microbiome-networks.html"><a href="microbiome-networks.html#evaluation-1"><i class="fa fa-check"></i><b>4.2</b> Evaluation</a></li>
-<li class="chapter" data-level="4.3" data-path="microbiome-networks.html"><a href="microbiome-networks.html#block-covariance"><i class="fa fa-check"></i><b>4.3</b> Block Covariance</a></li>
-<li class="chapter" data-level="4.4" data-path="microbiome-networks.html"><a href="microbiome-networks.html#generalization"><i class="fa fa-check"></i><b>4.4</b> Generalization</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>5</b> Batch Effect Correction</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#anaerobic-digestion-data"><i class="fa fa-check"></i><b>5.1</b> Anaerobic Digestion Data</a></li>
-<li class="chapter" data-level="5.2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#simulation-design"><i class="fa fa-check"></i><b>5.2</b> Simulation Design</a></li>
-<li class="chapter" data-level="5.3" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#benchmarking"><i class="fa fa-check"></i><b>5.3</b> Benchmarking</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="vertical-integration.html"><a href="vertical-integration.html"><i class="fa fa-check"></i><b>6</b> Vertical Integration</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="vertical-integration.html"><a href="vertical-integration.html#icu-dataset"><i class="fa fa-check"></i><b>6.1</b> ICU Dataset</a></li>
-<li class="chapter" data-level="6.2" data-path="vertical-integration.html"><a href="vertical-integration.html#interlude-using-map"><i class="fa fa-check"></i><b>6.2</b> Interlude: Using map</a></li>
-<li class="chapter" data-level="6.3" data-path="vertical-integration.html"><a href="vertical-integration.html#simulation-question"><i class="fa fa-check"></i><b>6.3</b> Simulation Question</a></li>
-<li class="chapter" data-level="6.4" data-path="vertical-integration.html"><a href="vertical-integration.html#simulation-results"><i class="fa fa-check"></i><b>6.4</b> Simulation Results</a></li>
-<li class="chapter" data-level="6.5" data-path="vertical-integration.html"><a href="vertical-integration.html#alignability"><i class="fa fa-check"></i><b>6.5</b> Alignability</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Simulation for Microbiome Analysis</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Simulation for Microbiome Analysis</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Introduction</a></li>
+<li><a class="" href="simulating-differential-abundance.html"><span class="header-section-number">2</span> Simulating Differential Abundance</a></li>
+<li><a class="active" href="multivariate-power-analysis.html"><span class="header-section-number">3</span> Multivariate Power Analysis</a></li>
+<li><a class="" href="microbiome-networks.html"><span class="header-section-number">4</span> Microbiome Networks</a></li>
+<li><a class="" href="batch-effect-correction.html"><span class="header-section-number">5</span> Batch Effect Correction</a></li>
+<li><a class="" href="vertical-integration.html"><span class="header-section-number">6</span> Vertical Integration</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="multivariate-power-analysis" class="section level1 hasAnchor" number="3">
-<h1><span class="header-section-number">Chapter 3</span> Multivariate Power Analysis<a href="multivariate-power-analysis.html#multivariate-power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="multivariate-power-analysis" class="section level1" number="3">
+<h1>
+<span class="header-section-number">3</span> Multivariate Power Analysis<a class="anchor" aria-label="anchor" href="#multivariate-power-analysis"><i class="fas fa-link"></i></a>
+</h1>
 <p>How can we choose sample sizes in more complex bioinformatic workflows, where we
 simultaneously analyze many features (taxa, genes, metabolites) in concert?
 While traditional, analytical power analysis often breaks down, simulation can
@@ -212,24 +71,29 @@ good sample size for a sparse partial least squares discriminant analysis
 <p>First, we’ll load the required packages. Relative to our first session, the only
 additional package that we need is <code>mixOmics</code>. This can be installed using
 <code>BiocManager::install('mixOmics')</code>.</p>
-<div id="interpreting-pls-da" class="section level2 hasAnchor" number="3.1">
-<h2><span class="header-section-number">3.1</span> Interpreting PLS-DA<a href="multivariate-power-analysis.html#interpreting-pls-da" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="interpreting-pls-da" class="section level2" number="3.1">
+<h2>
+<span class="header-section-number">3.1</span> Interpreting PLS-DA<a class="anchor" aria-label="anchor" href="#interpreting-pls-da"><i class="fas fa-link"></i></a>
+</h2>
 <p>The T1D dataset below describes 427 metabolites from the gut microbiomes of 40
 T1D patients and 61 healthy controls. These data were originally gathered by
 <a href="https://doi.org/10.2337/dc18-0777">Gavin et al. (2018)</a>, who were motivated by
 the relationship between the pancreas and intestinal issues often experienced by
 T1D patients. They were especially curious about whether microbime-associated
 proteins might be related to increased risk for T1D development.</p>
-<div class="sourceCode" id="cb34"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb34-1"><a href="multivariate-power-analysis.html#cb34-1" tabindex="-1"></a><span class="fu">data</span>(t1d)</span></code></pre></div>
+<div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span></span></code></pre></div>
 <p>The output that we care about are the PLD-DA scores and loadings. The wrapper
 below directly gives us this output without our having to explicitly set
 hyerparameters, though you can <a href="https://github.com/krisrs1128/intro-to-simulation/blob/main/MIGsim/R/methods.R">look here</a>
 to see how the function was defined.</p>
-<div class="sourceCode" id="cb35"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb35-1"><a href="multivariate-power-analysis.html#cb35-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">splsda_fit</span>(t1d)</span>
-<span id="cb35-2"><a href="multivariate-power-analysis.html#cb35-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(result<span class="sc">$</span>fit, <span class="at">cex =</span> <span class="dv">5</span>)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/initial_t1d_analysis-1.png" width="672" /></p>
-<div class="sourceCode" id="cb36"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb36-1"><a href="multivariate-power-analysis.html#cb36-1" tabindex="-1"></a><span class="fu">plotVar</span>(result<span class="sc">$</span>fit, <span class="at">cutoff =</span> <span class="fl">0.4</span>, <span class="at">cex =</span> <span class="dv">5</span>)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/initial_t1d_analysis-2.png" width="672" /></p>
+<div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MIGsim/man/splsda_fit.html">splsda_fit</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/plotIndiv.html">plotIndiv</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">fit</span>, cex <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/initial_t1d_analysis-1.png" width="672"></div>
+<div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/plotVar.html">plotVar</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">fit</span>, cutoff <span class="op">=</span> <span class="fl">0.4</span>, cex <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/initial_t1d_analysis-2.png" width="672"></div>
 <p><strong>Exercise</strong>: Discuss the output of <code>plotIndiv</code>. How does <code>plotVar</code> shape
 your interpretation?</p>
 <p><strong>Solution</strong>: The first two dimensions of the sPLS-DA pick on distinctions between the T1D
@@ -245,16 +109,21 @@ tend to have higher levels of
 <a href="https://www.uniprot.org/uniprotkb/Q8WZ42/entry">q8wz42</a> compared to the
 controls.</p>
 </div>
-<div id="estimation" class="section level2 hasAnchor" number="3.2">
-<h2><span class="header-section-number">3.2</span> Estimation<a href="multivariate-power-analysis.html#estimation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="estimation" class="section level2" number="3.2">
+<h2>
+<span class="header-section-number">3.2</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation"><i class="fas fa-link"></i></a>
+</h2>
 <p>Let’s estimate a simulator where every protein is allowed ot vary across T1D
 type. Since the data have already been centered log-ratio transformed, it’s okay
 to treat these as Gaussian.</p>
-<div class="sourceCode" id="cb37"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb37-1"><a href="multivariate-power-analysis.html#cb37-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(t1d, <span class="at">link_formula =</span> <span class="sc">~</span>outcome2, <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb37-2"><a href="multivariate-power-analysis.html#cb37-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simulator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span><span class="va">t1d</span>, link_formula <span class="op">=</span> <span class="op">~</span><span class="va">outcome2</span>, family <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamboostLSS/man/families.html">GaussianLSS</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">estimate</span><span class="op">(</span>mstop <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
 </div>
-<div id="evaluation" class="section level2 hasAnchor" number="3.3">
-<h2><span class="header-section-number">3.3</span> Evaluation<a href="multivariate-power-analysis.html#evaluation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="evaluation" class="section level2" number="3.3">
+<h2>
+<span class="header-section-number">3.3</span> Evaluation<a class="anchor" aria-label="anchor" href="#evaluation"><i class="fas fa-link"></i></a>
+</h2>
 <p>Last time, we saw how we could visualize marginal simulator quality. How can we
 tell whether a joint simulator is working, though? One simple check is to
 analyze the pairwise correlations. Since the copula model is designed to capture
@@ -264,119 +133,130 @@ correlations.</p>
 correlations from both the real and the simulated datasets. We seem to be often
 overestimating the correlation strength. This is likely a consequence of the
 high-dimensionality of the problem.</p>
-<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="multivariate-power-analysis.html#cb38-1" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
-<span id="cb38-2"><a href="multivariate-power-analysis.html#cb38-2" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/multivariate_correlations-1.png" width="672" /></p>
+<div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim_exper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">simulator</span><span class="op">)</span></span>
+<span><span class="fu">correlation_hist</span><span class="op">(</span><span class="va">t1d</span>, <span class="va">sim_exper</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/multivariate_correlations-1.png" width="672"></div>
 <p><strong>Exercise</strong>: To address this, let’s try modifying the <code>copula_def</code> argument of
 <code>setup_simulator</code> to use a more suitable simulator. Generate new correlation
 histograms and comment on the changes you observe. You only need to modify the
 commented lines (<code>#</code>) lines in the block below.</p>
-<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="multivariate-power-analysis.html#cb39-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
-<span id="cb39-2"><a href="multivariate-power-analysis.html#cb39-2" tabindex="-1"></a>  t1d,</span>
-<span id="cb39-3"><a href="multivariate-power-analysis.html#cb39-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
-<span id="cb39-4"><a href="multivariate-power-analysis.html#cb39-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
-<span id="cb39-5"><a href="multivariate-power-analysis.html#cb39-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="co"># fill this code in</span></span>
-<span id="cb39-6"><a href="multivariate-power-analysis.html#cb39-6" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb39-7"><a href="multivariate-power-analysis.html#cb39-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb39-8"><a href="multivariate-power-analysis.html#cb39-8" tabindex="-1"></a></span>
-<span id="cb39-9"><a href="multivariate-power-analysis.html#cb39-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator) <span class="co"># and then run these two lines</span></span>
-<span id="cb39-10"><a href="multivariate-power-analysis.html#cb39-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper) <span class="co">#</span></span></code></pre></div>
+<div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simulator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span></span>
+<span>  <span class="va">t1d</span>,</span>
+<span>  link_formula <span class="op">=</span> <span class="op">~</span><span class="va">outcome2</span>,</span>
+<span>  family <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamboostLSS/man/families.html">GaussianLSS</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  copula_def <span class="op">=</span> <span class="co"># fill this code in</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">estimate</span><span class="op">(</span>mstop <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sim_exper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">simulator</span><span class="op">)</span> <span class="co"># and then run these two lines</span></span>
+<span><span class="fu">correlation_hist</span><span class="op">(</span><span class="va">t1d</span>, <span class="va">sim_exper</span><span class="op">)</span> <span class="co">#</span></span></code></pre></div>
 <p><strong>Solution</strong>: For our coupla, we can use a covariance estimator of <a href="https://www.tandfonline.com/doi/abs/10.1198/jasa.2011.tm10560">Cai and Liu
 (2011)</a>, that is
 suited for high dimensions. Larger values of <code>thr</code> will increase the stability
 of our estimates, but at the cost of potentially missing or weakening true
 correlations. In line with this point, our new simulated correlations are more
 concentrated.</p>
-<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="multivariate-power-analysis.html#cb40-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
-<span id="cb40-2"><a href="multivariate-power-analysis.html#cb40-2" tabindex="-1"></a>  t1d,</span>
-<span id="cb40-3"><a href="multivariate-power-analysis.html#cb40-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
-<span id="cb40-4"><a href="multivariate-power-analysis.html#cb40-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
-<span id="cb40-5"><a href="multivariate-power-analysis.html#cb40-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.1</span>)</span>
-<span id="cb40-6"><a href="multivariate-power-analysis.html#cb40-6" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb40-7"><a href="multivariate-power-analysis.html#cb40-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb40-8"><a href="multivariate-power-analysis.html#cb40-8" tabindex="-1"></a></span>
-<span id="cb40-9"><a href="multivariate-power-analysis.html#cb40-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
-<span id="cb40-10"><a href="multivariate-power-analysis.html#cb40-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/estimate_t1d_simulator-1.png" width="672" />
-:::</p>
-<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="multivariate-power-analysis.html#cb41-1" tabindex="-1"></a><span class="fu">contrast_boxplot</span>(t1d, sim_exper, <span class="sc">~</span>. <span class="sc">~</span> <span class="fu">reorder</span>(outcome2, value))</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/t1d_contrast_boxplot-1.png" width="672" /></p>
-<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multivariate-power-analysis.html#cb42-1" tabindex="-1"></a>rhos <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">sim =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(sim_exper))), <span class="at">real =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(t1d))))</span>
-<span id="cb42-2"><a href="multivariate-power-analysis.html#cb42-2" tabindex="-1"></a><span class="fu">diag</span>(rhos[[<span class="dv">1</span>]]) <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
-<span id="cb42-3"><a href="multivariate-power-analysis.html#cb42-3" tabindex="-1"></a>top_cors <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(rhos[[<span class="dv">1</span>]]) <span class="sc">&gt;</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(rhos[[<span class="dv">1</span>]]), <span class="fl">0.999</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">arr.ind =</span> <span class="cn">TRUE</span>)</span>
-<span id="cb42-4"><a href="multivariate-power-analysis.html#cb42-4" tabindex="-1"></a></span>
-<span id="cb42-5"><a href="multivariate-power-analysis.html#cb42-5" tabindex="-1"></a>pairs_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb42-6"><a href="multivariate-power-analysis.html#cb42-6" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">subset_correlated</span>(<span class="fu">assay</span>(t1d), top_cors),</span>
-<span id="cb42-7"><a href="multivariate-power-analysis.html#cb42-7" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">subset_correlated</span>(<span class="fu">assay</span>(sim_exper), top_cors)</span>
-<span id="cb42-8"><a href="multivariate-power-analysis.html#cb42-8" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb42-9"><a href="multivariate-power-analysis.html#cb42-9" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">&quot;source&quot;</span>)</span>
-<span id="cb42-10"><a href="multivariate-power-analysis.html#cb42-10" tabindex="-1"></a></span>
-<span id="cb42-11"><a href="multivariate-power-analysis.html#cb42-11" tabindex="-1"></a>keep_pairs <span class="ot">&lt;-</span> pairs_data <span class="sc">|&gt;</span></span>
-<span id="cb42-12"><a href="multivariate-power-analysis.html#cb42-12" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(source, pair, correlation) <span class="sc">|&gt;</span></span>
-<span id="cb42-13"><a href="multivariate-power-analysis.html#cb42-13" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
-<span id="cb42-14"><a href="multivariate-power-analysis.html#cb42-14" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">&quot;real&quot;</span>, correlation <span class="sc">&gt;</span> <span class="fl">0.72</span>, correlation <span class="sc">&lt;</span> <span class="fl">0.8</span>) <span class="sc">|&gt;</span></span>
-<span id="cb42-15"><a href="multivariate-power-analysis.html#cb42-15" tabindex="-1"></a>  <span class="fu">pull</span>(pair)</span>
-<span id="cb42-16"><a href="multivariate-power-analysis.html#cb42-16" tabindex="-1"></a></span>
-<span id="cb42-17"><a href="multivariate-power-analysis.html#cb42-17" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> pairs_data <span class="sc">|&gt;</span></span>
-<span id="cb42-18"><a href="multivariate-power-analysis.html#cb42-18" tabindex="-1"></a>  <span class="fu">filter</span>(pair <span class="sc">%in%</span> keep_pairs) <span class="sc">|&gt;</span></span>
-<span id="cb42-19"><a href="multivariate-power-analysis.html#cb42-19" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb42-20"><a href="multivariate-power-analysis.html#cb42-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(feature1, feature2, <span class="at">col =</span> source), <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb42-21"><a href="multivariate-power-analysis.html#cb42-21" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#038C8C&quot;</span>, <span class="st">&quot;#D93636&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb42-22"><a href="multivariate-power-analysis.html#cb42-22" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>))) <span class="sc">+</span></span>
-<span id="cb42-23"><a href="multivariate-power-analysis.html#cb42-23" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;A&quot;</span>, <span class="at">col =</span> <span class="st">&quot;Source&quot;</span>, <span class="at">x =</span> <span class="fu">expression</span>(<span class="st">&quot;Feature&quot;</span> <span class="sc">~</span> j), <span class="at">y =</span> <span class="fu">expression</span>(<span class="st">&quot;Feature&quot;</span> <span class="sc">~</span> j<span class="sc">^</span><span class="st">&quot;&#39;&quot;</span>)) <span class="sc">+</span></span>
-<span id="cb42-24"><a href="multivariate-power-analysis.html#cb42-24" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">reorder</span>(pair, <span class="sc">-</span>correlation), <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span></span>
-<span id="cb42-25"><a href="multivariate-power-analysis.html#cb42-25" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
-<span id="cb42-26"><a href="multivariate-power-analysis.html#cb42-26" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
-<span id="cb42-27"><a href="multivariate-power-analysis.html#cb42-27" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)</span>
-<span id="cb42-28"><a href="multivariate-power-analysis.html#cb42-28" tabindex="-1"></a>  )</span></code></pre></div>
-<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="multivariate-power-analysis.html#cb43-1" tabindex="-1"></a>ft_order <span class="ot">&lt;-</span> <span class="fu">hclust</span>(<span class="fu">dist</span>(<span class="fu">assay</span>(t1d)))<span class="sc">$</span>order</span>
-<span id="cb43-2"><a href="multivariate-power-analysis.html#cb43-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">correlation_heatmap</span>(rhos<span class="sc">$</span>real, ft_order) <span class="sc">+</span></span>
-<span id="cb43-3"><a href="multivariate-power-analysis.html#cb43-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;B  Real&quot;</span>) <span class="sc">+</span></span>
-<span id="cb43-4"><a href="multivariate-power-analysis.html#cb43-4" tabindex="-1"></a>  (<span class="fu">correlation_heatmap</span>(rhos<span class="sc">$</span>sim, ft_order) <span class="sc">+</span></span>
-<span id="cb43-5"><a href="multivariate-power-analysis.html#cb43-5" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Simulated&quot;</span>) <span class="sc">+</span></span>
-<span id="cb43-6"><a href="multivariate-power-analysis.html#cb43-6" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>))</span>
-<span id="cb43-7"><a href="multivariate-power-analysis.html#cb43-7" tabindex="-1"></a></span>
-<span id="cb43-8"><a href="multivariate-power-analysis.html#cb43-8" tabindex="-1"></a>(p1 <span class="sc">/</span> p2) <span class="sc">+</span></span>
-<span id="cb43-9"><a href="multivariate-power-analysis.html#cb43-9" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>, <span class="at">heights =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="dv">2</span>))</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/collect_plots_multivariate-1.png" width="672" /></p>
+<div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simulator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span></span>
+<span>  <span class="va">t1d</span>,</span>
+<span>  link_formula <span class="op">=</span> <span class="op">~</span><span class="va">outcome2</span>,</span>
+<span>  family <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamboostLSS/man/families.html">GaussianLSS</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>  copula_def <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/copula_adaptive.html">copula_adaptive</a></span><span class="op">(</span>thr <span class="op">=</span> <span class="fl">0.1</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">estimate</span><span class="op">(</span>mstop <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">sim_exper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">simulator</span><span class="op">)</span></span>
+<span><span class="fu">correlation_hist</span><span class="op">(</span><span class="va">t1d</span>, <span class="va">sim_exper</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure">
+<img src="simulation_for_microbiome_files/figure-html/estimate_t1d_simulator-1.png" width="672">
+:::</div>
+<div class="sourceCode" id="cb41"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu">contrast_boxplot</span><span class="op">(</span><span class="va">t1d</span>, <span class="va">sim_exper</span>, <span class="op">~</span><span class="va">.</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">outcome2</span>, <span class="va">value</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/t1d_contrast_boxplot-1.png" width="672"></div>
+<div class="sourceCode" id="cb42"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rhos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>sim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">sim_exper</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, real <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">rhos</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="cn">NA</span></span>
+<span><span class="va">top_cors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/which.html">which</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">rhos</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">&gt;</span> <span class="fu"><a href="https://rdrr.io/r/stats/quantile.html">quantile</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">abs</a></span><span class="op">(</span><span class="va">rhos</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, <span class="fl">0.999</span>, na.rm <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span>, arr.ind <span class="op">=</span> <span class="cn">TRUE</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">pairs_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  real <span class="op">=</span> <span class="fu">subset_correlated</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span>, <span class="va">top_cors</span><span class="op">)</span>,</span>
+<span>  simulated <span class="op">=</span> <span class="fu">subset_correlated</span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">sim_exper</span><span class="op">)</span>, <span class="va">top_cors</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span>.id <span class="op">=</span> <span class="st">"source"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">keep_pairs</span> <span class="op">&lt;-</span> <span class="va">pairs_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">dplyr</span><span class="fu">::</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/select.html">select</a></span><span class="op">(</span><span class="va">source</span>, <span class="va">pair</span>, <span class="va">correlation</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/unique.html">unique</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">source</span> <span class="op">==</span> <span class="st">"real"</span>, <span class="va">correlation</span> <span class="op">&gt;</span> <span class="fl">0.72</span>, <span class="va">correlation</span> <span class="op">&lt;</span> <span class="fl">0.8</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/pull.html">pull</a></span><span class="op">(</span><span class="va">pair</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">p1</span> <span class="op">&lt;-</span> <span class="va">pairs_data</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">pair</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">keep_pairs</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">feature1</span>, <span class="va">feature2</span>, col <span class="op">=</span> <span class="va">source</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.5</span>, size <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_manual.html">scale_color_manual</a></span><span class="op">(</span>values <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="st">"#038C8C"</span>, <span class="st">"#D93636"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guides.html">guides</a></span><span class="op">(</span>color <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/guide_legend.html">guide_legend</a></span><span class="op">(</span>override.aes <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>alpha <span class="op">=</span> <span class="fl">1</span>, size <span class="op">=</span> <span class="fl">2</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"A"</span>, col <span class="op">=</span> <span class="st">"Source"</span>, x <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="st">"Feature"</span> <span class="op">~</span> <span class="va">j</span><span class="op">)</span>, y <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/expression.html">expression</a></span><span class="op">(</span><span class="st">"Feature"</span> <span class="op">~</span> <span class="va">j</span><span class="op">^</span><span class="st">"'"</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">pair</span>, <span class="op">-</span><span class="va">correlation</span><span class="op">)</span>, ncol <span class="op">=</span> <span class="fl">6</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span></span>
+<span>    strip.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">7</span><span class="op">)</span>,</span>
+<span>    axis.text <span class="op">=</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/element.html">element_text</a></span><span class="op">(</span>size <span class="op">=</span> <span class="fl">8</span><span class="op">)</span></span>
+<span>  <span class="op">)</span></span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ft_order</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/hclust.html">hclust</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/stats/dist.html">dist</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">order</span></span>
+<span><span class="va">p2</span> <span class="op">&lt;-</span> <span class="fu">correlation_heatmap</span><span class="op">(</span><span class="va">rhos</span><span class="op">$</span><span class="va">real</span>, <span class="va">ft_order</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"B  Real"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="op">(</span><span class="fu">correlation_heatmap</span><span class="op">(</span><span class="va">rhos</span><span class="op">$</span><span class="va">sim</span>, <span class="va">ft_order</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>title <span class="op">=</span> <span class="st">"Simulated"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/theme.html">theme</a></span><span class="op">(</span>legend.position <span class="op">=</span> <span class="st">"none"</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.2</span>, <span class="fl">2</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/collect_plots_multivariate-1.png" width="672"></div>
 <p>How did we choose this threshold? You can compare the correlations more
 systematically using this loop:</p>
-<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multivariate-power-analysis.html#cb44-1" tabindex="-1"></a>bivariate_metrics <span class="ot">&lt;-</span> \(thr, <span class="at">n_rep =</span> <span class="dv">5</span>) {</span>
-<span id="cb44-2"><a href="multivariate-power-analysis.html#cb44-2" tabindex="-1"></a>  <span class="co"># refit the simulator with current threshold</span></span>
-<span id="cb44-3"><a href="multivariate-power-analysis.html#cb44-3" tabindex="-1"></a>  simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
-<span id="cb44-4"><a href="multivariate-power-analysis.html#cb44-4" tabindex="-1"></a>    t1d,</span>
-<span id="cb44-5"><a href="multivariate-power-analysis.html#cb44-5" tabindex="-1"></a>    <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
-<span id="cb44-6"><a href="multivariate-power-analysis.html#cb44-6" tabindex="-1"></a>    <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
-<span id="cb44-7"><a href="multivariate-power-analysis.html#cb44-7" tabindex="-1"></a>    <span class="at">copula_def =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> thr)</span>
-<span id="cb44-8"><a href="multivariate-power-analysis.html#cb44-8" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
-<span id="cb44-9"><a href="multivariate-power-analysis.html#cb44-9" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb44-10"><a href="multivariate-power-analysis.html#cb44-10" tabindex="-1"></a></span>
-<span id="cb44-11"><a href="multivariate-power-analysis.html#cb44-11" tabindex="-1"></a>  <span class="co"># compute metrics on five samples</span></span>
-<span id="cb44-12"><a href="multivariate-power-analysis.html#cb44-12" tabindex="-1"></a>  err <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb44-13"><a href="multivariate-power-analysis.html#cb44-13" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_rep) {</span>
-<span id="cb44-14"><a href="multivariate-power-analysis.html#cb44-14" tabindex="-1"></a>    sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)[<span class="fu">rownames</span>(t1d), ]</span>
-<span id="cb44-15"><a href="multivariate-power-analysis.html#cb44-15" tabindex="-1"></a>    rhos <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">sim =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(sim_exper))), <span class="at">real =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(t1d))))</span>
-<span id="cb44-16"><a href="multivariate-power-analysis.html#cb44-16" tabindex="-1"></a>    err[[i]] <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
-<span id="cb44-17"><a href="multivariate-power-analysis.html#cb44-17" tabindex="-1"></a>      <span class="at">frobenius =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((rhos<span class="sc">$</span>sim <span class="sc">-</span> rhos<span class="sc">$</span>real)<span class="sc">^</span><span class="dv">2</span>)),</span>
-<span id="cb44-18"><a href="multivariate-power-analysis.html#cb44-18" tabindex="-1"></a>      <span class="at">ks =</span> <span class="fu">ks.test</span>(rhos<span class="sc">$</span>sim, rhos<span class="sc">$</span>real)<span class="sc">$</span>statistic,</span>
-<span id="cb44-19"><a href="multivariate-power-analysis.html#cb44-19" tabindex="-1"></a>      <span class="at">thr =</span> thr</span>
-<span id="cb44-20"><a href="multivariate-power-analysis.html#cb44-20" tabindex="-1"></a>    )</span>
-<span id="cb44-21"><a href="multivariate-power-analysis.html#cb44-21" tabindex="-1"></a>  }</span>
-<span id="cb44-22"><a href="multivariate-power-analysis.html#cb44-22" tabindex="-1"></a></span>
-<span id="cb44-23"><a href="multivariate-power-analysis.html#cb44-23" tabindex="-1"></a>  <span class="fu">do.call</span>(rbind, err)</span>
-<span id="cb44-24"><a href="multivariate-power-analysis.html#cb44-24" tabindex="-1"></a>}</span></code></pre></div>
-<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="multivariate-power-analysis.html#cb45-1" tabindex="-1"></a>errors <span class="ot">&lt;-</span> <span class="fu">seq</span>(.<span class="dv">001</span>, <span class="fl">0.2</span>, <span class="at">length.out =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
-<span id="cb45-2"><a href="multivariate-power-analysis.html#cb45-2" tabindex="-1"></a>  <span class="fu">map_dfr</span>(bivariate_metrics) <span class="sc">|&gt;</span></span>
-<span id="cb45-3"><a href="multivariate-power-analysis.html#cb45-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>thr, <span class="at">names_to =</span> <span class="st">&quot;metric&quot;</span>)</span>
-<span id="cb45-4"><a href="multivariate-power-analysis.html#cb45-4" tabindex="-1"></a></span>
-<span id="cb45-5"><a href="multivariate-power-analysis.html#cb45-5" tabindex="-1"></a><span class="fu">ggplot</span>(errors) <span class="sc">+</span></span>
-<span id="cb45-6"><a href="multivariate-power-analysis.html#cb45-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(thr, value)) <span class="sc">+</span></span>
-<span id="cb45-7"><a href="multivariate-power-analysis.html#cb45-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>metric, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span></span>
-<span id="cb45-8"><a href="multivariate-power-analysis.html#cb45-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Threshold&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Metric Value&quot;</span>)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/metrics_results-1.png" width="672" /></p>
+<div class="sourceCode" id="cb44"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">bivariate_metrics</span> <span class="op">&lt;-</span> \<span class="op">(</span><span class="va">thr</span>, <span class="va">n_rep</span> <span class="op">=</span> <span class="fl">5</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="co"># refit the simulator with current threshold</span></span>
+<span>  <span class="va">simulator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span></span>
+<span>    <span class="va">t1d</span>,</span>
+<span>    link_formula <span class="op">=</span> <span class="op">~</span><span class="va">outcome2</span>,</span>
+<span>    family <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamboostLSS/man/families.html">GaussianLSS</a></span><span class="op">(</span><span class="op">)</span>,</span>
+<span>    copula_def <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/copula_adaptive.html">copula_adaptive</a></span><span class="op">(</span>thr <span class="op">=</span> <span class="va">thr</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">estimate</span><span class="op">(</span>mstop <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="co"># compute metrics on five samples</span></span>
+<span>  <span class="va">err</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fl">1</span><span class="op">:</span><span class="va">n_rep</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">sim_exper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">simulator</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span>, <span class="op">]</span></span>
+<span>    <span class="va">rhos</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>sim <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">sim_exper</span><span class="op">)</span><span class="op">)</span><span class="op">)</span>, real <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span>    <span class="va">err</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span></span>
+<span>      frobenius <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/MathFun.html">sqrt</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="op">(</span><span class="va">rhos</span><span class="op">$</span><span class="va">sim</span> <span class="op">-</span> <span class="va">rhos</span><span class="op">$</span><span class="va">real</span><span class="op">)</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>      ks <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/ks.test.html">ks.test</a></span><span class="op">(</span><span class="va">rhos</span><span class="op">$</span><span class="va">sim</span>, <span class="va">rhos</span><span class="op">$</span><span class="va">real</span><span class="op">)</span><span class="op">$</span><span class="va">statistic</span>,</span>
+<span>      thr <span class="op">=</span> <span class="va">thr</span></span>
+<span>    <span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/do.call.html">do.call</a></span><span class="op">(</span><span class="va">rbind</span>, <span class="va">err</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">errors</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">.001</span>, <span class="fl">0.2</span>, length.out <span class="op">=</span> <span class="fl">10</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://purrr.tidyverse.org/reference/map_dfr.html">map_dfr</a></span><span class="op">(</span><span class="va">bivariate_metrics</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">thr</span>, names_to <span class="op">=</span> <span class="st">"metric"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">errors</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">thr</span>, <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">metric</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Threshold"</span>, y <span class="op">=</span> <span class="st">"Metric Value"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/metrics_results-1.png" width="672"></div>
 </div>
-<div id="pls-da-power-analysis" class="section level2 hasAnchor" number="3.4">
-<h2><span class="header-section-number">3.4</span> PLS-DA Power Analysis<a href="multivariate-power-analysis.html#pls-da-power-analysis" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="pls-da-power-analysis" class="section level2" number="3.4">
+<h2>
+<span class="header-section-number">3.4</span> PLS-DA Power Analysis<a class="anchor" aria-label="anchor" href="#pls-da-power-analysis"><i class="fas fa-link"></i></a>
+</h2>
 <p>Now that we have a simulator, we can run a power analysis. In theory, we could
 look at how any summary from the PLS-DA output varies as the sample size
 increases. The most natural one, though, is simply to see how classifier
@@ -387,457 +267,62 @@ classifier balance precision and recall on new samples.</p>
 have no relationship at all with the response? We’ll also simulate three
 hypothetical datasets for each sample size and sparsity level. All
 configurations of interest are stored in the <code>config</code> matrix below.</p>
-<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multivariate-power-analysis.html#cb46-1" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb46-2"><a href="multivariate-power-analysis.html#cb46-2" tabindex="-1"></a>  <span class="at">sample_size =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">20</span>, <span class="dv">200</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
-<span id="cb46-3"><a href="multivariate-power-analysis.html#cb46-3" tabindex="-1"></a>  <span class="at">n_rep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,</span>
-<span id="cb46-4"><a href="multivariate-power-analysis.html#cb46-4" tabindex="-1"></a>  <span class="at">n_null =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">317</span>, <span class="dv">417</span>, <span class="at">length.out =</span> <span class="dv">4</span>)),</span>
-<span id="cb46-5"><a href="multivariate-power-analysis.html#cb46-5" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="cn">NA</span></span>
-<span id="cb46-6"><a href="multivariate-power-analysis.html#cb46-6" tabindex="-1"></a>)</span>
-<span id="cb46-7"><a href="multivariate-power-analysis.html#cb46-7" tabindex="-1"></a></span>
-<span id="cb46-8"><a href="multivariate-power-analysis.html#cb46-8" tabindex="-1"></a><span class="fu">data</span>(t1d_order)</span></code></pre></div>
+<div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span></span>
+<span>  sample_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">200</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  n_rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">20</span>,</span>
+<span>  n_null <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">317</span>, <span class="fl">417</span>, length.out <span class="op">=</span> <span class="fl">4</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  metrics <span class="op">=</span> <span class="cn">NA</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">t1d_order</span><span class="op">)</span></span></code></pre></div>
 <p><strong>Exercise</strong>: Finally, we’re in a position to generate synthetic data and
 evaluate PLS-DA performance. Fill in the block below to update the simulator for
 each <code>i</code>. Remember that the original <code>simulator</code> defined above assumes that all
 proteins are associated with T1D. You can use <code>t1d_order</code> to prioritize the
 proteins with the strongest effects in the original data. As before, you should
 only need to modify the line marked with the comments (<code>#</code>).</p>
-<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="multivariate-power-analysis.html#cb47-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
-<span id="cb47-2"><a href="multivariate-power-analysis.html#cb47-2" tabindex="-1"></a>  simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
-<span id="cb47-3"><a href="multivariate-power-analysis.html#cb47-3" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
-<span id="cb47-4"><a href="multivariate-power-analysis.html#cb47-4" tabindex="-1"></a>      <span class="co"># fill this in</span></span>
-<span id="cb47-5"><a href="multivariate-power-analysis.html#cb47-5" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
-<span id="cb47-6"><a href="multivariate-power-analysis.html#cb47-6" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb47-7"><a href="multivariate-power-analysis.html#cb47-7" tabindex="-1"></a></span>
-<span id="cb47-8"><a href="multivariate-power-analysis.html#cb47-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
-<span id="cb47-9"><a href="multivariate-power-analysis.html#cb47-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
-<span id="cb47-10"><a href="multivariate-power-analysis.html#cb47-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
-<span id="cb47-11"><a href="multivariate-power-analysis.html#cb47-11" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">config</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">simulator</span> <span class="op">&lt;-</span> <span class="va">simulator</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span></span>
+<span>      <span class="co"># fill this in</span></span>
+<span>    <span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">estimate</span><span class="op">(</span>mstop <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">config</span><span class="op">$</span><span class="va">metrics</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n</a></span><span class="op">(</span><span class="va">simulator</span>, <span class="va">config</span><span class="op">$</span><span class="va">sample_size</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/MIGsim/man/splsda_fit.html">splsda_fit</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="st">"auc"</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"run {i}/{nrow(config)}"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <p><strong>Solution</strong>: To define nulls, we mutate the weakest proteins so that there is no longer any
 association with T1D: <code>link = ~ 1</code> instead of <code>link = ~ outcome2</code>. To speed up
 the computation, we organized the <code>mutate</code> calls so that we don’t need to
 re-estimate proteins whose effects were removed in a previous iteration.</p>
-<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multivariate-power-analysis.html#cb48-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
-<span id="cb48-2"><a href="multivariate-power-analysis.html#cb48-2" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">==</span> <span class="dv">1</span> <span class="sc">||</span> config<span class="sc">$</span>n_null[i] <span class="sc">!=</span> config<span class="sc">$</span>n_null[i <span class="sc">-</span> <span class="dv">1</span>]) {</span>
-<span id="cb48-3"><a href="multivariate-power-analysis.html#cb48-3" tabindex="-1"></a>    simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
-<span id="cb48-4"><a href="multivariate-power-analysis.html#cb48-4" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">any_of</span>(<span class="fu">rev</span>(t1d_order)[<span class="dv">1</span><span class="sc">:</span>config<span class="sc">$</span>n_null[i]]), <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
-<span id="cb48-5"><a href="multivariate-power-analysis.html#cb48-5" tabindex="-1"></a>      <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb48-6"><a href="multivariate-power-analysis.html#cb48-6" tabindex="-1"></a>  }</span>
-<span id="cb48-7"><a href="multivariate-power-analysis.html#cb48-7" tabindex="-1"></a></span>
-<span id="cb48-8"><a href="multivariate-power-analysis.html#cb48-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
-<span id="cb48-9"><a href="multivariate-power-analysis.html#cb48-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
-<span id="cb48-10"><a href="multivariate-power-analysis.html#cb48-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
-<span id="cb48-11"><a href="multivariate-power-analysis.html#cb48-11" tabindex="-1"></a>}</span></code></pre></div>
-<pre><code>## run 1/400
-## run 2/400
-## run 3/400
-## run 4/400
-## run 5/400
-## run 6/400
-## run 7/400
-## run 8/400
-## run 9/400
-## run 10/400
-## run 11/400
-## run 12/400
-## run 13/400
-## run 14/400
-## run 15/400
-## run 16/400
-## run 17/400
-## run 18/400
-## run 19/400
-## run 20/400
-## run 21/400
-## run 22/400
-## run 23/400
-## run 24/400
-## run 25/400
-## run 26/400
-## run 27/400
-## run 28/400
-## run 29/400
-## run 30/400
-## run 31/400
-## run 32/400
-## run 33/400
-## run 34/400
-## run 35/400
-## run 36/400
-## run 37/400
-## run 38/400
-## run 39/400
-## run 40/400
-## run 41/400
-## run 42/400
-## run 43/400
-## run 44/400
-## run 45/400
-## run 46/400
-## run 47/400
-## run 48/400
-## run 49/400
-## run 50/400
-## run 51/400
-## run 52/400
-## run 53/400
-## run 54/400
-## run 55/400
-## run 56/400
-## run 57/400
-## run 58/400
-## run 59/400
-## run 60/400
-## run 61/400
-## run 62/400
-## run 63/400
-## run 64/400
-## run 65/400
-## run 66/400
-## run 67/400
-## run 68/400
-## run 69/400
-## run 70/400
-## run 71/400
-## run 72/400
-## run 73/400
-## run 74/400
-## run 75/400
-## run 76/400
-## run 77/400
-## run 78/400
-## run 79/400
-## run 80/400
-## run 81/400
-## run 82/400
-## run 83/400
-## run 84/400
-## run 85/400
-## run 86/400
-## run 87/400
-## run 88/400
-## run 89/400
-## run 90/400
-## run 91/400
-## run 92/400
-## run 93/400
-## run 94/400
-## run 95/400
-## run 96/400
-## run 97/400
-## run 98/400
-## run 99/400
-## run 100/400
-## run 101/400
-## run 102/400
-## run 103/400
-## run 104/400
-## run 105/400
-## run 106/400
-## run 107/400
-## run 108/400
-## run 109/400
-## run 110/400
-## run 111/400
-## run 112/400
-## run 113/400
-## run 114/400
-## run 115/400
-## run 116/400
-## run 117/400
-## run 118/400
-## run 119/400
-## run 120/400
-## run 121/400
-## run 122/400
-## run 123/400
-## run 124/400
-## run 125/400
-## run 126/400
-## run 127/400
-## run 128/400
-## run 129/400
-## run 130/400
-## run 131/400
-## run 132/400
-## run 133/400
-## run 134/400
-## run 135/400
-## run 136/400
-## run 137/400
-## run 138/400
-## run 139/400
-## run 140/400
-## run 141/400
-## run 142/400
-## run 143/400
-## run 144/400
-## run 145/400
-## run 146/400
-## run 147/400
-## run 148/400
-## run 149/400
-## run 150/400
-## run 151/400
-## run 152/400
-## run 153/400
-## run 154/400
-## run 155/400
-## run 156/400
-## run 157/400
-## run 158/400
-## run 159/400
-## run 160/400
-## run 161/400
-## run 162/400
-## run 163/400
-## run 164/400
-## run 165/400
-## run 166/400
-## run 167/400
-## run 168/400
-## run 169/400
-## run 170/400
-## run 171/400
-## run 172/400
-## run 173/400
-## run 174/400
-## run 175/400
-## run 176/400
-## run 177/400
-## run 178/400
-## run 179/400
-## run 180/400
-## run 181/400
-## run 182/400
-## run 183/400
-## run 184/400
-## run 185/400
-## run 186/400
-## run 187/400
-## run 188/400
-## run 189/400
-## run 190/400
-## run 191/400
-## run 192/400
-## run 193/400
-## run 194/400
-## run 195/400
-## run 196/400
-## run 197/400
-## run 198/400
-## run 199/400
-## run 200/400
-## run 201/400
-## run 202/400
-## run 203/400
-## run 204/400
-## run 205/400
-## run 206/400
-## run 207/400
-## run 208/400
-## run 209/400
-## run 210/400
-## run 211/400
-## run 212/400
-## run 213/400
-## run 214/400
-## run 215/400
-## run 216/400
-## run 217/400
-## run 218/400
-## run 219/400
-## run 220/400
-## run 221/400
-## run 222/400
-## run 223/400
-## run 224/400
-## run 225/400
-## run 226/400
-## run 227/400
-## run 228/400
-## run 229/400
-## run 230/400
-## run 231/400
-## run 232/400
-## run 233/400
-## run 234/400
-## run 235/400
-## run 236/400
-## run 237/400
-## run 238/400
-## run 239/400
-## run 240/400
-## run 241/400
-## run 242/400
-## run 243/400
-## run 244/400
-## run 245/400
-## run 246/400
-## run 247/400
-## run 248/400
-## run 249/400
-## run 250/400
-## run 251/400
-## run 252/400
-## run 253/400
-## run 254/400
-## run 255/400
-## run 256/400
-## run 257/400
-## run 258/400
-## run 259/400
-## run 260/400
-## run 261/400
-## run 262/400
-## run 263/400
-## run 264/400
-## run 265/400
-## run 266/400
-## run 267/400
-## run 268/400
-## run 269/400
-## run 270/400
-## run 271/400
-## run 272/400
-## run 273/400
-## run 274/400
-## run 275/400
-## run 276/400
-## run 277/400
-## run 278/400
-## run 279/400
-## run 280/400
-## run 281/400
-## run 282/400
-## run 283/400
-## run 284/400
-## run 285/400
-## run 286/400
-## run 287/400
-## run 288/400
-## run 289/400
-## run 290/400
-## run 291/400
-## run 292/400
-## run 293/400
-## run 294/400
-## run 295/400
-## run 296/400
-## run 297/400
-## run 298/400
-## run 299/400
-## run 300/400
-## run 301/400
-## run 302/400
-## run 303/400
-## run 304/400
-## run 305/400
-## run 306/400
-## run 307/400
-## run 308/400
-## run 309/400
-## run 310/400
-## run 311/400
-## run 312/400
-## run 313/400
-## run 314/400
-## run 315/400
-## run 316/400
-## run 317/400
-## run 318/400
-## run 319/400
-## run 320/400
-## run 321/400
-## run 322/400
-## run 323/400
-## run 324/400
-## run 325/400
-## run 326/400
-## run 327/400
-## run 328/400
-## run 329/400
-## run 330/400
-## run 331/400
-## run 332/400
-## run 333/400
-## run 334/400
-## run 335/400
-## run 336/400
-## run 337/400
-## run 338/400
-## run 339/400
-## run 340/400
-## run 341/400
-## run 342/400
-## run 343/400
-## run 344/400
-## run 345/400
-## run 346/400
-## run 347/400
-## run 348/400
-## run 349/400
-## run 350/400
-## run 351/400
-## run 352/400
-## run 353/400
-## run 354/400
-## run 355/400
-## run 356/400
-## run 357/400
-## run 358/400
-## run 359/400
-## run 360/400
-## run 361/400
-## run 362/400
-## run 363/400
-## run 364/400
-## run 365/400
-## run 366/400
-## run 367/400
-## run 368/400
-## run 369/400
-## run 370/400
-## run 371/400
-## run 372/400
-## run 373/400
-## run 374/400
-## run 375/400
-## run 376/400
-## run 377/400
-## run 378/400
-## run 379/400
-## run 380/400
-## run 381/400
-## run 382/400
-## run 383/400
-## run 384/400
-## run 385/400
-## run 386/400
-## run 387/400
-## run 388/400
-## run 389/400
-## run 390/400
-## run 391/400
-## run 392/400
-## run 393/400
-## run 394/400
-## run 395/400
-## run 396/400
-## run 397/400
-## run 398/400
-## run 399/400
-## run 400/400</code></pre>
-<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multivariate-power-analysis.html#cb50-1" tabindex="-1"></a><span class="co">#config &lt;- readRDS(url(&quot;https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds&quot;))</span></span></code></pre></div>
+<div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">config</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="kw">if</span> <span class="op">(</span><span class="va">i</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">||</span> <span class="va">config</span><span class="op">$</span><span class="va">n_null</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">!=</span> <span class="va">config</span><span class="op">$</span><span class="va">n_null</span><span class="op">[</span><span class="va">i</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">{</span></span>
+<span>    <span class="va">simulator</span> <span class="op">&lt;-</span> <span class="va">simulator</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">any_of</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/rev.html">rev</a></span><span class="op">(</span><span class="va">t1d_order</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="va">config</span><span class="op">$</span><span class="va">n_null</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, link <span class="op">=</span> <span class="op">~</span><span class="fl">1</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>      <span class="fu">estimate</span><span class="op">(</span>mstop <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span>  <span class="op">}</span></span>
+<span></span>
+<span>  <span class="va">config</span><span class="op">$</span><span class="va">metrics</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n</a></span><span class="op">(</span><span class="va">simulator</span>, <span class="va">config</span><span class="op">$</span><span class="va">sample_size</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/MIGsim/man/splsda_fit.html">splsda_fit</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="st">"auc"</span><span class="op">]</span><span class="op">]</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"run {i}/{nrow(config)}"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/readRDS.html">readRDS</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/connections.html">url</a></span><span class="op">(</span><span class="st">"https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds"</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>:::</p>
 <p>We can visualize variation in performance.</p>
-<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="multivariate-power-analysis.html#cb51-1" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(config, <span class="fu">aes</span>(<span class="fu">factor</span>(sample_size), metrics, <span class="at">col =</span> <span class="fu">factor</span>(n_null))) <span class="sc">+</span></span>
-<span id="cb51-2"><a href="multivariate-power-analysis.html#cb51-2" tabindex="-1"></a>  <span class="fu">stat_pointinterval</span>(<span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
-<span id="cb51-3"><a href="multivariate-power-analysis.html#cb51-3" tabindex="-1"></a>  <span class="fu">scale_color_scico_d</span>(<span class="at">palette =</span> <span class="st">&quot;managua&quot;</span>) <span class="sc">+</span></span>
-<span id="cb51-4"><a href="multivariate-power-analysis.html#cb51-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Sample Size&quot;</span>, <span class="at">y =</span> <span class="st">&quot;AUC&quot;</span>, <span class="at">color =</span> <span class="st">&quot;# Nulls&quot;</span>, <span class="at">title =</span> <span class="st">&quot;C&quot;</span>)</span>
-<span id="cb51-5"><a href="multivariate-power-analysis.html#cb51-5" tabindex="-1"></a></span>
-<span id="cb51-6"><a href="multivariate-power-analysis.html#cb51-6" tabindex="-1"></a>(p1 <span class="sc">/</span> p2 <span class="sc">/</span> p3) <span class="sc">+</span></span>
-<span id="cb51-7"><a href="multivariate-power-analysis.html#cb51-7" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>, <span class="at">heights =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/visualize-power-1.png" width="672" /></p>
+<div class="sourceCode" id="cb50"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">p3</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">config</span>, <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">sample_size</span><span class="op">)</span>, <span class="va">metrics</span>, col <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">n_null</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_pointinterval.html">stat_pointinterval</a></span><span class="op">(</span>position <span class="op">=</span> <span class="st">"dodge"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/scico/man/ggplot2-scales.html">scale_color_scico_d</a></span><span class="op">(</span>palette <span class="op">=</span> <span class="st">"managua"</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Sample Size"</span>, y <span class="op">=</span> <span class="st">"AUC"</span>, color <span class="op">=</span> <span class="st">"# Nulls"</span>, title <span class="op">=</span> <span class="st">"C"</span><span class="op">)</span></span>
+<span></span>
+<span><span class="op">(</span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span> <span class="op">/</span> <span class="va">p3</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.2</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/visualize-power-1.png" width="768"></div>
 <p><strong>Discussion</strong>: Interpret the visualization above. How do you think analysis
 like this could help you justify making some experimental investments over
 others?</p>
@@ -851,13 +336,16 @@ then we may already achieve good power with ~ 100 samples. However, if we
 imagine our effect might be sparser in our future experiment, then this figure
 would give us good justification for arguing for a larger number of samples, in
 order to ensure we can discover a disease-associated proteomics signature.</p>
-<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="multivariate-power-analysis.html#cb52-1" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">colData</span>(t1d)<span class="sc">$</span>outcome2 <span class="sc">==</span> <span class="st">&quot;T1D&quot;</span></span>
-<span id="cb52-2"><a href="multivariate-power-analysis.html#cb52-2" tabindex="-1"></a>p_vals <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">assay</span>(t1d), <span class="dv">1</span>, \(x) <span class="fu">t.test</span>(x[ix], x[<span class="sc">-</span>ix])<span class="sc">$</span>p.value)</span>
-<span id="cb52-3"><a href="multivariate-power-analysis.html#cb52-3" tabindex="-1"></a><span class="fu">storey_pi0_est</span>(p_vals, <span class="fl">0.5</span>)<span class="sc">$</span>pi0</span></code></pre></div>
+<div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">$</span><span class="va">outcome2</span> <span class="op">==</span> <span class="st">"T1D"</span></span>
+<span><span class="va">p_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span>, <span class="fl">1</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="va">ix</span><span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="op">-</span><span class="va">ix</span><span class="op">]</span><span class="op">)</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/mutoss/man/storey_pi0_est.html">storey_pi0_est</a></span><span class="op">(</span><span class="va">p_vals</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">$</span><span class="va">pi0</span></span></code></pre></div>
 <pre><code>## [1] 1.311475</code></pre>
 </div>
-<div id="comparison-with-t-test-calculation" class="section level2 hasAnchor" number="3.5">
-<h2><span class="header-section-number">3.5</span> Comparison with <span class="math inline">\(t\)</span>-test calculation<a href="multivariate-power-analysis.html#comparison-with-t-test-calculation" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="comparison-with-t-test-calculation" class="section level2" number="3.5">
+<h2>
+<span class="header-section-number">3.5</span> Comparison with <span class="math inline">\(t\)</span>-test calculation<a class="anchor" aria-label="anchor" href="#comparison-with-t-test-calculation"><i class="fas fa-link"></i></a>
+</h2>
 <p>What if we had based our power analysis using theory from <span class="math inline">\(t\)</span>-tests? We might be
 hopeful that this theory might give a sample size that is also good enough for
 the sPLS-DA. To make this concrete, suppose that we will test all 427 taxa using
@@ -865,19 +353,21 @@ a two-sample <span class="math inline">\(t\)</span>-test with a Benjamini-Hochbe
 Suppose that we are in the sparse case, with only 10 nonnull taxa. As a
 hypothetical true signal strength, we use the observed signal strength of the
 tenth most significant taxon from the real data,</p>
-<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="multivariate-power-analysis.html#cb54-1" tabindex="-1"></a>subset_size <span class="ot">&lt;-</span> <span class="dv">10</span></span>
-<span id="cb54-2"><a href="multivariate-power-analysis.html#cb54-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">colData</span>(t1d)<span class="sc">$</span>outcome2</span>
-<span id="cb54-3"><a href="multivariate-power-analysis.html#cb54-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">assay</span>(t1d)[t1d_order[subset_size], ]</span>
-<span id="cb54-4"><a href="multivariate-power-analysis.html#cb54-4" tabindex="-1"></a>test_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(x[y <span class="sc">==</span> <span class="st">&quot;T1D&quot;</span>], x[y <span class="sc">==</span> <span class="st">&quot;healthy&quot;</span>])</span>
-<span id="cb54-5"><a href="multivariate-power-analysis.html#cb54-5" tabindex="-1"></a>signal_strength <span class="ot">&lt;-</span> test_result<span class="sc">$</span>statistic</span>
-<span id="cb54-6"><a href="multivariate-power-analysis.html#cb54-6" tabindex="-1"></a>signal_strength</span></code></pre></div>
+<div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">subset_size</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
+<span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">$</span><span class="va">outcome2</span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">[</span><span class="va">t1d_order</span><span class="op">[</span><span class="va">subset_size</span><span class="op">]</span>, <span class="op">]</span></span>
+<span><span class="va">test_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="va">y</span> <span class="op">==</span> <span class="st">"T1D"</span><span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="va">y</span> <span class="op">==</span> <span class="st">"healthy"</span><span class="op">]</span><span class="op">)</span></span>
+<span><span class="va">signal_strength</span> <span class="op">&lt;-</span> <span class="va">test_result</span><span class="op">$</span><span class="va">statistic</span></span>
+<span><span class="va">signal_strength</span></span></code></pre></div>
 <pre><code>##         t 
 ## -2.092196</code></pre>
 <p>How many samples would we need in order to achieve 80% power in this setting?
 Accounting for multiple testing, we would need this taxon to be significant at
 the level <span class="math inline">\(\frac{10 \alpha}{427}\)</span>, which gives us,</p>
-<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="multivariate-power-analysis.html#cb56-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">pwr.t.test</span>(<span class="at">power =</span> <span class="fl">0.8</span>, <span class="at">d =</span> signal_strength, <span class="at">sig.level =</span> <span class="fl">0.05</span> <span class="sc">*</span> subset_size <span class="sc">/</span> <span class="fu">nrow</span>(t1d))</span>
-<span id="cb56-2"><a href="multivariate-power-analysis.html#cb56-2" tabindex="-1"></a>result<span class="sc">$</span>n</span></code></pre></div>
+<div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pwr/man/pwr.t.test.html">pwr.t.test</a></span><span class="op">(</span>power <span class="op">=</span> <span class="fl">0.8</span>, d <span class="op">=</span> <span class="va">signal_strength</span>, sig.level <span class="op">=</span> <span class="fl">0.05</span> <span class="op">*</span> <span class="va">subset_size</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="va">result</span><span class="op">$</span><span class="va">n</span></span></code></pre></div>
 <pre><code>## [1] 10.36249</code></pre>
 <p>So, according to this power analysis, we only need 11 samples each for the
 healthy and disease groups. In comparison to our earlier analysis using sPLS-DA,
@@ -892,7 +382,8 @@ requires some simplification, but the fact that a more realistic simulator
 points us towards noticeably larger sample sizes is an indication that we should
 not trust the <span class="math inline">\(t\)</span>-test calculation and instead suggest the larger sample sample
 from our sPLS-DA specific analysis.</p>
-<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="multivariate-power-analysis.html#cb58-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
@@ -938,68 +429,43 @@ from our sPLS-DA specific analysis.</p>
 
 </div>
 </div>
-            </section>
+  <div class="chapter-nav">
+<div class="prev"><a href="simulating-differential-abundance.html"><span class="header-section-number">2</span> Simulating Differential Abundance</a></div>
+<div class="next"><a href="microbiome-networks.html"><span class="header-section-number">4</span> Microbiome Networks</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#multivariate-power-analysis"><span class="header-section-number">3</span> Multivariate Power Analysis</a></li>
+<li><a class="nav-link" href="#interpreting-pls-da"><span class="header-section-number">3.1</span> Interpreting PLS-DA</a></li>
+<li><a class="nav-link" href="#estimation"><span class="header-section-number">3.2</span> Estimation</a></li>
+<li><a class="nav-link" href="#evaluation"><span class="header-section-number">3.3</span> Evaluation</a></li>
+<li><a class="nav-link" href="#pls-da-power-analysis"><span class="header-section-number">3.4</span> PLS-DA Power Analysis</a></li>
+<li><a class="nav-link" href="#comparison-with-t-test-calculation"><span class="header-section-number">3.5</span> Comparison with \(t\)-test calculation</a></li>
+</ul>
 
-          </div>
-        </div>
-      </div>
-<a href="simulating-differential-abundance.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="microbiome-networks.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Simulation for Microbiome Analysis</strong>" was written by Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao. It was last built on 2024-09-08.</p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/02-multivariate_power.Rmd",
-"text": "Edit"
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["simulation_for_microbiome.pdf", "simulation_for_microbiome.epub"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
-});
-});
-</script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -1011,7 +477,22 @@ gitbook.start({
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
 </body>
-
 </html>

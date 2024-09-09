@@ -1,208 +1,67 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 4 Microbiome Networks | Simulation for Microbiome Analysis</title>
-  <meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  <meta name="generator" content="bookdown 0.39.1 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="Chapter 4 Microbiome Networks | Simulation for Microbiome Analysis" />
-  <meta property="og:type" content="book" />
-  
-  <meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  <meta name="github-repo" content="rstudio/bookdown-demo" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 4 Microbiome Networks | Simulation for Microbiome Analysis" />
-  
-  <meta name="twitter:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  
-
-<meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
-
-
-<meta name="date" content="2024-07-12" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="multivariate-power-analysis.html"/>
-<link rel="next" href="batch-effect-correction.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-
-
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<style type="text/css">
-  
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 4 Microbiome Networks | Simulation for Microbiome Analysis</title>
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao">
+<meta name="description" content="Unlike human social networks, there is no simple way to observe microbe-microbe interactions – we have to make do with indirect evidence. One approach uses population profiles as a proxy for...">
+<meta name="generator" content="bookdown 0.40 with bs4_book()">
+<meta property="og:title" content="Chapter 4 Microbiome Networks | Simulation for Microbiome Analysis">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://krisrs1128.github.io/microbiome-simulation/microbiome-networks.html">
+<meta property="og:description" content="Unlike human social networks, there is no simple way to observe microbe-microbe interactions – we have to make do with indirect evidence. One approach uses population profiles as a proxy for...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 4 Microbiome Networks | Simulation for Microbiome Analysis">
+<meta name="twitter:description" content="Unlike human social networks, there is no simple way to observe microbe-microbe interactions – we have to make do with indirect evidence. One approach uses population profiles as a proxy for...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Simulation for Microbiome Analysis</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#setup"><i class="fa fa-check"></i><b>1.1</b> Setup</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#using-summarizedexperiment"><i class="fa fa-check"></i><b>1.2</b> Using <code>SummarizedExperiment</code></a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#warm-up-a-gaussian-example"><i class="fa fa-check"></i><b>1.3</b> Warm-up: A Gaussian Example</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html"><i class="fa fa-check"></i><b>2</b> Simulating Differential Abundance</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#critique"><i class="fa fa-check"></i><b>2.1</b> Critique</a></li>
-<li class="chapter" data-level="2.2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#power-analysis-loop"><i class="fa fa-check"></i><b>2.2</b> Power Analysis Loop</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html"><i class="fa fa-check"></i><b>3</b> Multivariate Power Analysis</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#interpreting-pls-da"><i class="fa fa-check"></i><b>3.1</b> Interpreting PLS-DA</a></li>
-<li class="chapter" data-level="3.2" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#estimation"><i class="fa fa-check"></i><b>3.2</b> Estimation</a></li>
-<li class="chapter" data-level="3.3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#evaluation"><i class="fa fa-check"></i><b>3.3</b> Evaluation</a></li>
-<li class="chapter" data-level="3.4" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#pls-da-power-analysis"><i class="fa fa-check"></i><b>3.4</b> PLS-DA Power Analysis</a></li>
-<li class="chapter" data-level="3.5" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#comparison-with-t-test-calculation"><i class="fa fa-check"></i><b>3.5</b> Comparison with <span class="math inline">\(t\)</span>-test calculation</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="microbiome-networks.html"><a href="microbiome-networks.html"><i class="fa fa-check"></i><b>4</b> Microbiome Networks</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="microbiome-networks.html"><a href="microbiome-networks.html#estimation-1"><i class="fa fa-check"></i><b>4.1</b> Estimation</a></li>
-<li class="chapter" data-level="4.2" data-path="microbiome-networks.html"><a href="microbiome-networks.html#evaluation-1"><i class="fa fa-check"></i><b>4.2</b> Evaluation</a></li>
-<li class="chapter" data-level="4.3" data-path="microbiome-networks.html"><a href="microbiome-networks.html#block-covariance"><i class="fa fa-check"></i><b>4.3</b> Block Covariance</a></li>
-<li class="chapter" data-level="4.4" data-path="microbiome-networks.html"><a href="microbiome-networks.html#generalization"><i class="fa fa-check"></i><b>4.4</b> Generalization</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>5</b> Batch Effect Correction</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#anaerobic-digestion-data"><i class="fa fa-check"></i><b>5.1</b> Anaerobic Digestion Data</a></li>
-<li class="chapter" data-level="5.2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#simulation-design"><i class="fa fa-check"></i><b>5.2</b> Simulation Design</a></li>
-<li class="chapter" data-level="5.3" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#benchmarking"><i class="fa fa-check"></i><b>5.3</b> Benchmarking</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="vertical-integration.html"><a href="vertical-integration.html"><i class="fa fa-check"></i><b>6</b> Vertical Integration</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="vertical-integration.html"><a href="vertical-integration.html#icu-dataset"><i class="fa fa-check"></i><b>6.1</b> ICU Dataset</a></li>
-<li class="chapter" data-level="6.2" data-path="vertical-integration.html"><a href="vertical-integration.html#interlude-using-map"><i class="fa fa-check"></i><b>6.2</b> Interlude: Using map</a></li>
-<li class="chapter" data-level="6.3" data-path="vertical-integration.html"><a href="vertical-integration.html#simulation-question"><i class="fa fa-check"></i><b>6.3</b> Simulation Question</a></li>
-<li class="chapter" data-level="6.4" data-path="vertical-integration.html"><a href="vertical-integration.html#simulation-results"><i class="fa fa-check"></i><b>6.4</b> Simulation Results</a></li>
-<li class="chapter" data-level="6.5" data-path="vertical-integration.html"><a href="vertical-integration.html#alignability"><i class="fa fa-check"></i><b>6.5</b> Alignability</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Simulation for Microbiome Analysis</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Simulation for Microbiome Analysis</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Introduction</a></li>
+<li><a class="" href="simulating-differential-abundance.html"><span class="header-section-number">2</span> Simulating Differential Abundance</a></li>
+<li><a class="" href="multivariate-power-analysis.html"><span class="header-section-number">3</span> Multivariate Power Analysis</a></li>
+<li><a class="active" href="microbiome-networks.html"><span class="header-section-number">4</span> Microbiome Networks</a></li>
+<li><a class="" href="batch-effect-correction.html"><span class="header-section-number">5</span> Batch Effect Correction</a></li>
+<li><a class="" href="vertical-integration.html"><span class="header-section-number">6</span> Vertical Integration</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="microbiome-networks" class="section level1 hasAnchor" number="4">
-<h1><span class="header-section-number">Chapter 4</span> Microbiome Networks<a href="microbiome-networks.html#microbiome-networks" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="microbiome-networks" class="section level1" number="4">
+<h1>
+<span class="header-section-number">4</span> Microbiome Networks<a class="anchor" aria-label="anchor" href="#microbiome-networks"><i class="fas fa-link"></i></a>
+</h1>
 <p>Unlike human social networks, there is no simple way to observe microbe-microbe
 interactions – we have to make do with indirect evidence. One approach uses
 population profiles as a proxy for ecological interaction. Taxa that often
@@ -214,15 +73,18 @@ dependence. A challenge in practice is that it’s hard to know which method to
 use when, since the problem is unsupervised. Even when thorough simulation
 benchmarking studies are available, it’s often not obvious how well those
 simulation setups match our problems of interest.</p>
-<div id="estimation-1" class="section level2 hasAnchor" number="4.1">
-<h2><span class="header-section-number">4.1</span> Estimation<a href="microbiome-networks.html#estimation-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="estimation-1" class="section level2" number="4.1">
+<h2>
+<span class="header-section-number">4.1</span> Estimation<a class="anchor" aria-label="anchor" href="#estimation-1"><i class="fas fa-link"></i></a>
+</h2>
 <p>Let’s use simulation to benchmark network estimation methods using data from
 rounds 1 and 2 of the <a href="https://journals.asm.org/doi/10.1128/msystems.00031-18">American Gut
 Project</a>. We will
 simulate data with known correlation structure and taxa-level marginals
 estimated from the study data. The block below reads in the data.</p>
-<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="microbiome-networks.html#cb60-1" tabindex="-1"></a><span class="fu">data</span>(amgut)</span>
-<span id="cb60-2"><a href="microbiome-networks.html#cb60-2" tabindex="-1"></a>amgut</span></code></pre></div>
+<div class="sourceCode" id="cb59"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">amgut</span><span class="op">)</span></span>
+<span><span class="va">amgut</span></span></code></pre></div>
 <pre><code>## class: SummarizedExperiment 
 ## dim: 45 261 
 ## metadata(0):
@@ -238,13 +100,14 @@ The data structure below captures all the simulator components, and we can swap
 pieces in and out to modify the form of the simulator. For example, if we
 wanted, we could <code>mutate</code> the family and link function associated with
 particular features.</p>
-<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="microbiome-networks.html#cb62-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
-<span id="cb62-2"><a href="microbiome-networks.html#cb62-2" tabindex="-1"></a>  amgut,</span>
-<span id="cb62-3"><a href="microbiome-networks.html#cb62-3" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">log</span>(sequencing_depth) <span class="sc">+</span> BMI,</span>
-<span id="cb62-4"><a href="microbiome-networks.html#cb62-4" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">ZINBLSS</span>()</span>
-<span id="cb62-5"><a href="microbiome-networks.html#cb62-5" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb62-6"><a href="microbiome-networks.html#cb62-6" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
-<span id="cb62-7"><a href="microbiome-networks.html#cb62-7" tabindex="-1"></a>sim</span></code></pre></div>
+<div class="sourceCode" id="cb61"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span></span>
+<span>  <span class="va">amgut</span>,</span>
+<span>  <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="va">sequencing_depth</span><span class="op">)</span> <span class="op">+</span> <span class="va">BMI</span>,</span>
+<span>  <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamboostLSS/man/families.html">ZINBLSS</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">estimate</span><span class="op">(</span>mstop <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span>
+<span><span class="va">sim</span></span></code></pre></div>
 <pre><code>## [Marginals]
 ## Plan:
 ## # A tibble: 6 × 3
@@ -283,8 +146,9 @@ workflow that applied to the original data can be applied to the simulated one
 without any changes. Notice also that <code>sample</code> defaults to drawing samples from
 the same design as the original input experiment (we’ll modify this using the
 <code>new_data</code> argument in a minute).</p>
-<div class="sourceCode" id="cb64"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb64-1"><a href="microbiome-networks.html#cb64-1" tabindex="-1"></a>simulated <span class="ot">&lt;-</span> <span class="fu">sample</span>(sim)</span>
-<span id="cb64-2"><a href="microbiome-networks.html#cb64-2" tabindex="-1"></a>simulated</span></code></pre></div>
+<div class="sourceCode" id="cb63"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">simulated</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
+<span><span class="va">simulated</span></span></code></pre></div>
 <pre><code>## class: SummarizedExperiment 
 ## dim: 45 261 
 ## metadata(0):
@@ -294,8 +158,10 @@ the same design as the original input experiment (we’ll modify this using the
 ## colnames(261): 000001879.1076223 000002437.1076448 ... 000002656.1076186 000001582.1076447
 ## colData names(167): X.SampleID BarcodeSequence ... Description sequencing_depth</code></pre>
 </div>
-<div id="evaluation-1" class="section level2 hasAnchor" number="4.2">
-<h2><span class="header-section-number">4.2</span> Evaluation<a href="microbiome-networks.html#evaluation-1" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="evaluation-1" class="section level2" number="4.2">
+<h2>
+<span class="header-section-number">4.2</span> Evaluation<a class="anchor" aria-label="anchor" href="#evaluation-1"><i class="fas fa-link"></i></a>
+</h2>
 <p>Let’s compare the marginal count distributions for the real and simulated data.
 We’ll need the data in “long” format to be able to make the ggplot2 figure. The
 <code>pivot_experiment</code> helper can transform the original <code>SummarizedExperiment</code>
@@ -303,117 +169,130 @@ objects in this way. Notice that the simulated data tends to overestimate the
 number of zeros in the high-abundance taxa. To refine the simulator, we should
 probably replace the zero-inflated negative binomial with ordinary negative
 binomials for these poorly fitted taxa.</p>
-<div class="sourceCode" id="cb66"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb66-1"><a href="microbiome-networks.html#cb66-1" tabindex="-1"></a><span class="fu">bind_rows</span>(</span>
-<span id="cb66-2"><a href="microbiome-networks.html#cb66-2" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">pivot_experiment</span>(amgut),</span>
-<span id="cb66-3"><a href="microbiome-networks.html#cb66-3" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">pivot_experiment</span>(simulated),</span>
-<span id="cb66-4"><a href="microbiome-networks.html#cb66-4" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">&quot;source&quot;</span></span>
-<span id="cb66-5"><a href="microbiome-networks.html#cb66-5" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb66-6"><a href="microbiome-networks.html#cb66-6" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">%in%</span> <span class="fu">rownames</span>(simulated)[<span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>]) <span class="sc">|&gt;</span></span>
-<span id="cb66-7"><a href="microbiome-networks.html#cb66-7" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb66-8"><a href="microbiome-networks.html#cb66-8" tabindex="-1"></a>  <span class="fu">geom_histogram</span>(</span>
-<span id="cb66-9"><a href="microbiome-networks.html#cb66-9" tabindex="-1"></a>    <span class="fu">aes</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> value), <span class="at">fill =</span> source),</span>
-<span id="cb66-10"><a href="microbiome-networks.html#cb66-10" tabindex="-1"></a>    <span class="at">position =</span> <span class="st">&quot;identity&quot;</span>, <span class="at">alpha =</span> <span class="fl">0.8</span></span>
-<span id="cb66-11"><a href="microbiome-networks.html#cb66-11" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb66-12"><a href="microbiome-networks.html#cb66-12" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">reorder</span>(feature, value), <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/histogram-critique-1.png" width="864" /></p>
+<div class="sourceCode" id="cb65"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  real <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/pivot_experiment.html">pivot_experiment</a></span><span class="op">(</span><span class="va">amgut</span><span class="op">)</span>,</span>
+<span>  simulated <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/pivot_experiment.html">pivot_experiment</a></span><span class="op">(</span><span class="va">simulated</span><span class="op">)</span>,</span>
+<span>  .id <span class="op">=</span> <span class="st">"source"</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">feature</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">simulated</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">20</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_histogram.html">geom_histogram</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">value</span><span class="op">)</span>, fill <span class="op">=</span> <span class="va">source</span><span class="op">)</span>,</span>
+<span>    position <span class="op">=</span> <span class="st">"identity"</span>, alpha <span class="op">=</span> <span class="fl">0.8</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">feature</span>, <span class="va">value</span><span class="op">)</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/histogram-critique-1.png" width="864"></div>
 <p>Are the learned relationships with BMI plausible? We can compare scatterplots of
 the real and simulated data against this variable. Note that, by default, the
 ribbons will be evaluated along all variables, which makes for the jagged
 ribbons (neighboring values for BMI might have different sequencing depth,
 potentially leading to quite different predictions). To remove this artifact, we
 can assume that all samples had exactly the same sequencing depth.</p>
-<div class="sourceCode" id="cb67"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb67-1"><a href="microbiome-networks.html#cb67-1" tabindex="-1"></a>new_data <span class="ot">&lt;-</span> <span class="fu">colData</span>(amgut) <span class="sc">|&gt;</span></span>
-<span id="cb67-2"><a href="microbiome-networks.html#cb67-2" tabindex="-1"></a>  <span class="fu">as_tibble</span>() <span class="sc">|&gt;</span></span>
-<span id="cb67-3"><a href="microbiome-networks.html#cb67-3" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">sequencing_depth =</span> <span class="fl">2e4</span>)</span>
-<span id="cb67-4"><a href="microbiome-networks.html#cb67-4" tabindex="-1"></a><span class="fu">plot</span>(sim, <span class="st">&quot;BMI&quot;</span>, <span class="fu">sample</span>(sim, <span class="at">new_data =</span> new_data), <span class="at">new_data =</span> new_data)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/bmi-scatter-1.png" width="1152" /></p>
+<div class="sourceCode" id="cb66"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">new_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">amgut</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tibble.tidyverse.org/reference/as_tibble.html">as_tibble</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>sequencing_depth <span class="op">=</span> <span class="fl">2e4</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/graphics/plot.default.html">plot</a></span><span class="op">(</span><span class="va">sim</span>, <span class="st">"BMI"</span>, <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">sim</span>, new_data <span class="op">=</span> <span class="va">new_data</span><span class="op">)</span>, new_data <span class="op">=</span> <span class="va">new_data</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/bmi-scatter-1.png" width="1152"></div>
 <p>We next visualize the correlation matrix estimated by the simulator’s copula
 model. There are a few pairs of taxa that are very highly correlated, and there
 are also a few taxa that seem to have higher correlation across a large number
 of taxa (e.g., the taxon in row 34). There is no obvious banding or block
 structure in this real data, though.</p>
-<div class="sourceCode" id="cb68"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb68-1"><a href="microbiome-networks.html#cb68-1" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">copula_parameters</span>(sim)</span>
-<span id="cb68-2"><a href="microbiome-networks.html#cb68-2" tabindex="-1"></a><span class="fu">heatmap</span>(rho)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/correlation-heatmap-1.png" width="480" /></p>
+<div class="sourceCode" id="cb67"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rho</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/copula_parameters.html">copula_parameters</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="va">rho</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/correlation-heatmap-1.png" width="480"></div>
 <p>The pair below is one of those with high positive correlation. You can replace
 the selection with the commented out line to see what one of the anticorrelated
 pairs of taxa looks like.</p>
-<div class="sourceCode" id="cb69"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb69-1"><a href="microbiome-networks.html#cb69-1" tabindex="-1"></a><span class="co"># taxa &lt;- rownames(amgut)[c(33, 43)]</span></span>
-<span id="cb69-2"><a href="microbiome-networks.html#cb69-2" tabindex="-1"></a>taxa <span class="ot">&lt;-</span> <span class="fu">rownames</span>(amgut)[<span class="fu">c</span>(<span class="dv">14</span>, <span class="dv">25</span>)]</span>
-<span id="cb69-3"><a href="microbiome-networks.html#cb69-3" tabindex="-1"></a><span class="fu">pivot_experiment</span>(amgut) <span class="sc">|&gt;</span></span>
-<span id="cb69-4"><a href="microbiome-networks.html#cb69-4" tabindex="-1"></a>  <span class="fu">filter</span>(feature <span class="sc">%in%</span> taxa) <span class="sc">|&gt;</span></span>
-<span id="cb69-5"><a href="microbiome-networks.html#cb69-5" tabindex="-1"></a>  <span class="fu">pivot_wider</span>(<span class="at">names_from =</span> feature) <span class="sc">|&gt;</span></span>
-<span id="cb69-6"><a href="microbiome-networks.html#cb69-6" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb69-7"><a href="microbiome-networks.html#cb69-7" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> .data[[taxa[<span class="dv">1</span>]]]), <span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> .data[[taxa[<span class="dv">2</span>]]])))</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/correlation_pairs-1.png" width="480" /></p>
+<div class="sourceCode" id="cb68"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="co"># taxa &lt;- rownames(amgut)[c(33, 43)]</span></span>
+<span><span class="va">taxa</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="va">amgut</span><span class="op">)</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">14</span>, <span class="fl">25</span><span class="op">)</span><span class="op">]</span></span>
+<span><span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/pivot_experiment.html">pivot_experiment</a></span><span class="op">(</span><span class="va">amgut</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/filter.html">filter</a></span><span class="op">(</span><span class="va">feature</span> <span class="op"><a href="https://rdrr.io/r/base/match.html">%in%</a></span> <span class="va">taxa</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_wider.html">pivot_wider</a></span><span class="op">(</span>names_from <span class="op">=</span> <span class="va">feature</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_point.html">geom_point</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">.data</span><span class="op">[[</span><span class="va">taxa</span><span class="op">[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">.data</span><span class="op">[[</span><span class="va">taxa</span><span class="op">[</span><span class="fl">2</span><span class="op">]</span><span class="op">]</span><span class="op">]</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/correlation_pairs-1.png" width="480"></div>
 </div>
-<div id="block-covariance" class="section level2 hasAnchor" number="4.3">
-<h2><span class="header-section-number">4.3</span> Block Covariance<a href="microbiome-networks.html#block-covariance" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="block-covariance" class="section level2" number="4.3">
+<h2>
+<span class="header-section-number">4.3</span> Block Covariance<a class="anchor" aria-label="anchor" href="#block-covariance"><i class="fas fa-link"></i></a>
+</h2>
 <p>Let’s replace the current copula correlation structure with one from a block
 diagonal matrix. In this example, the off-diagonal correlations are 0.6. We can
 use <code>mutate_correlation</code> to swap this new correlation matrix into our earlier
 simulator.</p>
-<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="microbiome-networks.html#cb70-1" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.4</span>, .<span class="dv">6</span>, <span class="fl">0.8</span>) <span class="sc">|&gt;</span></span>
-<span id="cb70-2"><a href="microbiome-networks.html#cb70-2" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">matrix</span>(., <span class="at">nrow =</span> <span class="dv">15</span>, <span class="at">ncol =</span> <span class="dv">15</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb70-3"><a href="microbiome-networks.html#cb70-3" tabindex="-1"></a>  Matrix<span class="sc">::</span><span class="fu">bdiag</span>() <span class="sc">|&gt;</span></span>
-<span id="cb70-4"><a href="microbiome-networks.html#cb70-4" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
-<span id="cb70-5"><a href="microbiome-networks.html#cb70-5" tabindex="-1"></a><span class="fu">diag</span>(rho) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
-<span id="cb70-6"><a href="microbiome-networks.html#cb70-6" tabindex="-1"></a></span>
-<span id="cb70-7"><a href="microbiome-networks.html#cb70-7" tabindex="-1"></a>simulated <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
-<span id="cb70-8"><a href="microbiome-networks.html#cb70-8" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho) <span class="sc">|&gt;</span></span>
-<span id="cb70-9"><a href="microbiome-networks.html#cb70-9" tabindex="-1"></a>  <span class="fu">sample</span>()</span>
-<span id="cb70-10"><a href="microbiome-networks.html#cb70-10" tabindex="-1"></a></span>
-<span id="cb70-11"><a href="microbiome-networks.html#cb70-11" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">assay</span>(simulated))</span></code></pre></div>
+<div class="sourceCode" id="cb69"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rho</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">0.4</span>, <span class="fl">.6</span>, <span class="fl">0.8</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/map.html">map</a></span><span class="op">(</span><span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">matrix</a></span><span class="op">(</span><span class="va">.</span>, nrow <span class="op">=</span> <span class="fl">15</span>, ncol <span class="op">=</span> <span class="fl">15</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">Matrix</span><span class="fu">::</span><span class="fu"><a href="https://rdrr.io/pkg/Matrix/man/bdiag.html">bdiag</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/base/diag.html">diag</a></span><span class="op">(</span><span class="va">rho</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fl">1</span></span>
+<span></span>
+<span><span class="va">simulated</span> <span class="op">&lt;-</span> <span class="va">sim</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/mutate_correlation.html">mutate_correlation</a></span><span class="op">(</span><span class="va">rho</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">simulated</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <p>Let’s first look at the <a href="https://github.com/zdk123/SpiecEasi"><code>SpiecEasi</code> covariance estimate</a>. This is a variant of the
 graphical lasso that is designed to be well-adapted to microbiome data. The good
 news is that it does warn that the default choices of <span class="math inline">\(\lambda\)</span> are too large,
 which is correct in this case. Unfortunately, it took a while to get this
 answer, and we had already been quite generous in allowing it to fit 10 choices
 of <span class="math inline">\(\lambda\)</span>.</p>
-<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="microbiome-networks.html#cb71-1" tabindex="-1"></a>rho_se <span class="ot">&lt;-</span> <span class="fu">spiec.easi</span>(x, <span class="at">nlambda =</span> <span class="dv">10</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb71-2"><a href="microbiome-networks.html#cb71-2" tabindex="-1"></a>  <span class="fu">getOptCov</span>() <span class="sc">|&gt;</span></span>
-<span id="cb71-3"><a href="microbiome-networks.html#cb71-3" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
-<span id="cb71-4"><a href="microbiome-networks.html#cb71-4" tabindex="-1"></a>  <span class="fu">cov2cor</span>()</span>
-<span id="cb71-5"><a href="microbiome-networks.html#cb71-5" tabindex="-1"></a><span class="fu">heatmap</span>(rho_se)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/spieceasi-1.png" width="672" /></p>
+<div class="sourceCode" id="cb70"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rho_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SpiecEasi/man/spiec.easi.html">spiec.easi</a></span><span class="op">(</span><span class="va">x</span>, nlambda <span class="op">=</span> <span class="fl">10</span>, pulsar.params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>rep.num <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/pkg/SpiecEasi/man/getOptInd.html">getOptCov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="va">rho_se</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/spieceasi-1.png" width="672"></div>
 <p>Let’s instead use the Ledoit-Wolf estimator on the log-transformed data. The
 results make much more sense.</p>
-<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="microbiome-networks.html#cb72-1" tabindex="-1"></a>rho_lw <span class="ot">&lt;-</span> <span class="fu">CovEst.2003LW</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> x))<span class="sc">$</span>S <span class="sc">|&gt;</span></span>
-<span id="cb72-2"><a href="microbiome-networks.html#cb72-2" tabindex="-1"></a>  <span class="fu">cov2cor</span>()</span>
-<span id="cb72-3"><a href="microbiome-networks.html#cb72-3" tabindex="-1"></a><span class="fu">heatmap</span>(rho_lw)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/lw-1.png" width="672" /></p>
+<div class="sourceCode" id="cb71"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">rho_lw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CovTools/man/CovEst.2003LW.html">CovEst.2003LW</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">S</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="fu"><a href="https://rdrr.io/r/stats/heatmap.html">heatmap</a></span><span class="op">(</span><span class="va">rho_lw</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/lw-1.png" width="672"></div>
 <p>Since color comparisons are difficult to evaluate precisely, we can also make a
 scatterplot comparing the different covariance estimators.</p>
-<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="microbiome-networks.html#cb73-1" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">truth =</span> <span class="fu">c</span>(rho), <span class="at">se =</span> <span class="fu">c</span>(rho_se), <span class="at">lw =</span> <span class="fu">c</span>(rho_lw)) <span class="sc">|&gt;</span></span>
-<span id="cb73-2"><a href="microbiome-networks.html#cb73-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>truth, <span class="at">values_to =</span> <span class="st">&quot;estimate&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb73-3"><a href="microbiome-networks.html#cb73-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb73-4"><a href="microbiome-networks.html#cb73-4" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(truth, estimate, <span class="at">col =</span> name), <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
-<span id="cb73-5"><a href="microbiome-networks.html#cb73-5" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
-<span id="cb73-6"><a href="microbiome-networks.html#cb73-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>name)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/covariance_metrics-1.png" width="672" /></p>
+<div class="sourceCode" id="cb72"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/base/data.frame.html">data.frame</a></span><span class="op">(</span>truth <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">rho</span><span class="op">)</span>, se <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">rho_se</span><span class="op">)</span>, lw <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="va">rho_lw</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://tidyr.tidyverse.org/reference/pivot_longer.html">pivot_longer</a></span><span class="op">(</span><span class="op">-</span><span class="va">truth</span>, values_to <span class="op">=</span> <span class="st">"estimate"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_jitter.html">geom_jitter</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">truth</span>, <span class="va">estimate</span>, col <span class="op">=</span> <span class="va">name</span><span class="op">)</span>, alpha <span class="op">=</span> <span class="fl">0.6</span>, size <span class="op">=</span> <span class="fl">0.4</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_abline.html">geom_abline</a></span><span class="op">(</span>slope <span class="op">=</span> <span class="fl">1</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">name</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/covariance_metrics-1.png" width="672"></div>
 </div>
-<div id="generalization" class="section level2 hasAnchor" number="4.4">
-<h2><span class="header-section-number">4.4</span> Generalization<a href="microbiome-networks.html#generalization" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="generalization" class="section level2" number="4.4">
+<h2>
+<span class="header-section-number">4.4</span> Generalization<a class="anchor" aria-label="anchor" href="#generalization"><i class="fas fa-link"></i></a>
+</h2>
 <p>What about other network structures? We can use the same logic to evaluate
 several network regimes. For example, the block below defines correlation
 matrices associated with scale-free and banded structures.</p>
-<div class="sourceCode" id="cb74"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb74-1"><a href="microbiome-networks.html#cb74-1" tabindex="-1"></a><span class="fu">data</span>(example_rho)</span>
-<span id="cb74-2"><a href="microbiome-networks.html#cb74-2" tabindex="-1"></a>rho_hat <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb74-3"><a href="microbiome-networks.html#cb74-3" tabindex="-1"></a><span class="cf">for</span> (r <span class="cf">in</span> <span class="fu">seq_along</span>(example_rho)) {</span>
-<span id="cb74-4"><a href="microbiome-networks.html#cb74-4" tabindex="-1"></a>  x <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
-<span id="cb74-5"><a href="microbiome-networks.html#cb74-5" tabindex="-1"></a>    <span class="fu">mutate_correlation</span>(example_rho[[r]]) <span class="sc">|&gt;</span></span>
-<span id="cb74-6"><a href="microbiome-networks.html#cb74-6" tabindex="-1"></a>    scDesigner<span class="sc">::</span><span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
-<span id="cb74-7"><a href="microbiome-networks.html#cb74-7" tabindex="-1"></a>    <span class="fu">assay</span>()</span>
-<span id="cb74-8"><a href="microbiome-networks.html#cb74-8" tabindex="-1"></a></span>
-<span id="cb74-9"><a href="microbiome-networks.html#cb74-9" tabindex="-1"></a>  rho_se <span class="ot">&lt;-</span> <span class="fu">spiec.easi</span>(<span class="fu">t</span>(x), <span class="at">nlambda =</span> <span class="dv">10</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
-<span id="cb74-10"><a href="microbiome-networks.html#cb74-10" tabindex="-1"></a>    <span class="fu">getOptCov</span>() <span class="sc">|&gt;</span></span>
-<span id="cb74-11"><a href="microbiome-networks.html#cb74-11" tabindex="-1"></a>    <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
-<span id="cb74-12"><a href="microbiome-networks.html#cb74-12" tabindex="-1"></a>    <span class="fu">cov2cor</span>()</span>
-<span id="cb74-13"><a href="microbiome-networks.html#cb74-13" tabindex="-1"></a>  rho_lw <span class="ot">&lt;-</span> <span class="fu">CovEst.2003LW</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> <span class="fu">t</span>(x)))<span class="sc">$</span>S <span class="sc">|&gt;</span></span>
-<span id="cb74-14"><a href="microbiome-networks.html#cb74-14" tabindex="-1"></a>    <span class="fu">cov2cor</span>()</span>
-<span id="cb74-15"><a href="microbiome-networks.html#cb74-15" tabindex="-1"></a>  rho_hat[[<span class="fu">names</span>(example_rho)[r]]] <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">se =</span> rho_se, <span class="at">lw =</span> rho_lw)</span>
-<span id="cb74-16"><a href="microbiome-networks.html#cb74-16" tabindex="-1"></a>}</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/visualize-difference-1.png" width="672" /></p>
+<div class="sourceCode" id="cb73"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">example_rho</span><span class="op">)</span></span>
+<span><span class="va">rho_hat</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">r</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_along</a></span><span class="op">(</span><span class="va">example_rho</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">x</span> <span class="op">&lt;-</span> <span class="va">sim</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/mutate_correlation.html">mutate_correlation</a></span><span class="op">(</span><span class="va">example_rho</span><span class="op">[[</span><span class="va">r</span><span class="op">]</span><span class="op">]</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu">scDesigner</span><span class="fu">::</span><span class="fu">sample</span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="op">)</span></span>
+<span></span>
+<span>  <span class="va">rho_se</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SpiecEasi/man/spiec.easi.html">spiec.easi</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span>, nlambda <span class="op">=</span> <span class="fl">10</span>, pulsar.params <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>rep.num <span class="op">=</span> <span class="fl">1</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/SpiecEasi/man/getOptInd.html">getOptCov</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/base/matrix.html">as.matrix</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">rho_lw</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/CovTools/man/CovEst.2003LW.html">CovEst.2003LW</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/Log.html">log</a></span><span class="op">(</span><span class="fl">1</span> <span class="op">+</span> <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="va">x</span><span class="op">)</span><span class="op">)</span><span class="op">)</span><span class="op">$</span><span class="va">S</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/r/stats/cor.html">cov2cor</a></span><span class="op">(</span><span class="op">)</span></span>
+<span>  <span class="va">rho_hat</span><span class="op">[[</span><span class="fu"><a href="https://rdrr.io/r/base/names.html">names</a></span><span class="op">(</span><span class="va">example_rho</span><span class="op">)</span><span class="op">[</span><span class="va">r</span><span class="op">]</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>se <span class="op">=</span> <span class="va">rho_se</span>, lw <span class="op">=</span> <span class="va">rho_lw</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/visualize-difference-1.png" width="672"></div>
 <p>This example shows that, when we start with real template data, it’s not too
 hard to setup a benchmarking experiment. It’s generally easier to reconfigure
 the components of an existing simulator than it is to specify all the simulation
@@ -429,68 +308,42 @@ workflow can be used as long as it applies to a <code>SummarizedExperiment</code
 
 </div>
 </div>
-            </section>
+  <div class="chapter-nav">
+<div class="prev"><a href="multivariate-power-analysis.html"><span class="header-section-number">3</span> Multivariate Power Analysis</a></div>
+<div class="next"><a href="batch-effect-correction.html"><span class="header-section-number">5</span> Batch Effect Correction</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#microbiome-networks"><span class="header-section-number">4</span> Microbiome Networks</a></li>
+<li><a class="nav-link" href="#estimation-1"><span class="header-section-number">4.1</span> Estimation</a></li>
+<li><a class="nav-link" href="#evaluation-1"><span class="header-section-number">4.2</span> Evaluation</a></li>
+<li><a class="nav-link" href="#block-covariance"><span class="header-section-number">4.3</span> Block Covariance</a></li>
+<li><a class="nav-link" href="#generalization"><span class="header-section-number">4.4</span> Generalization</a></li>
+</ul>
 
-          </div>
-        </div>
-      </div>
-<a href="multivariate-power-analysis.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="batch-effect-correction.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Simulation for Microbiome Analysis</strong>" was written by Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao. It was last built on 2024-09-08.</p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/03-network_benchmark.Rmd",
-"text": "Edit"
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["simulation_for_microbiome.pdf", "simulation_for_microbiome.epub"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
-});
-});
-</script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -502,7 +355,22 @@ gitbook.start({
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
 </body>
-
 </html>

@@ -1,0 +1,238 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="6.1 ICU Dataset | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>6.1 ICU Dataset | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="icu-dataset" class="section level2" number="6.1">
+<h2><span class="header-section-number">6.1</span> ICU Dataset</h2>
+<p>We’ll work with the ICU sepsis dataset previously studied by <a href="https://doi.org/10.1128/mSystems.01148-20">Haak et al.
+(2021)</a> and documented within a
+<a href="https://raw.githack.com/bioFAM/MOFA2_tutorials/master/R_tutorials/microbiome_vignette.html#train-mofa-model">vignette</a>
+for the MOFA package. The three datasets here are 16S bacterial, ITS fungal, and
+Virome assays, all applied to different healthy and sepsis patient populations.
+Moreover, some participants were on a course of antibiotics while others were
+not. The question is how either sepsis, antibiotics, or their interaction
+affects the microbiome viewed through these three assays. The data are printed
+below, they have already been filtered and CLR transformed following the MOFA
+vignette.</p>
+<div class="sourceCode" id="cb87"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb87-1"><a href="6.1-icu-dataset.html#cb87-1" tabindex="-1"></a><span class="fu">data</span>(icu)</span>
+<span id="cb87-2"><a href="6.1-icu-dataset.html#cb87-2" tabindex="-1"></a>icu</span></code></pre></div>
+<pre><code>## $Bacteria
+## class: SummarizedExperiment 
+## dim: 180 57 
+## metadata(0):
+## assays(1): clr
+## rownames(180): Acidaminococcus Actinomyces ... Veillonellaceae Weissella
+## rowData names(0):
+## colnames(57): TKI_F1 TKI_F10 ... TKI_F8 TKI_F9
+## colData names(16): Age Sexs ... Propionate Butyrate
+## 
+## $Fungi
+## class: SummarizedExperiment 
+## dim: 18 57 
+## metadata(0):
+## assays(1): clr
+## rownames(18): Agaricus Aspergillus ... Sclerotiniaceae Vishniacozyma
+## rowData names(0):
+## colnames(57): TKI_F1 TKI_F10 ... TKI_F8 TKI_F9
+## colData names(16): Age Sexs ... Propionate Butyrate
+## 
+## $Viruses
+## class: SummarizedExperiment 
+## dim: 42 57 
+## metadata(0):
+## assays(1): clr
+## rownames(42): Acidovorax phage Acinetobacter phage ... Streptomyces phage Vibrio phage
+## rowData names(0):
+## colnames(57): TKI_F1 TKI_F10 ... TKI_F8 TKI_F9
+## colData names(16): Age Sexs ... Propionate Butyrate</code></pre>
+<p>We can simultaneously analyze these data sources using block sPLS-DA. This is
+the multi-assay version of the analysis that we saw in the previous session.
+<code>exper_splsda</code> is a very light wrapper of a mixOmics function call, which you
+can read
+<a href="https://github.com/krisrs1128/intro-to-simulation/blob/9f842ef52fdbe9a137833531147ceb3bc1f7ae81/MIGsim/R/vertical_integration.R#L3">here</a>.
+The output plot below shows that each assay differs across groups, and this is
+quantitatively summarized by the high estimated weights between each category
+and the estimated PLS directions.</p>
+<div class="sourceCode" id="cb89"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb89-1"><a href="6.1-icu-dataset.html#cb89-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu)</span>
+<span id="cb89-2"><a href="6.1-icu-dataset.html#cb89-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-28-1.png" width="672" /></p>
+<div class="sourceCode" id="cb90"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb90-1"><a href="6.1-icu-dataset.html#cb90-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
+<pre><code>##              comp1     comp2
+## Bacteria 0.8580402 0.8191458
+## Fungi    0.6513668 0.4845247
+## Viruses  0.6118091 0.8047067</code></pre>
+</div>
+<p style="text-align: center;">
+<a href="6-vertical-integration.html"><button class="btn btn-default">Previous</button></a>
+<a href="6.2-interlude-using-map.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="1.3 Warm-up: A Gaussian Example | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>1.3 Warm-up: A Gaussian Example | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="warm-up-a-gaussian-example" class="section level2" number="1.3">
+<h2><span class="header-section-number">1.3</span> Warm-up: A Gaussian Example</h2>
+<p>Here’s a toy dataset to illustrate the main idea of GAMLSS. Each panel in the
+plot below represents a different feature (e.g., taxon, gene, metabolite…).
+The abundance varies smoothly over time, and in the first three panels, the
+trends differ by group assignment.</p>
+<div class="sourceCode" id="cb17"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb17-1"><a href="1.3-warm-up-a-gaussian-example.html#cb17-1" tabindex="-1"></a><span class="fu">data</span>(exper_ts)</span>
+<span id="cb17-2"><a href="1.3-warm-up-a-gaussian-example.html#cb17-2" tabindex="-1"></a><span class="fu">exper_lineplot</span>(exper_ts)</span></code></pre></div>
+<pre><code>## Warning: Removed 12 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-4-1.png" width="672" /></p>
+<p>We can try to approximate these data with a new simulator. The <code>setup_simulator</code>
+command takes the template <code>SummarizedExperiment</code> object as its first argument.
+The second gives an R formula syntax-style specification of GAMLSS parameters
+(mean and SD, in this case) dependence on sample properties. The last argument
+gives the type of model to fit, in this case, a Gaussian location-shape-scale
+model.</p>
+<div class="sourceCode" id="cb19"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb19-1"><a href="1.3-warm-up-a-gaussian-example.html#cb19-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(exper_ts, <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>) <span class="sc">*</span> group, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb19-2"><a href="1.3-warm-up-a-gaussian-example.html#cb19-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
+<span id="cb19-3"><a href="1.3-warm-up-a-gaussian-example.html#cb19-3" tabindex="-1"></a></span>
+<span id="cb19-4"><a href="1.3-warm-up-a-gaussian-example.html#cb19-4" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb19-5"><a href="1.3-warm-up-a-gaussian-example.html#cb19-5" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<pre><code>## Warning: Removed 1 row containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p><strong>Exercise</strong>: Right now, each panel allows for an interaction between the trend and
+group type. Can you define a simulator where the groups have no effect on the
+trends for the first two panels? This is the basis for defining synthetic
+negative controls.</p>
+<div class="sourceCode" id="cb21"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb21-1"><a href="1.3-warm-up-a-gaussian-example.html#cb21-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb21-2"><a href="1.3-warm-up-a-gaussian-example.html#cb21-2" tabindex="-1"></a>  scDesigner<span class="sc">::</span><span class="fu">mutate</span>(</span>
+<span id="cb21-3"><a href="1.3-warm-up-a-gaussian-example.html#cb21-3" tabindex="-1"></a>    <span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>,</span>
+<span id="cb21-4"><a href="1.3-warm-up-a-gaussian-example.html#cb21-4" tabindex="-1"></a>    <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)</span>
+<span id="cb21-5"><a href="1.3-warm-up-a-gaussian-example.html#cb21-5" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb21-6"><a href="1.3-warm-up-a-gaussian-example.html#cb21-6" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
+<span id="cb21-7"><a href="1.3-warm-up-a-gaussian-example.html#cb21-7" tabindex="-1"></a></span>
+<span id="cb21-8"><a href="1.3-warm-up-a-gaussian-example.html#cb21-8" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb21-9"><a href="1.3-warm-up-a-gaussian-example.html#cb21-9" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<p><strong>Solution</strong>: We can modify the formula so that it no longer has an interaction
+with group. We just need to remove the <code>* group</code> from the original formula in our updated
+link function. To ensure that this only applies to the first two panels, we use
+1:2 in the first argument of <code>mutate</code>. This first argument specifies which
+features to apply the new formula to.</p>
+<div class="sourceCode" id="cb22"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb22-1"><a href="1.3-warm-up-a-gaussian-example.html#cb22-1" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb22-2"><a href="1.3-warm-up-a-gaussian-example.html#cb22-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">2</span>, <span class="at">link =</span> <span class="sc">~</span> <span class="fu">ns</span>(time, <span class="at">df =</span> <span class="dv">7</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb22-3"><a href="1.3-warm-up-a-gaussian-example.html#cb22-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span>
+<span id="cb22-4"><a href="1.3-warm-up-a-gaussian-example.html#cb22-4" tabindex="-1"></a></span>
+<span id="cb22-5"><a href="1.3-warm-up-a-gaussian-example.html#cb22-5" tabindex="-1"></a><span class="fu">sample</span>(sim) <span class="sc">|&gt;</span></span>
+<span id="cb22-6"><a href="1.3-warm-up-a-gaussian-example.html#cb22-6" tabindex="-1"></a>  <span class="fu">exper_lineplot</span>()</span></code></pre></div>
+<pre><code>## Warning: Removed 4 rows containing missing values or values outside the scale range (`geom_point()`).</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<div class="sourceCode" id="cb24"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb24-1"><a href="1.3-warm-up-a-gaussian-example.html#cb24-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.4.1 Patched (2024-08-21 r87049)
+## Platform: aarch64-apple-darwin20
+## Running under: macOS Sonoma 14.5
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: America/Chicago
+## tzcode source: internal
+## 
+## attached base packages:
+##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] TreeSummarizedExperiment_2.13.0 Biostrings_2.73.1               XVector_0.45.0                  SingleCellExperiment_1.27.2     scDesigner_0.0.0.9000           purrr_1.0.2                    
+##  [7] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                     pwr_1.3-0                       patchwork_1.2.0                
+## [13] mutoss_0.1-13                   mvtnorm_1.3-1                   mixOmics_6.29.0                 lattice_0.22-6                  MASS_7.3-61                     glue_1.7.0                     
+## [19] ggplot2_3.5.1                   ggdist_3.3.2                    gamboostLSS_2.0-7               mboost_2.9-11                   stabs_0.6-4                     forcats_1.0.0                  
+## [25] dplyr_1.1.4                     SummarizedExperiment_1.35.1     Biobase_2.65.1                  GenomicRanges_1.57.1            GenomeInfoDb_1.41.1             IRanges_2.39.2                 
+## [31] S4Vectors_0.43.2                BiocGenerics_0.51.1             MatrixGenerics_1.17.0           matrixStats_1.4.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
+## 
+## loaded via a namespace (and not attached):
+##   [1] minpack.lm_1.2-4        rpart_4.1.23            lifecycle_1.0.4         Rdpack_2.6.1            edgeR_4.3.14            doParallel_1.0.17       insight_0.20.4          magrittr_2.0.3         
+##   [9] limma_3.61.9            sass_0.4.9              rmarkdown_2.28          jquerylib_0.1.4         yaml_2.3.10             plotrix_3.8-4           RColorBrewer_1.1-3      ADGofTest_0.3          
+##  [17] multcomp_1.4-26         abind_1.4-5             zlibbioc_1.51.1         expm_1.0-0              quadprog_1.5-8          pspline_1.0-20          kde1d_1.0.7             yulab.utils_0.1.7      
+##  [25] rgl_1.3.1               pracma_2.4.4            TH.data_1.1-2           sandwich_3.1-0          GenomeInfoDbData_1.2.12 ggrepel_0.9.5           tidytree_0.4.6          ellipse_0.5.0          
+##  [33] RSpectra_0.16-2         codetools_0.2-20        DelayedArray_0.31.11    shapes_1.2.7            tidyselect_1.2.1        shape_1.4.6.1           farver_2.1.2            UCSC.utils_1.1.0       
+##  [41] randtoolbox_2.0.4       base64enc_0.1-3         jsonlite_1.8.8          multtest_2.61.0         Formula_1.2-5           survival_3.7-0          iterators_1.0.14        foreach_1.5.2          
+##  [49] tools_4.4.1             progress_1.2.3          treeio_1.29.1           Rcpp_1.0.13             rARPACK_0.11-0          gridExtra_2.3           Rttf2pt1_1.3.12         SparseArray_1.5.31     
+##  [57] xfun_0.47               distributional_0.4.0    withr_3.0.1             numDeriv_2016.8-1.1     fastmap_1.2.0           fansi_1.0.6             digest_0.6.37           R6_2.5.1               
+##  [65] colorspace_2.1-1        inum_1.0-5              copula_1.1-4            flare_1.7.0.1           utf8_1.2.4              generics_0.1.3          corpcor_1.6.10          prettyunits_1.2.0      
+##  [73] pulsar_0.3.11           httr_1.4.7              htmlwidgets_1.6.4       S4Arrays_1.5.7          scatterplot3d_0.3-44    rngWELL_0.10-9          pkgconfig_2.0.3         geigen_2.3             
+##  [81] gtable_0.3.5            pcaPP_2.0-5             htmltools_0.5.8.1       bookdown_0.40           scales_1.3.0            SHT_0.1.8               knitr_1.48              rstudioapi_0.16.0      
+##  [89] reshape2_1.4.4          nlme_3.1-166            cachem_1.1.0            zoo_1.8-12              stringr_1.5.1           libcoin_1.0-10          extrafont_0.19          pillar_1.9.0           
+##  [97] grid_4.4.1              vctrs_0.6.5             VGAM_1.1-11             huge_1.3.5              extrafontdb_1.0         gamlss.dist_6.1-1       evaluate_0.24.0         cli_3.6.3              
+## [105] locfit_1.5-9.10         compiler_4.4.1          rlang_1.1.4             crayon_1.5.3            labeling_0.4.3          fs_1.6.4                plyr_1.8.9              stringi_1.8.4          
+## [113] BiocParallel_1.39.0     nnls_1.5                assertthat_0.2.1        rvinecopulib_0.6.3.1.1  munsell_0.5.1           gsl_2.1-8               lazyeval_0.2.2          glmnet_4.1-8           
+## [121] Matrix_1.7-0            hms_1.1.3               stabledist_0.7-2        statmod_1.5.0           highr_0.11              rbibutils_2.2.16        partykit_1.2-22         igraph_2.0.3           
+## [129] bslib_0.8.0             ape_5.8</code></pre>
+
+</div>
+<!-- </div> -->
+<p style="text-align: center;">
+<a href="1.2-using-summarizedexperiment.html"><button class="btn btn-default">Previous</button></a>
+<a href="2-simulating-differential-abundance.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

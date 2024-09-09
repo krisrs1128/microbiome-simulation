@@ -1,0 +1,241 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="1.2 Using SummarizedExperiment | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>1.2 Using SummarizedExperiment | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="using-summarizedexperiment" class="section level2" number="1.2">
+<h2><span class="header-section-number">1.2</span> Using <code>SummarizedExperiment</code></h2>
+<p><code>SummarizedExperiment</code> data structures simplify manipulation of sequencing
+experiments, and we’ll be using them throughout these tutorials. For example,
+they distinguish between molecule counts, which are stored in the <code>assay</code> slot,
+and sample descriptors, which are stored in <code>colData</code>. At the same time, these
+separate components are nicely synchronized. For example, subsetting samples
+from one of these tables automatically subsets the other.</p>
+<p>The line below loads a small subset of genera from the
+<a href="https://microbiome.github.io/tutorials/Atlas.html">Atlas</a> experiment, which
+profiled the gut microbiomes from 1006 healthy adults in Western Europe.</p>
+<div class="sourceCode" id="cb3"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb3-1"><a href="1.2-using-summarizedexperiment.html#cb3-1" tabindex="-1"></a><span class="fu">data</span>(atlas)</span>
+<span id="cb3-2"><a href="1.2-using-summarizedexperiment.html#cb3-2" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rowData</span>(atlas)<span class="sc">$</span>Phylum)</span></code></pre></div>
+<pre><code>## 
+## Actinobacteria  Bacteroidetes     Firmicutes 
+##              1              2             21</code></pre>
+<div class="sourceCode" id="cb5"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb5-1"><a href="1.2-using-summarizedexperiment.html#cb5-1" tabindex="-1"></a><span class="fu">mean</span>(atlas<span class="sc">$</span>age)</span></code></pre></div>
+<pre><code>## [1] 45.15629</code></pre>
+<div class="sourceCode" id="cb7"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb7-1"><a href="1.2-using-summarizedexperiment.html#cb7-1" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">colData</span>(atlas)<span class="sc">$</span>bmi_group <span class="sc">==</span> <span class="st">&quot;obese&quot;</span></span>
+<span id="cb7-2"><a href="1.2-using-summarizedexperiment.html#cb7-2" tabindex="-1"></a>abundances <span class="ot">&lt;-</span> <span class="fu">assay</span>(atlas)</span>
+<span id="cb7-3"><a href="1.2-using-summarizedexperiment.html#cb7-3" tabindex="-1"></a><span class="fu">rowMeans</span>(abundances[, ix])</span></code></pre></div>
+<pre><code>##                   Allistipes et rel.          Anaerostipes caccae et rel.         Bacteroides vulgatus et rel.                      Bifidobacterium     Bryantella formatexigens et rel. 
+##                            289.85263                            123.84211                           1235.44211                            120.72982                            137.74737 
+##       Butyrivibrio crossotus et rel.        Clostridium cellulosi et rel.           Clostridium leptum et rel.           Clostridium nexile et rel.     Clostridium orbiscindens et rel. 
+##                            188.54035                            437.13684                            129.88070                             73.69474                            231.82807 
+##       Clostridium sphenoides et rel.        Clostridium symbiosum et rel.         Coprococcus eutactus et rel.        Dorea formicigenerans et rel.    Lachnospira pectinoschiza et rel. 
+##                            139.35439                            331.90175                            222.15088                            176.07368                            127.75439 
+##   Oscillospira guillermondii et rel. Outgrouping clostridium cluster XIVa          Ruminococcus bromii et rel.        Ruminococcus callidus et rel.           Ruminococcus obeum et rel. 
+##                           1560.27368                             91.93684                            100.09123                            103.61754                            449.28421 
+##       Sporobacter termitidis et rel.     Subdoligranulum variable at rel.           Uncultured Clostridiales I          Uncultured Clostridiales II 
+##                            423.71579                            442.34737                            191.28772                            152.83509</code></pre>
+<p><strong>Exercise</strong>: To practice working with <code>SummarizedExperiment</code>
+objects, try answering:</p>
+<ul>
+<li>How many genera are available in this experiment object?</li>
+<li>What was the most common phylum in this dataset?</li>
+<li>What was the average participant age?</li>
+<li>What was the average abundance of <code>Allistipes et rel.</code> among people in the <code>obese</code> BMI group?</li>
+</ul>
+<p><em>Hint: The most important functions are <code>assay()</code>, <code>rowData()</code>, and <code>colData()</code>.</em></p>
+<p><strong>Solution</strong></p>
+<div class="sourceCode" id="cb9"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb9-1"><a href="1.2-using-summarizedexperiment.html#cb9-1" tabindex="-1"></a><span class="fu">nrow</span>(atlas)</span></code></pre></div>
+<pre><code>## [1] 24</code></pre>
+<div class="sourceCode" id="cb11"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb11-1"><a href="1.2-using-summarizedexperiment.html#cb11-1" tabindex="-1"></a><span class="fu">table</span>(<span class="fu">rowData</span>(atlas)<span class="sc">$</span>Phylum)</span></code></pre></div>
+<pre><code>## 
+## Actinobacteria  Bacteroidetes     Firmicutes 
+##              1              2             21</code></pre>
+<div class="sourceCode" id="cb13"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb13-1"><a href="1.2-using-summarizedexperiment.html#cb13-1" tabindex="-1"></a><span class="fu">mean</span>(atlas<span class="sc">$</span>age)</span></code></pre></div>
+<pre><code>## [1] 45.15629</code></pre>
+<div class="sourceCode" id="cb15"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb15-1"><a href="1.2-using-summarizedexperiment.html#cb15-1" tabindex="-1"></a>atlas[, atlas<span class="sc">$</span>bmi_group <span class="sc">==</span> <span class="st">&quot;obese&quot;</span>] <span class="sc">|&gt;</span></span>
+<span id="cb15-2"><a href="1.2-using-summarizedexperiment.html#cb15-2" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb15-3"><a href="1.2-using-summarizedexperiment.html#cb15-3" tabindex="-1"></a>  <span class="fu">rowMeans</span>()</span></code></pre></div>
+<pre><code>##                   Allistipes et rel.          Anaerostipes caccae et rel.         Bacteroides vulgatus et rel.                      Bifidobacterium     Bryantella formatexigens et rel. 
+##                            289.85263                            123.84211                           1235.44211                            120.72982                            137.74737 
+##       Butyrivibrio crossotus et rel.        Clostridium cellulosi et rel.           Clostridium leptum et rel.           Clostridium nexile et rel.     Clostridium orbiscindens et rel. 
+##                            188.54035                            437.13684                            129.88070                             73.69474                            231.82807 
+##       Clostridium sphenoides et rel.        Clostridium symbiosum et rel.         Coprococcus eutactus et rel.        Dorea formicigenerans et rel.    Lachnospira pectinoschiza et rel. 
+##                            139.35439                            331.90175                            222.15088                            176.07368                            127.75439 
+##   Oscillospira guillermondii et rel. Outgrouping clostridium cluster XIVa          Ruminococcus bromii et rel.        Ruminococcus callidus et rel.           Ruminococcus obeum et rel. 
+##                           1560.27368                             91.93684                            100.09123                            103.61754                            449.28421 
+##       Sporobacter termitidis et rel.     Subdoligranulum variable at rel.           Uncultured Clostridiales I          Uncultured Clostridiales II 
+##                            423.71579                            442.34737                            191.28772                            152.83509</code></pre>
+</div>
+<p style="text-align: center;">
+<a href="1.1-setup.html"><button class="btn btn-default">Previous</button></a>
+<a href="1.3-warm-up-a-gaussian-example.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

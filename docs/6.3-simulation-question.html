@@ -1,0 +1,226 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="6.3 Simulation Question | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>6.3 Simulation Question | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="simulation-question" class="section level2" number="6.3">
+<h2><span class="header-section-number">6.3</span> Simulation Question</h2>
+<p>How would the output have looked if 16S community composition had not been
+related to disease or antibiotics groups? Since integrative analysis prioritizes
+similarities across sources, we expect this to mask some of the real differences
+in the fungal and virus data as well. We can use simulation to gauge the extent
+of this masking.</p>
+<p>Our first step is to train a simulator. We’re just learning four different
+setes of parameters for each of the four observed groups. This is not as nuanced
+as learning separate effects for sepsis and antibiotics, but it will be enough
+for illustration. We have used <code>map</code> to estimate a simulator for each assay in
+the <code>icu</code> list.</p>
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="6.3-simulation-question.html#cb101-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">map</span>(</span>
+<span id="cb101-2"><a href="6.3-simulation-question.html#cb101-2" tabindex="-1"></a>  icu,</span>
+<span id="cb101-3"><a href="6.3-simulation-question.html#cb101-3" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">setup_simulator</span>(., <span class="sc">~</span>Category, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb101-4"><a href="6.3-simulation-question.html#cb101-4" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span>
+<span id="cb101-5"><a href="6.3-simulation-question.html#cb101-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>So far, we haven’t tried removing any relationships present in the 16S assay,
+and indeed our integrative analysis output on the simulated data looks
+comparable to that from the original study.</p>
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="6.3-simulation-question.html#cb102-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb102-2"><a href="6.3-simulation-question.html#cb102-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb102-3"><a href="6.3-simulation-question.html#cb102-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
+<span id="cb102-4"><a href="6.3-simulation-question.html#cb102-4" tabindex="-1"></a></span>
+<span id="cb102-5"><a href="6.3-simulation-question.html#cb102-5" tabindex="-1"></a>fit_sim <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
+<span id="cb102-6"><a href="6.3-simulation-question.html#cb102-6" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit_sim)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<div class="sourceCode" id="cb103"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb103-1"><a href="6.3-simulation-question.html#cb103-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
+<pre><code>##              comp1     comp2
+## Bacteria 0.8580402 0.8191458
+## Fungi    0.6513668 0.4845247
+## Viruses  0.6118091 0.8047067</code></pre>
+<p><strong>Exercise</strong>: Modify the simulator above so that the 16S group no longer depends
+on disease cateogry. This will allow us to study how the integrative analysis
+output changes when the data are not alignable.</p>
+<div class="sourceCode" id="cb105"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb105-1"><a href="6.3-simulation-question.html#cb105-1" tabindex="-1"></a>null_simulator <span class="ot">&lt;-</span> simulator</span>
+<span id="cb105-2"><a href="6.3-simulation-question.html#cb105-2" tabindex="-1"></a><span class="co"># fill this in</span></span>
+<span id="cb105-3"><a href="6.3-simulation-question.html#cb105-3" tabindex="-1"></a><span class="co"># null_simulator[[1]] &lt;- ???</span></span></code></pre></div>
+<p><strong>Solution</strong>: We need to define a new link that no longer depends on <code>Category</code>. One solution
+is to modify the existing simulator in place using <code>mutate</code>.</p>
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="6.3-simulation-question.html#cb106-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> simulator[[<span class="dv">1</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb106-2"><a href="6.3-simulation-question.html#cb106-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">180</span>, <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb106-3"><a href="6.3-simulation-question.html#cb106-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<p>Since we are modifying all taxa, a simpler solution is to just define a
+new simulator from scratch.</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="6.3-simulation-question.html#cb107-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(icu[[<span class="dv">1</span>]], <span class="sc">~</span><span class="dv">1</span>, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb107-2"><a href="6.3-simulation-question.html#cb107-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+</div>
+<p style="text-align: center;">
+<a href="6.2-interlude-using-map.html"><button class="btn btn-default">Previous</button></a>
+<a href="6.4-simulation-results.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

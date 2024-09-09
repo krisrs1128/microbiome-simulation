@@ -1,208 +1,67 @@
 <!DOCTYPE html>
-<html lang="" xml:lang="">
+<html lang="en">
 <head>
-
-  <meta charset="utf-8" />
-  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
-  <title>Chapter 2 Simulating Differential Abundance | Simulation for Microbiome Analysis</title>
-  <meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  <meta name="generator" content="bookdown 0.39.1 and GitBook 2.6.7" />
-
-  <meta property="og:title" content="Chapter 2 Simulating Differential Abundance | Simulation for Microbiome Analysis" />
-  <meta property="og:type" content="book" />
-  
-  <meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  <meta name="github-repo" content="rstudio/bookdown-demo" />
-
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="Chapter 2 Simulating Differential Abundance | Simulation for Microbiome Analysis" />
-  
-  <meta name="twitter:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
-  
-
-<meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
-
-
-<meta name="date" content="2024-07-12" />
-
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
-  <meta name="apple-mobile-web-app-capable" content="yes" />
-  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
-  
-  
-<link rel="prev" href="index.html"/>
-<link rel="next" href="multivariate-power-analysis.html"/>
-<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
-<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
-<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
-<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
-
-
-
-
-
-
-
-
-<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
-<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
-<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
-
-
-<style type="text/css">
-pre > code.sourceCode { white-space: pre; position: relative; }
-pre > code.sourceCode > span { line-height: 1.25; }
-pre > code.sourceCode > span:empty { height: 1.2em; }
-.sourceCode { overflow: visible; }
-code.sourceCode > span { color: inherit; text-decoration: inherit; }
-pre.sourceCode { margin: 0; }
-@media screen {
-div.sourceCode { overflow: auto; }
-}
-@media print {
-pre > code.sourceCode { white-space: pre-wrap; }
-pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
-}
-pre.numberSource code
-  { counter-reset: source-line 0; }
-pre.numberSource code > span
-  { position: relative; left: -4em; counter-increment: source-line; }
-pre.numberSource code > span > a:first-child::before
-  { content: counter(source-line);
-    position: relative; left: -1em; text-align: right; vertical-align: baseline;
-    border: none; display: inline-block;
-    -webkit-touch-callout: none; -webkit-user-select: none;
-    -khtml-user-select: none; -moz-user-select: none;
-    -ms-user-select: none; user-select: none;
-    padding: 0 4px; width: 4em;
-    color: #aaaaaa;
-  }
-pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
-div.sourceCode
-  {   }
-@media screen {
-pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
-}
-code span.al { color: #ff0000; font-weight: bold; } /* Alert */
-code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
-code span.at { color: #7d9029; } /* Attribute */
-code span.bn { color: #40a070; } /* BaseN */
-code span.bu { color: #008000; } /* BuiltIn */
-code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
-code span.ch { color: #4070a0; } /* Char */
-code span.cn { color: #880000; } /* Constant */
-code span.co { color: #60a0b0; font-style: italic; } /* Comment */
-code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
-code span.do { color: #ba2121; font-style: italic; } /* Documentation */
-code span.dt { color: #902000; } /* DataType */
-code span.dv { color: #40a070; } /* DecVal */
-code span.er { color: #ff0000; font-weight: bold; } /* Error */
-code span.ex { } /* Extension */
-code span.fl { color: #40a070; } /* Float */
-code span.fu { color: #06287e; } /* Function */
-code span.im { color: #008000; font-weight: bold; } /* Import */
-code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
-code span.kw { color: #007020; font-weight: bold; } /* Keyword */
-code span.op { color: #666666; } /* Operator */
-code span.ot { color: #007020; } /* Other */
-code span.pp { color: #bc7a00; } /* Preprocessor */
-code span.sc { color: #4070a0; } /* SpecialChar */
-code span.ss { color: #bb6688; } /* SpecialString */
-code span.st { color: #4070a0; } /* String */
-code span.va { color: #19177c; } /* Variable */
-code span.vs { color: #4070a0; } /* VerbatimString */
-code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
-</style>
-
-<style type="text/css">
-  
-  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
-</style>
-
-<link rel="stylesheet" href="style.css" type="text/css" />
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<title>Chapter 2 Simulating Differential Abundance | Simulation for Microbiome Analysis</title>
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao">
+<meta name="description" content="Before we consider simulating entire microbial communities, with their complex correlation structures, let’s learn simulators for individual taxa. This is already enough to analyze taxon-level...">
+<meta name="generator" content="bookdown 0.40 with bs4_book()">
+<meta property="og:title" content="Chapter 2 Simulating Differential Abundance | Simulation for Microbiome Analysis">
+<meta property="og:type" content="book">
+<meta property="og:url" content="https://krisrs1128.github.io/microbiome-simulation/simulating-differential-abundance.html">
+<meta property="og:description" content="Before we consider simulating entire microbial communities, with their complex correlation structures, let’s learn simulators for individual taxa. This is already enough to analyze taxon-level...">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Chapter 2 Simulating Differential Abundance | Simulation for Microbiome Analysis">
+<meta name="twitter:description" content="Before we consider simulating entire microbial communities, with their complex correlation structures, let’s learn simulators for individual taxa. This is already enough to analyze taxon-level...">
+<!-- JS --><script src="https://cdnjs.cloudflare.com/ajax/libs/clipboard.js/2.0.6/clipboard.min.js" integrity="sha256-inc5kl9MA1hkeYUt+EC3BhlIgyp/2jDIyBLS6k3UxPI=" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/fuse.js/6.4.6/fuse.js" integrity="sha512-zv6Ywkjyktsohkbp9bb45V6tEMoWhzFzXis+LrMehmJZZSys19Yxf1dopHx7WzIKxr5tK2dVcYmaCk2uqdjF4A==" crossorigin="anonymous"></script><script src="https://kit.fontawesome.com/6ecbd6c532.js" crossorigin="anonymous"></script><script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script><meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+<link href="libs/bootstrap-4.6.0/bootstrap.min.css" rel="stylesheet">
+<script src="libs/bootstrap-4.6.0/bootstrap.bundle.min.js"></script><script src="libs/bs3compat-0.8.0/transition.js"></script><script src="libs/bs3compat-0.8.0/tabs.js"></script><script src="libs/bs3compat-0.8.0/bs3compat.js"></script><link href="libs/bs4_book-1.0.0/bs4_book.css" rel="stylesheet">
+<script src="libs/bs4_book-1.0.0/bs4_book.js"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/autocomplete.js/0.38.0/autocomplete.jquery.min.js" integrity="sha512-GU9ayf+66Xx2TmpxqJpliWbT5PiGYxpaG8rfnBEk1LL8l1KGkRShhngwdXK1UgqhAzWpZHSiYPc09/NwDQIGyg==" crossorigin="anonymous"></script><script src="https://cdnjs.cloudflare.com/ajax/libs/mark.js/8.11.1/mark.min.js" integrity="sha512-5CYOlHXGh6QpOFA/TeTylKLWfB3ftPsde7AnmhuitiTX4K5SqCLBeKro6sPS8ilsz1Q4NRx3v8Ko2IBiszzdww==" crossorigin="anonymous"></script><!-- CSS --><style type="text/css">
+    
+    div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+  </style>
+<link rel="stylesheet" href="style.css">
 </head>
+<body data-spy="scroll" data-target="#toc">
 
-<body>
+<div class="container-fluid">
+<div class="row">
+  <header class="col-sm-12 col-lg-3 sidebar sidebar-book"><a class="sr-only sr-only-focusable" href="#content">Skip to main content</a>
 
-
-
-  <div class="book without-animation with-summary font-size-2 font-family-1" data-basepath=".">
-
-    <div class="book-summary">
-      <nav role="navigation">
-
-<ul class="summary">
-<li><a href="./">Simulation for Microbiome Analysis</a></li>
-
-<li class="divider"></li>
-<li class="chapter" data-level="1" data-path="index.html"><a href="index.html"><i class="fa fa-check"></i><b>1</b> Introduction</a>
-<ul>
-<li class="chapter" data-level="1.1" data-path="index.html"><a href="index.html#setup"><i class="fa fa-check"></i><b>1.1</b> Setup</a></li>
-<li class="chapter" data-level="1.2" data-path="index.html"><a href="index.html#using-summarizedexperiment"><i class="fa fa-check"></i><b>1.2</b> Using <code>SummarizedExperiment</code></a></li>
-<li class="chapter" data-level="1.3" data-path="index.html"><a href="index.html#warm-up-a-gaussian-example"><i class="fa fa-check"></i><b>1.3</b> Warm-up: A Gaussian Example</a></li>
-</ul></li>
-<li class="chapter" data-level="2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html"><i class="fa fa-check"></i><b>2</b> Simulating Differential Abundance</a>
-<ul>
-<li class="chapter" data-level="2.1" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#critique"><i class="fa fa-check"></i><b>2.1</b> Critique</a></li>
-<li class="chapter" data-level="2.2" data-path="simulating-differential-abundance.html"><a href="simulating-differential-abundance.html#power-analysis-loop"><i class="fa fa-check"></i><b>2.2</b> Power Analysis Loop</a></li>
-</ul></li>
-<li class="chapter" data-level="3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html"><i class="fa fa-check"></i><b>3</b> Multivariate Power Analysis</a>
-<ul>
-<li class="chapter" data-level="3.1" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#interpreting-pls-da"><i class="fa fa-check"></i><b>3.1</b> Interpreting PLS-DA</a></li>
-<li class="chapter" data-level="3.2" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#estimation"><i class="fa fa-check"></i><b>3.2</b> Estimation</a></li>
-<li class="chapter" data-level="3.3" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#evaluation"><i class="fa fa-check"></i><b>3.3</b> Evaluation</a></li>
-<li class="chapter" data-level="3.4" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#pls-da-power-analysis"><i class="fa fa-check"></i><b>3.4</b> PLS-DA Power Analysis</a></li>
-<li class="chapter" data-level="3.5" data-path="multivariate-power-analysis.html"><a href="multivariate-power-analysis.html#comparison-with-t-test-calculation"><i class="fa fa-check"></i><b>3.5</b> Comparison with <span class="math inline">\(t\)</span>-test calculation</a></li>
-</ul></li>
-<li class="chapter" data-level="4" data-path="microbiome-networks.html"><a href="microbiome-networks.html"><i class="fa fa-check"></i><b>4</b> Microbiome Networks</a>
-<ul>
-<li class="chapter" data-level="4.1" data-path="microbiome-networks.html"><a href="microbiome-networks.html#estimation-1"><i class="fa fa-check"></i><b>4.1</b> Estimation</a></li>
-<li class="chapter" data-level="4.2" data-path="microbiome-networks.html"><a href="microbiome-networks.html#evaluation-1"><i class="fa fa-check"></i><b>4.2</b> Evaluation</a></li>
-<li class="chapter" data-level="4.3" data-path="microbiome-networks.html"><a href="microbiome-networks.html#block-covariance"><i class="fa fa-check"></i><b>4.3</b> Block Covariance</a></li>
-<li class="chapter" data-level="4.4" data-path="microbiome-networks.html"><a href="microbiome-networks.html#generalization"><i class="fa fa-check"></i><b>4.4</b> Generalization</a></li>
-</ul></li>
-<li class="chapter" data-level="5" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html"><i class="fa fa-check"></i><b>5</b> Batch Effect Correction</a>
-<ul>
-<li class="chapter" data-level="5.1" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#anaerobic-digestion-data"><i class="fa fa-check"></i><b>5.1</b> Anaerobic Digestion Data</a></li>
-<li class="chapter" data-level="5.2" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#simulation-design"><i class="fa fa-check"></i><b>5.2</b> Simulation Design</a></li>
-<li class="chapter" data-level="5.3" data-path="batch-effect-correction.html"><a href="batch-effect-correction.html#benchmarking"><i class="fa fa-check"></i><b>5.3</b> Benchmarking</a></li>
-</ul></li>
-<li class="chapter" data-level="6" data-path="vertical-integration.html"><a href="vertical-integration.html"><i class="fa fa-check"></i><b>6</b> Vertical Integration</a>
-<ul>
-<li class="chapter" data-level="6.1" data-path="vertical-integration.html"><a href="vertical-integration.html#icu-dataset"><i class="fa fa-check"></i><b>6.1</b> ICU Dataset</a></li>
-<li class="chapter" data-level="6.2" data-path="vertical-integration.html"><a href="vertical-integration.html#interlude-using-map"><i class="fa fa-check"></i><b>6.2</b> Interlude: Using map</a></li>
-<li class="chapter" data-level="6.3" data-path="vertical-integration.html"><a href="vertical-integration.html#simulation-question"><i class="fa fa-check"></i><b>6.3</b> Simulation Question</a></li>
-<li class="chapter" data-level="6.4" data-path="vertical-integration.html"><a href="vertical-integration.html#simulation-results"><i class="fa fa-check"></i><b>6.4</b> Simulation Results</a></li>
-<li class="chapter" data-level="6.5" data-path="vertical-integration.html"><a href="vertical-integration.html#alignability"><i class="fa fa-check"></i><b>6.5</b> Alignability</a></li>
-</ul></li>
-<li class="chapter" data-level="" data-path="references.html"><a href="references.html"><i class="fa fa-check"></i>References</a></li>
-<li class="divider"></li>
-<li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-
-</ul>
-
-      </nav>
+    <div class="d-flex align-items-start justify-content-between">
+      <h1>
+        <a href="index.html" title="">Simulation for Microbiome Analysis</a>
+      </h1>
+      <button class="btn btn-outline-primary d-lg-none ml-2 mt-1" type="button" data-toggle="collapse" data-target="#main-nav" aria-expanded="true" aria-controls="main-nav"><i class="fas fa-bars"></i><span class="sr-only">Show table of contents</span></button>
     </div>
 
-    <div class="book-body">
-      <div class="body-inner">
-        <div class="book-header" role="navigation">
-          <h1>
-            <i class="fa fa-circle-o-notch fa-spin"></i><a href="./">Simulation for Microbiome Analysis</a>
-          </h1>
+    <div id="main-nav" class="collapse-lg">
+      <form role="search">
+        <input id="search" class="form-control" type="search" placeholder="Search" aria-label="Search">
+</form>
+
+      <nav aria-label="Table of contents"><h2>Table of contents</h2>
+        <ul class="book-toc list-unstyled">
+<li><a class="" href="index.html"><span class="header-section-number">1</span> Introduction</a></li>
+<li><a class="active" href="simulating-differential-abundance.html"><span class="header-section-number">2</span> Simulating Differential Abundance</a></li>
+<li><a class="" href="multivariate-power-analysis.html"><span class="header-section-number">3</span> Multivariate Power Analysis</a></li>
+<li><a class="" href="microbiome-networks.html"><span class="header-section-number">4</span> Microbiome Networks</a></li>
+<li><a class="" href="batch-effect-correction.html"><span class="header-section-number">5</span> Batch Effect Correction</a></li>
+<li><a class="" href="vertical-integration.html"><span class="header-section-number">6</span> Vertical Integration</a></li>
+<li><a class="" href="references.html">References</a></li>
+</ul>
+
+        <div class="book-extra">
+          
         </div>
-
-        <div class="page-wrapper" tabindex="-1" role="main">
-          <div class="page-inner">
-
-            <section class="normal" id="section-">
-<div id="simulating-differential-abundance" class="section level1 hasAnchor" number="2">
-<h1><span class="header-section-number">Chapter 2</span> Simulating Differential Abundance<a href="simulating-differential-abundance.html#simulating-differential-abundance" class="anchor-section" aria-label="Anchor link to header"></a></h1>
+      </nav>
+</div>
+  </header><main class="col-sm-12 col-md-9 col-lg-7" id="content"><div id="simulating-differential-abundance" class="section level1" number="2">
+<h1>
+<span class="header-section-number">2</span> Simulating Differential Abundance<a class="anchor" aria-label="anchor" href="#simulating-differential-abundance"><i class="fas fa-link"></i></a>
+</h1>
 <p>Before we consider simulating entire microbial communities, with their complex
 correlation structures, let’s learn simulators for individual taxa. This is
 already enough to analyze taxon-level differential abundance approaches. For
@@ -222,33 +81,37 @@ to fixed zero inflation across the population (<code>nu</code>), so we have set 
 Finally, since we want to eventually evaluate testing methods that are designed
 for count data, we have used the (Z)ero (I)nflated (N)egative (B)inomial
 location-shape-scale model.</p>
-<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="simulating-differential-abundance.html#cb26-1" tabindex="-1"></a><span class="fu">data</span>(atlas)</span>
-<span id="cb26-2"><a href="simulating-differential-abundance.html#cb26-2" tabindex="-1"></a></span>
-<span id="cb26-3"><a href="simulating-differential-abundance.html#cb26-3" tabindex="-1"></a>fmla <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
-<span id="cb26-4"><a href="simulating-differential-abundance.html#cb26-4" tabindex="-1"></a>  <span class="at">mu =</span> <span class="sc">~</span> bmi_group <span class="sc">+</span> log_depth,</span>
-<span id="cb26-5"><a href="simulating-differential-abundance.html#cb26-5" tabindex="-1"></a>  <span class="at">sigma =</span> <span class="sc">~</span> bmi_group <span class="sc">+</span> log_depth,</span>
-<span id="cb26-6"><a href="simulating-differential-abundance.html#cb26-6" tabindex="-1"></a>  <span class="at">nu =</span> <span class="sc">~</span><span class="dv">1</span></span>
-<span id="cb26-7"><a href="simulating-differential-abundance.html#cb26-7" tabindex="-1"></a>)</span>
-<span id="cb26-8"><a href="simulating-differential-abundance.html#cb26-8" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(atlas, fmla, <span class="sc">~</span> <span class="fu">ZINBLSS</span>()) <span class="sc">|&gt;</span></span>
-<span id="cb26-9"><a href="simulating-differential-abundance.html#cb26-9" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
-<div id="critique" class="section level2 hasAnchor" number="2.1">
-<h2><span class="header-section-number">2.1</span> Critique<a href="simulating-differential-abundance.html#critique" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div class="sourceCode" id="cb26"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">atlas</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">fmla</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span></span>
+<span>  mu <span class="op">=</span> <span class="op">~</span> <span class="va">bmi_group</span> <span class="op">+</span> <span class="va">log_depth</span>,</span>
+<span>  sigma <span class="op">=</span> <span class="op">~</span> <span class="va">bmi_group</span> <span class="op">+</span> <span class="va">log_depth</span>,</span>
+<span>  nu <span class="op">=</span> <span class="op">~</span><span class="fl">1</span></span>
+<span><span class="op">)</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span><span class="va">atlas</span>, <span class="va">fmla</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamboostLSS/man/families.html">ZINBLSS</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">estimate</span><span class="op">(</span>nu <span class="op">=</span> <span class="fl">0.01</span>, mstop <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
+<div id="critique" class="section level2" number="2.1">
+<h2>
+<span class="header-section-number">2.1</span> Critique<a class="anchor" aria-label="anchor" href="#critique"><i class="fas fa-link"></i></a>
+</h2>
 <p><strong>Exercise</strong>: The block below combines the real and simulated experiments and
 visualizes their difference. With your neighbors, discuss how well the simulator
 approximates the original template.</p>
-<div class="sourceCode" id="cb27"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb27-1"><a href="simulating-differential-abundance.html#cb27-1" tabindex="-1"></a>combined <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(</span>
-<span id="cb27-2"><a href="simulating-differential-abundance.html#cb27-2" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">pivot_experiment</span>(atlas), <span class="co"># real data</span></span>
-<span id="cb27-3"><a href="simulating-differential-abundance.html#cb27-3" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">pivot_experiment</span>(<span class="fu">sample</span>(sim)), <span class="co"># simulated</span></span>
-<span id="cb27-4"><a href="simulating-differential-abundance.html#cb27-4" tabindex="-1"></a>  <span class="at">.id =</span> <span class="st">&quot;source&quot;</span></span>
-<span id="cb27-5"><a href="simulating-differential-abundance.html#cb27-5" tabindex="-1"></a>)</span>
-<span id="cb27-6"><a href="simulating-differential-abundance.html#cb27-6" tabindex="-1"></a></span>
-<span id="cb27-7"><a href="simulating-differential-abundance.html#cb27-7" tabindex="-1"></a><span class="fu">ggplot</span>(combined) <span class="sc">+</span></span>
-<span id="cb27-8"><a href="simulating-differential-abundance.html#cb27-8" tabindex="-1"></a>  <span class="fu">geom_boxplot</span>(</span>
-<span id="cb27-9"><a href="simulating-differential-abundance.html#cb27-9" tabindex="-1"></a>    <span class="fu">aes</span>(value, <span class="fu">reorder</span>(feature, value, median), <span class="at">fill =</span> bmi_group)</span>
-<span id="cb27-10"><a href="simulating-differential-abundance.html#cb27-10" tabindex="-1"></a>  ) <span class="sc">+</span></span>
-<span id="cb27-11"><a href="simulating-differential-abundance.html#cb27-11" tabindex="-1"></a>  <span class="fu">scale_x_sqrt</span>() <span class="sc">+</span></span>
-<span id="cb27-12"><a href="simulating-differential-abundance.html#cb27-12" tabindex="-1"></a>  <span class="fu">facet_grid</span>(. <span class="sc">~</span> source)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/contrast-simulators-1.png" width="672" /></p>
+<div class="sourceCode" id="cb27"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">combined</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span></span>
+<span>  real <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/pivot_experiment.html">pivot_experiment</a></span><span class="op">(</span><span class="va">atlas</span><span class="op">)</span>, <span class="co"># real data</span></span>
+<span>  simulated <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/pivot_experiment.html">pivot_experiment</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">sim</span><span class="op">)</span><span class="op">)</span>, <span class="co"># simulated</span></span>
+<span>  .id <span class="op">=</span> <span class="st">"source"</span></span>
+<span><span class="op">)</span></span>
+<span></span>
+<span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="va">combined</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/geom_boxplot.html">geom_boxplot</a></span><span class="op">(</span></span>
+<span>    <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="va">value</span>, <span class="fu"><a href="https://rdrr.io/r/stats/reorder.factor.html">reorder</a></span><span class="op">(</span><span class="va">feature</span>, <span class="va">value</span>, <span class="va">median</span><span class="op">)</span>, fill <span class="op">=</span> <span class="va">bmi_group</span><span class="op">)</span></span>
+<span>  <span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/scale_continuous.html">scale_x_sqrt</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_grid.html">facet_grid</a></span><span class="op">(</span><span class="va">.</span> <span class="op">~</span> <span class="va">source</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/contrast-simulators-1.png" width="672"></div>
 <p><strong>Solution</strong>: The clearest difference is that, for these more abundant taxa, there there are
 not many low or zero counts. In contrast, the simulated data tend to have a long
 left tail (the many outlier circles on the left side of the boxplots),
@@ -257,8 +120,10 @@ have support for all counts <span class="math inline">\(\geq 0\)</span>. Nonethe
 between the groups typically agrees between the real and simulated data. The
 interquartile ranges for each taxon also seem to roughly match.</p>
 </div>
-<div id="power-analysis-loop" class="section level2 hasAnchor" number="2.2">
-<h2><span class="header-section-number">2.2</span> Power Analysis Loop<a href="simulating-differential-abundance.html#power-analysis-loop" class="anchor-section" aria-label="Anchor link to header"></a></h2>
+<div id="power-analysis-loop" class="section level2" number="2.2">
+<h2>
+<span class="header-section-number">2.2</span> Power Analysis Loop<a class="anchor" aria-label="anchor" href="#power-analysis-loop"><i class="fas fa-link"></i></a>
+</h2>
 <p>To run a power analysis, we need to define datasets that have known ground
 truth. Then, we can run any differential abundance methods we want and see how
 many of the true associations are recovered (and how many nulls are falsely
@@ -271,30 +136,32 @@ it as a true signal, the difference may be hard to detect. Eventually, our
 package will include functions for modifying these effects directly; at this
 point, though, we can only indirectly modify parameters by re-estimating them
 with new formulas.</p>
-<div class="sourceCode" id="cb28"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb28-1"><a href="simulating-differential-abundance.html#cb28-1" tabindex="-1"></a>nulls <span class="ot">&lt;-</span> <span class="fu">differential_analysis</span>(atlas, <span class="st">&quot;LIMMA_voom&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb28-2"><a href="simulating-differential-abundance.html#cb28-2" tabindex="-1"></a>  <span class="fu">rownames</span>() <span class="sc">|&gt;</span></span>
-<span id="cb28-3"><a href="simulating-differential-abundance.html#cb28-3" tabindex="-1"></a>  <span class="fu">tail</span>(<span class="dv">16</span>)</span>
-<span id="cb28-4"><a href="simulating-differential-abundance.html#cb28-4" tabindex="-1"></a></span>
-<span id="cb28-5"><a href="simulating-differential-abundance.html#cb28-5" tabindex="-1"></a>null_fmla <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">mu =</span> <span class="sc">~</span>log_depth, <span class="at">sigma =</span> <span class="sc">~</span>log_depth, <span class="at">nu =</span> <span class="sc">~</span><span class="dv">1</span>)</span>
-<span id="cb28-6"><a href="simulating-differential-abundance.html#cb28-6" tabindex="-1"></a>sim <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
-<span id="cb28-7"><a href="simulating-differential-abundance.html#cb28-7" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="fu">any_of</span>(nulls), <span class="at">link =</span> null_fmla) <span class="sc">|&gt;</span></span>
-<span id="cb28-8"><a href="simulating-differential-abundance.html#cb28-8" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
+<div class="sourceCode" id="cb28"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">nulls</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MIGsim/man/differential_analysis.html">differential_analysis</a></span><span class="op">(</span><span class="va">atlas</span>, <span class="st">"LIMMA_voom"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">rownames</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/utils/head.html">tail</a></span><span class="op">(</span><span class="fl">16</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">null_fmla</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>mu <span class="op">=</span> <span class="op">~</span><span class="va">log_depth</span>, sigma <span class="op">=</span> <span class="op">~</span><span class="va">log_depth</span>, nu <span class="op">=</span> <span class="op">~</span><span class="fl">1</span><span class="op">)</span></span>
+<span><span class="va">sim</span> <span class="op">&lt;-</span> <span class="va">sim</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span><span class="fu"><a href="https://tidyselect.r-lib.org/reference/all_of.html">any_of</a></span><span class="op">(</span><span class="va">nulls</span><span class="op">)</span>, link <span class="op">=</span> <span class="va">null_fmla</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu">estimate</span><span class="op">(</span>nu <span class="op">=</span> <span class="fl">0.01</span>, mstop <span class="op">=</span> <span class="fl">1000</span><span class="op">)</span></span></code></pre></div>
 <p>Now that we have ground truth associations, we’ll evaluate LIMMA-voom for
 differential analysis. We consider sample sizes ranging from 50 to 1200, and we
 simulate 10 datasets for each sample size.</p>
-<div class="sourceCode" id="cb29"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb29-1"><a href="simulating-differential-abundance.html#cb29-1" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
-<span id="cb29-2"><a href="simulating-differential-abundance.html#cb29-2" tabindex="-1"></a>  <span class="at">sample_size =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">50</span>, <span class="dv">1200</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
-<span id="cb29-3"><a href="simulating-differential-abundance.html#cb29-3" tabindex="-1"></a>  <span class="at">n_rep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">10</span></span>
-<span id="cb29-4"><a href="simulating-differential-abundance.html#cb29-4" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
-<span id="cb29-5"><a href="simulating-differential-abundance.html#cb29-5" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="at">run =</span> <span class="fu">as.character</span>(<span class="fu">row_number</span>()))</span>
-<span id="cb29-6"><a href="simulating-differential-abundance.html#cb29-6" tabindex="-1"></a></span>
-<span id="cb29-7"><a href="simulating-differential-abundance.html#cb29-7" tabindex="-1"></a>results <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
-<span id="cb29-8"><a href="simulating-differential-abundance.html#cb29-8" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
-<span id="cb29-9"><a href="simulating-differential-abundance.html#cb29-9" tabindex="-1"></a>  atlas_ <span class="ot">&lt;-</span> <span class="fu">sample_n</span>(sim, config<span class="sc">$</span>sample_size[i])</span>
-<span id="cb29-10"><a href="simulating-differential-abundance.html#cb29-10" tabindex="-1"></a>  results[[i]] <span class="ot">&lt;-</span> <span class="fu">differential_analysis</span>(atlas_, <span class="st">&quot;LIMMA_voom&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb29-11"><a href="simulating-differential-abundance.html#cb29-11" tabindex="-1"></a>    <span class="fu">da_metrics</span>(nulls, <span class="at">level =</span> <span class="fl">0.3</span>)</span>
-<span id="cb29-12"><a href="simulating-differential-abundance.html#cb29-12" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;{i}/{nrow(config)}&quot;</span>))</span>
-<span id="cb29-13"><a href="simulating-differential-abundance.html#cb29-13" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb29"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span></span>
+<span>  sample_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">50</span>, <span class="fl">1200</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span>,</span>
+<span>  n_rep <span class="op">=</span> <span class="fl">1</span><span class="op">:</span><span class="fl">10</span></span>
+<span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate.html">mutate</a></span><span class="op">(</span>run <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/character.html">as.character</a></span><span class="op">(</span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/row_number.html">row_number</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">)</span></span>
+<span></span>
+<span><span class="va">results</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="op">)</span></span>
+<span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">config</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
+<span>  <span class="va">atlas_</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/sample_n.html">sample_n</a></span><span class="op">(</span><span class="va">sim</span>, <span class="va">config</span><span class="op">$</span><span class="va">sample_size</span><span class="op">[</span><span class="va">i</span><span class="op">]</span><span class="op">)</span></span>
+<span>  <span class="va">results</span><span class="op">[[</span><span class="va">i</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MIGsim/man/differential_analysis.html">differential_analysis</a></span><span class="op">(</span><span class="va">atlas_</span>, <span class="st">"LIMMA_voom"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>    <span class="fu"><a href="https://rdrr.io/pkg/MIGsim/man/da_metrics.html">da_metrics</a></span><span class="op">(</span><span class="va">nulls</span>, level <span class="op">=</span> <span class="fl">0.3</span><span class="op">)</span></span>
+<span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"{i}/{nrow(config)}"</span><span class="op">)</span><span class="op">)</span></span>
+<span><span class="op">}</span></span></code></pre></div>
 <pre><code>## 1/50
 ## 2/50
 ## 3/50
@@ -354,17 +221,19 @@ that the average false discovery proportion is always controlled below 0.3,
 though the variance in this proportion can be quite high. We can also see that
 we would have quite good power with <span class="math inline">\(n \geq 625\)</span> samples, but the worst case
 scenarios can be quite poor for anything with fewer samples.</p>
-<div class="sourceCode" id="cb31"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb31-1"><a href="simulating-differential-abundance.html#cb31-1" tabindex="-1"></a><span class="fu">bind_rows</span>(results, <span class="at">.id =</span> <span class="st">&quot;run&quot;</span>) <span class="sc">|&gt;</span></span>
-<span id="cb31-2"><a href="simulating-differential-abundance.html#cb31-2" tabindex="-1"></a>  <span class="fu">left_join</span>(config) <span class="sc">|&gt;</span></span>
-<span id="cb31-3"><a href="simulating-differential-abundance.html#cb31-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
-<span id="cb31-4"><a href="simulating-differential-abundance.html#cb31-4" tabindex="-1"></a>  <span class="fu">stat_pointinterval</span>(<span class="fu">aes</span>(<span class="fu">factor</span>(sample_size), value)) <span class="sc">+</span></span>
-<span id="cb31-5"><a href="simulating-differential-abundance.html#cb31-5" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>metric, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>)</span></code></pre></div>
-<p><img src="simulation_for_microbiome_files/figure-html/visualize-da-power-1.png" width="672" /></p>
+<div class="sourceCode" id="cb31"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">results</span>, .id <span class="op">=</span> <span class="st">"run"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://dplyr.tidyverse.org/reference/mutate-joins.html">left_join</a></span><span class="op">(</span><span class="va">config</span><span class="op">)</span> <span class="op">|&gt;</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/ggplot.html">ggplot</a></span><span class="op">(</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="http://mjskay.github.io/ggdist/reference/stat_pointinterval.html">stat_pointinterval</a></span><span class="op">(</span><span class="fu"><a href="https://ggplot2.tidyverse.org/reference/aes.html">aes</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/factor.html">factor</a></span><span class="op">(</span><span class="va">sample_size</span><span class="op">)</span>, <span class="va">value</span><span class="op">)</span><span class="op">)</span> <span class="op">+</span></span>
+<span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">metric</span>, scales <span class="op">=</span> <span class="st">"free"</span><span class="op">)</span></span></code></pre></div>
+<div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/visualize-da-power-1.png" width="672"></div>
 <p>We expect that this result is somewhat conservative. This is because the
 original data have more symmetric distributions than our simulation, so limma’s
 transformation to normality is likely easier to accomplish than in our more
 highly skewed data.</p>
-<div class="sourceCode" id="cb32"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb32-1"><a href="simulating-differential-abundance.html#cb32-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<div class="sourceCode" id="cb32"><pre class="downlit sourceCode r">
+<code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
@@ -410,68 +279,40 @@ highly skewed data.</p>
 
 </div>
 </div>
-            </section>
+  <div class="chapter-nav">
+<div class="prev"><a href="index.html"><span class="header-section-number">1</span> Introduction</a></div>
+<div class="next"><a href="multivariate-power-analysis.html"><span class="header-section-number">3</span> Multivariate Power Analysis</a></div>
+</div></main><div class="col-md-3 col-lg-2 d-none d-md-block sidebar sidebar-chapter">
+    <nav id="toc" data-toggle="toc" aria-label="On this page"><h2>On this page</h2>
+      <ul class="nav navbar-nav">
+<li><a class="nav-link" href="#simulating-differential-abundance"><span class="header-section-number">2</span> Simulating Differential Abundance</a></li>
+<li><a class="nav-link" href="#critique"><span class="header-section-number">2.1</span> Critique</a></li>
+<li><a class="nav-link" href="#power-analysis-loop"><span class="header-section-number">2.2</span> Power Analysis Loop</a></li>
+</ul>
 
-          </div>
-        </div>
-      </div>
-<a href="index.html" class="navigation navigation-prev " aria-label="Previous page"><i class="fa fa-angle-left"></i></a>
-<a href="multivariate-power-analysis.html" class="navigation navigation-next " aria-label="Next page"><i class="fa fa-angle-right"></i></a>
-    </div>
+      <div class="book-extra">
+        <ul class="list-unstyled">
+          
+        </ul>
+</div>
+    </nav>
+</div>
+
+</div>
+</div> <!-- .container -->
+
+<footer class="bg-primary text-light mt-5"><div class="container"><div class="row">
+
+  <div class="col-12 col-md-6 mt-3">
+    <p>"<strong>Simulation for Microbiome Analysis</strong>" was written by Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao. It was last built on 2024-09-08.</p>
   </div>
-<script src="libs/gitbook-2.6.7/js/app.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/clipboard.min.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-search.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-sharing.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-fontsettings.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-bookdown.js"></script>
-<script src="libs/gitbook-2.6.7/js/jquery.highlight.js"></script>
-<script src="libs/gitbook-2.6.7/js/plugin-clipboard.js"></script>
-<script>
-gitbook.require(["gitbook"], function(gitbook) {
-gitbook.start({
-"sharing": {
-"github": false,
-"facebook": true,
-"twitter": true,
-"linkedin": false,
-"weibo": false,
-"instapaper": false,
-"vk": false,
-"whatsapp": false,
-"all": ["facebook", "twitter", "linkedin", "weibo", "instapaper"]
-},
-"fontsettings": {
-"theme": "white",
-"family": "sans",
-"size": 2
-},
-"edit": {
-"link": "https://github.com/USERNAME/REPO/edit/BRANCH/01-differential_analysis.Rmd",
-"text": "Edit"
-},
-"history": {
-"link": null,
-"text": null
-},
-"view": {
-"link": null,
-"text": null
-},
-"download": ["simulation_for_microbiome.pdf", "simulation_for_microbiome.epub"],
-"search": {
-"engine": "fuse",
-"options": null
-},
-"toc": {
-"collapse": "subsection"
-}
-});
-});
-</script>
 
-<!-- dynamically load mathjax for compatibility with self-contained -->
-<script>
+  <div class="col-12 col-md-6 mt-3">
+    <p>This book was built by the <a class="text-light" href="https://bookdown.org">bookdown</a> R package.</p>
+  </div>
+
+</div></div>
+</footer><!-- dynamically load mathjax for compatibility with self-contained --><script>
   (function () {
     var script = document.createElement("script");
     script.type = "text/javascript";
@@ -483,7 +324,22 @@ gitbook.start({
     script.src = src;
     document.getElementsByTagName("head")[0].appendChild(script);
   })();
+</script><script type="text/x-mathjax-config">const popovers = document.querySelectorAll('a.footnote-ref[data-toggle="popover"]');
+for (let popover of popovers) {
+  const div = document.createElement('div');
+  div.setAttribute('style', 'position: absolute; top: 0, left:0; width:0, height:0, overflow: hidden; visibility: hidden;');
+  div.innerHTML = popover.getAttribute('data-content');
+
+  var has_math = div.querySelector("span.math");
+  if (has_math) {
+    document.body.appendChild(div);
+    MathJax.Hub.Queue(["Typeset", MathJax.Hub, div]);
+    MathJax.Hub.Queue(function() {
+      popover.setAttribute('data-content', div.innerHTML);
+      document.body.removeChild(div);
+    })
+  }
+}
 </script>
 </body>
-
 </html>

@@ -1,0 +1,285 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="6.5 Alignability | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>6.5 Alignability | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="alignability" class="section level2" number="6.5">
+<h2><span class="header-section-number">6.5</span> Alignability</h2>
+<p>How do the canonical correlations compare between the real data and a reference
+null? First, we can compute the CCA canonical correlations using the real
+Bacteria and Virus data.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="6.5-alignability.html#cb111-1" tabindex="-1"></a>merged <span class="ot">&lt;-</span> simulator[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)] <span class="sc">|&gt;</span></span>
+<span id="cb111-2"><a href="6.5-alignability.html#cb111-2" tabindex="-1"></a>  <span class="fu">join_copula</span>(<span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.01</span>))</span>
+<span id="cb111-3"><a href="6.5-alignability.html#cb111-3" tabindex="-1"></a></span>
+<span id="cb111-4"><a href="6.5-alignability.html#cb111-4" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">sample</span>(merged) <span class="sc">|&gt;</span></span>
+<span id="cb111-5"><a href="6.5-alignability.html#cb111-5" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb111-6"><a href="6.5-alignability.html#cb111-6" tabindex="-1"></a>  <span class="fu">t</span>()</span>
+<span id="cb111-7"><a href="6.5-alignability.html#cb111-7" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">map</span>(icu, rownames)</span>
+<span id="cb111-8"><a href="6.5-alignability.html#cb111-8" tabindex="-1"></a>cca_result <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy[, ix[[<span class="dv">1</span>]]], xy[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)</span></code></pre></div>
+<p>Next, we define a reference null and compute canonical correlations on ten
+replicates from this null. To define the reference null, we zero out any
+correlations across tables. We then draw 100 samples from the resulting
+distribution and compute canonical correlations for each.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="6.5-alignability.html#cb112-1" tabindex="-1"></a>rho_null <span class="ot">&lt;-</span> <span class="fu">copula_parameters</span>(merged)</span>
+<span id="cb112-2"><a href="6.5-alignability.html#cb112-2" tabindex="-1"></a><span class="fu">dimnames</span>(rho_null) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">colnames</span>(xy), <span class="fu">colnames</span>(xy))</span>
+<span id="cb112-3"><a href="6.5-alignability.html#cb112-3" tabindex="-1"></a>rho_null[ix[[<span class="dv">1</span>]], ix[[<span class="dv">3</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb112-4"><a href="6.5-alignability.html#cb112-4" tabindex="-1"></a>rho_null[ix[[<span class="dv">3</span>]], ix[[<span class="dv">1</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb112-5"><a href="6.5-alignability.html#cb112-5" tabindex="-1"></a></span>
+<span id="cb112-6"><a href="6.5-alignability.html#cb112-6" tabindex="-1"></a>null_cancor <span class="ot">&lt;-</span> merged <span class="sc">|&gt;</span></span>
+<span id="cb112-7"><a href="6.5-alignability.html#cb112-7" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho_null)</span>
+<span id="cb112-8"><a href="6.5-alignability.html#cb112-8" tabindex="-1"></a></span>
+<span id="cb112-9"><a href="6.5-alignability.html#cb112-9" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb112-10"><a href="6.5-alignability.html#cb112-10" tabindex="-1"></a>cancors <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb112-11"><a href="6.5-alignability.html#cb112-11" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="fu">seq_len</span>(B)) {</span>
+<span id="cb112-12"><a href="6.5-alignability.html#cb112-12" tabindex="-1"></a>  xy_null <span class="ot">&lt;-</span> <span class="fu">sample</span>(null_cancor) <span class="sc">|&gt;</span></span>
+<span id="cb112-13"><a href="6.5-alignability.html#cb112-13" tabindex="-1"></a>    <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb112-14"><a href="6.5-alignability.html#cb112-14" tabindex="-1"></a>    <span class="fu">t</span>()</span>
+<span id="cb112-15"><a href="6.5-alignability.html#cb112-15" tabindex="-1"></a></span>
+<span id="cb112-16"><a href="6.5-alignability.html#cb112-16" tabindex="-1"></a>  cancors[[<span class="fu">glue</span>(<span class="st">&quot;sim_{b}&quot;</span>)]] <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy_null[, ix[[<span class="dv">1</span>]]], xy_null[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)<span class="sc">$</span>cor</span>
+<span id="cb112-17"><a href="6.5-alignability.html#cb112-17" tabindex="-1"></a>}</span></code></pre></div>
+<p>To help with later visualization, we combine both the real and reference
+canonical correlations into a tidy data.frame. These are visualized in a hidden
+chunk below – if you want to see the source code, you can review it
+<a href="https://github.com/krisrs1128/microbiome-simulation/blob/main/book/04-integration.Rmd">here</a>.</p>
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="6.5-alignability.html#cb113-1" tabindex="-1"></a>cancors[[<span class="st">&quot;true&quot;</span>]] <span class="ot">&lt;-</span> cca_result<span class="sc">$</span>cor</span>
+<span id="cb113-2"><a href="6.5-alignability.html#cb113-2" tabindex="-1"></a>contrast_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(cancors, <span class="at">.id =</span> <span class="st">&quot;rep&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb113-3"><a href="6.5-alignability.html#cb113-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>rep, <span class="at">names_to =</span> <span class="st">&quot;loading&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb113-4"><a href="6.5-alignability.html#cb113-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb113-5"><a href="6.5-alignability.html#cb113-5" tabindex="-1"></a>    <span class="at">source =</span> <span class="fu">grepl</span>(<span class="st">&quot;true&quot;</span>, rep),</span>
+<span id="cb113-6"><a href="6.5-alignability.html#cb113-6" tabindex="-1"></a>    <span class="at">loading =</span> <span class="fu">as.integer</span>(loading)</span>
+<span id="cb113-7"><a href="6.5-alignability.html#cb113-7" tabindex="-1"></a>  )</span>
+<span id="cb113-8"><a href="6.5-alignability.html#cb113-8" tabindex="-1"></a><span class="fu">head</span>(contrast_data)</span></code></pre></div>
+<pre><code>## # A tibble: 6 × 4
+##   rep   loading value source
+##   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;lgl&gt; 
+## 1 sim_1       1 0.913 FALSE 
+## 2 sim_1       2 0.880 FALSE 
+## 3 sim_1       3 0.848 FALSE 
+## 4 sim_1       4 0.826 FALSE 
+## 5 sim_1       5 0.815 FALSE 
+## 6 sim_1       6 0.797 FALSE</code></pre>
+<p><img src="simulation_for_microbiome_files/figure-html/contrast-vis-1.png" width="672" /></p>
+<div class="sourceCode" id="cb115"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb115-1"><a href="6.5-alignability.html#cb115-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.4.0 (2024-04-24)
+## Platform: aarch64-apple-darwin20
+## Running under: macOS Ventura 13.4
+## 
+## Matrix products: default
+## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## 
+## locale:
+## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+## 
+## time zone: America/Chicago
+## tzcode source: internal
+## 
+## attached base packages:
+##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+## 
+## other attached packages:
+##  [1] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1               XVector_0.44.0                  SingleCellExperiment_1.26.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
+##  [7] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                     pwr_1.3-0                       patchwork_1.2.0                
+## [13] mixOmics_6.28.0                 lattice_0.22-6                  MASS_7.3-60.2                   glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                   
+## [19] gamboostLSS_2.0-7               mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                     SummarizedExperiment_1.34.0    
+## [25] Biobase_2.64.0                  GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0            
+## [31] MatrixGenerics_1.16.0           matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
+## 
+## loaded via a namespace (and not attached):
+##   [1] minpack.lm_1.2-4            XML_3.99-0.16.1             rpart_4.1.23                lifecycle_1.0.4             Rdpack_2.6                  edgeR_4.2.0                 doParallel_1.0.17          
+##   [8] MultiAssayExperiment_1.30.2 insight_0.20.1              magrittr_2.0.3              limma_3.60.2                sass_0.4.9                  rmarkdown_2.27              jquerylib_0.1.4            
+##  [15] yaml_2.3.8                  DBI_1.2.3                   RColorBrewer_1.1-3          ADGofTest_0.3               abind_1.4-5                 zlibbioc_1.50.0             expm_0.999-9               
+##  [22] quadprog_1.5-8              pspline_1.0-20              kde1d_1.0.7                 rgl_1.3.1                   yulab.utils_0.1.4           pracma_2.4.4                sva_3.50.0                 
+##  [29] GenomeInfoDbData_1.2.12     ggrepel_0.9.5               tidytree_0.4.6              genefilter_1.86.0           ellipse_0.5.0               RSpectra_0.16-1             annotate_1.82.0            
+##  [36] svglite_2.1.3               codetools_0.2-20            DelayedArray_0.30.1         shapes_1.2.7                tidyselect_1.2.1            shape_1.4.6.1               UCSC.utils_1.0.0           
+##  [43] farver_2.1.2                randtoolbox_2.0.4           base64enc_0.1-3             jsonlite_1.8.8              Formula_1.2-5               survival_3.7-0              iterators_1.0.14           
+##  [50] systemfonts_1.1.0           foreach_1.5.2               tools_4.4.0                 progress_1.2.3              treeio_1.28.0               ragg_1.3.2                  Rcpp_1.0.12                
+##  [57] rARPACK_0.11-0              BiocBaseUtils_1.6.0         gridExtra_2.3               SparseArray_1.4.8           mgcv_1.9-1                  xfun_0.44                   distributional_0.4.0       
+##  [64] withr_3.0.0                 numDeriv_2016.8-1.1         fastmap_1.2.0               fansi_1.0.6                 digest_0.6.35               R6_2.5.1                    textshaping_0.4.0          
+##  [71] colorspace_2.1-0            RSQLite_2.3.7               inum_1.0-5                  copula_1.1-3                flare_1.7.0.1               utf8_1.2.4                  generics_0.1.3             
+##  [78] corpcor_1.6.10              prettyunits_1.2.0           pulsar_0.3.11               httr_1.4.7                  htmlwidgets_1.6.4           S4Arrays_1.4.1              scatterplot3d_0.3-44       
+##  [85] rngWELL_0.10-9              pkgconfig_2.0.3             geigen_2.3                  gtable_0.3.5                blob_1.2.4                  pcaPP_2.0-4                 htmltools_0.5.8.1          
+##  [92] bookdown_0.39.1             ruv_0.9.7.1                 scales_1.3.0                SHT_0.1.8                   png_0.1-8                   knitr_1.47                  rstudioapi_0.16.0          
+##  [99] reshape2_1.4.4              nlme_3.1-164                cachem_1.1.0                stringr_1.5.1               libcoin_1.0-10              AnnotationDbi_1.66.0        pillar_1.9.0               
+## [106] grid_4.4.0                  vctrs_0.6.5                 VGAM_1.1-11                 huge_1.3.5                  xtable_1.8-4                gamlss.dist_6.1-1           evaluate_0.23              
+## [113] mvtnorm_1.2-5               cli_3.6.3                   locfit_1.5-9.9              compiler_4.4.0              rlang_1.1.4                 crayon_1.5.3                labeling_0.4.3             
+## [120] plyr_1.8.9                  fs_1.6.4                    stringi_1.8.4               BiocParallel_1.38.0         nnls_1.5                    assertthat_0.2.1            rvinecopulib_0.6.3.1.1     
+## [127] munsell_0.5.1               gsl_2.1-8                   lazyeval_0.2.2              glmnet_4.1-8                Matrix_1.7-0                hms_1.1.3                   stabledist_0.7-1           
+## [134] bit64_4.0.5                 KEGGREST_1.44.0             statmod_1.5.0               highr_0.11                  rbibutils_2.2.16            partykit_1.2-20             igraph_2.0.3               
+## [141] memoise_2.0.1               bslib_0.7.0.9000            bit_4.0.5                   ape_5.8</code></pre>
+
+</div>
+<!-- </div> -->
+<p style="text-align: center;">
+<a href="6.4-simulation-results.html"><button class="btn btn-default">Previous</button></a>
+<a href="references.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

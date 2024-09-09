@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="3.3 Evaluation | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>3.3 Evaluation | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="evaluation" class="section level2" number="3.3">
+<h2><span class="header-section-number">3.3</span> Evaluation</h2>
+<p>Last time, we saw how we could visualize marginal simulator quality. How can we
+tell whether a joint simulator is working, though? One simple check is to
+analyze the pairwise correlations. Since the copula model is designed to capture
+second-order moments, it should at the very least effectively capture the
+correlations.</p>
+<p>We’ve written a small helper that visualizes the pairwise protein-protein
+correlations from both the real and the simulated datasets. We seem to be often
+overestimating the correlation strength. This is likely a consequence of the
+high-dimensionality of the problem.</p>
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="3.3-evaluation.html#cb38-1" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
+<span id="cb38-2"><a href="3.3-evaluation.html#cb38-2" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/multivariate_correlations-1.png" width="672" /></p>
+<p><strong>Exercise</strong>: To address this, let’s try modifying the <code>copula_def</code> argument of
+<code>setup_simulator</code> to use a more suitable simulator. Generate new correlation
+histograms and comment on the changes you observe. You only need to modify the
+commented lines (<code>#</code>) lines in the block below.</p>
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="3.3-evaluation.html#cb39-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb39-2"><a href="3.3-evaluation.html#cb39-2" tabindex="-1"></a>  t1d,</span>
+<span id="cb39-3"><a href="3.3-evaluation.html#cb39-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
+<span id="cb39-4"><a href="3.3-evaluation.html#cb39-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb39-5"><a href="3.3-evaluation.html#cb39-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="co"># fill this code in</span></span>
+<span id="cb39-6"><a href="3.3-evaluation.html#cb39-6" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb39-7"><a href="3.3-evaluation.html#cb39-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb39-8"><a href="3.3-evaluation.html#cb39-8" tabindex="-1"></a></span>
+<span id="cb39-9"><a href="3.3-evaluation.html#cb39-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator) <span class="co"># and then run these two lines</span></span>
+<span id="cb39-10"><a href="3.3-evaluation.html#cb39-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper) <span class="co">#</span></span></code></pre></div>
+<p><strong>Solution</strong>: For our coupla, we can use a covariance estimator of <a href="https://www.tandfonline.com/doi/abs/10.1198/jasa.2011.tm10560">Cai and Liu
+(2011)</a>, that is
+suited for high dimensions. Larger values of <code>thr</code> will increase the stability
+of our estimates, but at the cost of potentially missing or weakening true
+correlations. In line with this point, our new simulated correlations are more
+concentrated.</p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="3.3-evaluation.html#cb40-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb40-2"><a href="3.3-evaluation.html#cb40-2" tabindex="-1"></a>  t1d,</span>
+<span id="cb40-3"><a href="3.3-evaluation.html#cb40-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
+<span id="cb40-4"><a href="3.3-evaluation.html#cb40-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb40-5"><a href="3.3-evaluation.html#cb40-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.1</span>)</span>
+<span id="cb40-6"><a href="3.3-evaluation.html#cb40-6" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb40-7"><a href="3.3-evaluation.html#cb40-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb40-8"><a href="3.3-evaluation.html#cb40-8" tabindex="-1"></a></span>
+<span id="cb40-9"><a href="3.3-evaluation.html#cb40-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
+<span id="cb40-10"><a href="3.3-evaluation.html#cb40-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/estimate_t1d_simulator-1.png" width="672" />
+:::</p>
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="3.3-evaluation.html#cb41-1" tabindex="-1"></a><span class="fu">contrast_boxplot</span>(t1d, sim_exper, <span class="sc">~</span>. <span class="sc">~</span> <span class="fu">reorder</span>(outcome2, value))</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/t1d_contrast_boxplot-1.png" width="672" /></p>
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="3.3-evaluation.html#cb42-1" tabindex="-1"></a>rhos <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">sim =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(sim_exper))), <span class="at">real =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(t1d))))</span>
+<span id="cb42-2"><a href="3.3-evaluation.html#cb42-2" tabindex="-1"></a><span class="fu">diag</span>(rhos[[<span class="dv">1</span>]]) <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb42-3"><a href="3.3-evaluation.html#cb42-3" tabindex="-1"></a>top_cors <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(rhos[[<span class="dv">1</span>]]) <span class="sc">&gt;</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(rhos[[<span class="dv">1</span>]]), <span class="fl">0.999</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">arr.ind =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb42-4"><a href="3.3-evaluation.html#cb42-4" tabindex="-1"></a></span>
+<span id="cb42-5"><a href="3.3-evaluation.html#cb42-5" tabindex="-1"></a>pairs_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb42-6"><a href="3.3-evaluation.html#cb42-6" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">subset_correlated</span>(<span class="fu">assay</span>(t1d), top_cors),</span>
+<span id="cb42-7"><a href="3.3-evaluation.html#cb42-7" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">subset_correlated</span>(<span class="fu">assay</span>(sim_exper), top_cors)</span>
+<span id="cb42-8"><a href="3.3-evaluation.html#cb42-8" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb42-9"><a href="3.3-evaluation.html#cb42-9" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">&quot;source&quot;</span>)</span>
+<span id="cb42-10"><a href="3.3-evaluation.html#cb42-10" tabindex="-1"></a></span>
+<span id="cb42-11"><a href="3.3-evaluation.html#cb42-11" tabindex="-1"></a>keep_pairs <span class="ot">&lt;-</span> pairs_data <span class="sc">|&gt;</span></span>
+<span id="cb42-12"><a href="3.3-evaluation.html#cb42-12" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(source, pair, correlation) <span class="sc">|&gt;</span></span>
+<span id="cb42-13"><a href="3.3-evaluation.html#cb42-13" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb42-14"><a href="3.3-evaluation.html#cb42-14" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">&quot;real&quot;</span>, correlation <span class="sc">&gt;</span> <span class="fl">0.72</span>, correlation <span class="sc">&lt;</span> <span class="fl">0.8</span>) <span class="sc">|&gt;</span></span>
+<span id="cb42-15"><a href="3.3-evaluation.html#cb42-15" tabindex="-1"></a>  <span class="fu">pull</span>(pair)</span>
+<span id="cb42-16"><a href="3.3-evaluation.html#cb42-16" tabindex="-1"></a></span>
+<span id="cb42-17"><a href="3.3-evaluation.html#cb42-17" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> pairs_data <span class="sc">|&gt;</span></span>
+<span id="cb42-18"><a href="3.3-evaluation.html#cb42-18" tabindex="-1"></a>  <span class="fu">filter</span>(pair <span class="sc">%in%</span> keep_pairs) <span class="sc">|&gt;</span></span>
+<span id="cb42-19"><a href="3.3-evaluation.html#cb42-19" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb42-20"><a href="3.3-evaluation.html#cb42-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(feature1, feature2, <span class="at">col =</span> source), <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb42-21"><a href="3.3-evaluation.html#cb42-21" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#038C8C&quot;</span>, <span class="st">&quot;#D93636&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb42-22"><a href="3.3-evaluation.html#cb42-22" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>))) <span class="sc">+</span></span>
+<span id="cb42-23"><a href="3.3-evaluation.html#cb42-23" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;A&quot;</span>, <span class="at">col =</span> <span class="st">&quot;Source&quot;</span>, <span class="at">x =</span> <span class="fu">expression</span>(<span class="st">&quot;Feature&quot;</span> <span class="sc">~</span> j), <span class="at">y =</span> <span class="fu">expression</span>(<span class="st">&quot;Feature&quot;</span> <span class="sc">~</span> j<span class="sc">^</span><span class="st">&quot;&#39;&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb42-24"><a href="3.3-evaluation.html#cb42-24" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">reorder</span>(pair, <span class="sc">-</span>correlation), <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span></span>
+<span id="cb42-25"><a href="3.3-evaluation.html#cb42-25" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb42-26"><a href="3.3-evaluation.html#cb42-26" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb42-27"><a href="3.3-evaluation.html#cb42-27" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb42-28"><a href="3.3-evaluation.html#cb42-28" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="3.3-evaluation.html#cb43-1" tabindex="-1"></a>ft_order <span class="ot">&lt;-</span> <span class="fu">hclust</span>(<span class="fu">dist</span>(<span class="fu">assay</span>(t1d)))<span class="sc">$</span>order</span>
+<span id="cb43-2"><a href="3.3-evaluation.html#cb43-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">correlation_heatmap</span>(rhos<span class="sc">$</span>real, ft_order) <span class="sc">+</span></span>
+<span id="cb43-3"><a href="3.3-evaluation.html#cb43-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;B  Real&quot;</span>) <span class="sc">+</span></span>
+<span id="cb43-4"><a href="3.3-evaluation.html#cb43-4" tabindex="-1"></a>  (<span class="fu">correlation_heatmap</span>(rhos<span class="sc">$</span>sim, ft_order) <span class="sc">+</span></span>
+<span id="cb43-5"><a href="3.3-evaluation.html#cb43-5" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Simulated&quot;</span>) <span class="sc">+</span></span>
+<span id="cb43-6"><a href="3.3-evaluation.html#cb43-6" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>))</span>
+<span id="cb43-7"><a href="3.3-evaluation.html#cb43-7" tabindex="-1"></a></span>
+<span id="cb43-8"><a href="3.3-evaluation.html#cb43-8" tabindex="-1"></a>(p1 <span class="sc">/</span> p2) <span class="sc">+</span></span>
+<span id="cb43-9"><a href="3.3-evaluation.html#cb43-9" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>, <span class="at">heights =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="dv">2</span>))</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/collect_plots_multivariate-1.png" width="672" /></p>
+<p>How did we choose this threshold? You can compare the correlations more
+systematically using this loop:</p>
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="3.3-evaluation.html#cb44-1" tabindex="-1"></a>bivariate_metrics <span class="ot">&lt;-</span> \(thr, <span class="at">n_rep =</span> <span class="dv">5</span>) {</span>
+<span id="cb44-2"><a href="3.3-evaluation.html#cb44-2" tabindex="-1"></a>  <span class="co"># refit the simulator with current threshold</span></span>
+<span id="cb44-3"><a href="3.3-evaluation.html#cb44-3" tabindex="-1"></a>  simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb44-4"><a href="3.3-evaluation.html#cb44-4" tabindex="-1"></a>    t1d,</span>
+<span id="cb44-5"><a href="3.3-evaluation.html#cb44-5" tabindex="-1"></a>    <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
+<span id="cb44-6"><a href="3.3-evaluation.html#cb44-6" tabindex="-1"></a>    <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb44-7"><a href="3.3-evaluation.html#cb44-7" tabindex="-1"></a>    <span class="at">copula_def =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> thr)</span>
+<span id="cb44-8"><a href="3.3-evaluation.html#cb44-8" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb44-9"><a href="3.3-evaluation.html#cb44-9" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb44-10"><a href="3.3-evaluation.html#cb44-10" tabindex="-1"></a></span>
+<span id="cb44-11"><a href="3.3-evaluation.html#cb44-11" tabindex="-1"></a>  <span class="co"># compute metrics on five samples</span></span>
+<span id="cb44-12"><a href="3.3-evaluation.html#cb44-12" tabindex="-1"></a>  err <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb44-13"><a href="3.3-evaluation.html#cb44-13" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_rep) {</span>
+<span id="cb44-14"><a href="3.3-evaluation.html#cb44-14" tabindex="-1"></a>    sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)[<span class="fu">rownames</span>(t1d), ]</span>
+<span id="cb44-15"><a href="3.3-evaluation.html#cb44-15" tabindex="-1"></a>    rhos <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">sim =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(sim_exper))), <span class="at">real =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(t1d))))</span>
+<span id="cb44-16"><a href="3.3-evaluation.html#cb44-16" tabindex="-1"></a>    err[[i]] <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb44-17"><a href="3.3-evaluation.html#cb44-17" tabindex="-1"></a>      <span class="at">frobenius =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((rhos<span class="sc">$</span>sim <span class="sc">-</span> rhos<span class="sc">$</span>real)<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb44-18"><a href="3.3-evaluation.html#cb44-18" tabindex="-1"></a>      <span class="at">ks =</span> <span class="fu">ks.test</span>(rhos<span class="sc">$</span>sim, rhos<span class="sc">$</span>real)<span class="sc">$</span>statistic,</span>
+<span id="cb44-19"><a href="3.3-evaluation.html#cb44-19" tabindex="-1"></a>      <span class="at">thr =</span> thr</span>
+<span id="cb44-20"><a href="3.3-evaluation.html#cb44-20" tabindex="-1"></a>    )</span>
+<span id="cb44-21"><a href="3.3-evaluation.html#cb44-21" tabindex="-1"></a>  }</span>
+<span id="cb44-22"><a href="3.3-evaluation.html#cb44-22" tabindex="-1"></a></span>
+<span id="cb44-23"><a href="3.3-evaluation.html#cb44-23" tabindex="-1"></a>  <span class="fu">do.call</span>(rbind, err)</span>
+<span id="cb44-24"><a href="3.3-evaluation.html#cb44-24" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="3.3-evaluation.html#cb45-1" tabindex="-1"></a>errors <span class="ot">&lt;-</span> <span class="fu">seq</span>(.<span class="dv">001</span>, <span class="fl">0.2</span>, <span class="at">length.out =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb45-2"><a href="3.3-evaluation.html#cb45-2" tabindex="-1"></a>  <span class="fu">map_dfr</span>(bivariate_metrics) <span class="sc">|&gt;</span></span>
+<span id="cb45-3"><a href="3.3-evaluation.html#cb45-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>thr, <span class="at">names_to =</span> <span class="st">&quot;metric&quot;</span>)</span>
+<span id="cb45-4"><a href="3.3-evaluation.html#cb45-4" tabindex="-1"></a></span>
+<span id="cb45-5"><a href="3.3-evaluation.html#cb45-5" tabindex="-1"></a><span class="fu">ggplot</span>(errors) <span class="sc">+</span></span>
+<span id="cb45-6"><a href="3.3-evaluation.html#cb45-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(thr, value)) <span class="sc">+</span></span>
+<span id="cb45-7"><a href="3.3-evaluation.html#cb45-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>metric, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb45-8"><a href="3.3-evaluation.html#cb45-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Threshold&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Metric Value&quot;</span>)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/metrics_results-1.png" width="672" /></p>
+</div>
+<p style="text-align: center;">
+<a href="3.2-estimation.html"><button class="btn btn-default">Previous</button></a>
+<a href="3.4-pls-da-power-analysis.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

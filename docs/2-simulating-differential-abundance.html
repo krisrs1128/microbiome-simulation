@@ -1,0 +1,209 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="Chapter 2 Simulating Differential Abundance | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>Chapter 2 Simulating Differential Abundance | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="simulating-differential-abundance" class="section level1" number="2">
+<h1><span class="header-section-number">Chapter 2</span> Simulating Differential Abundance</h1>
+<p>Before we consider simulating entire microbial communities, with their complex
+correlation structures, let’s learn simulators for individual taxa. This is
+already enough to analyze taxon-level differential abundance approaches. For
+example, at the end of this session, we’ll apply a simulator to study the power
+and false discovery rate of limma-voom when applied to microbiome data (as
+opposed to the bulk RNA-seq data for which it was originally proposed). Also,
+marginal modeling is a first step towards multivariate (community-wide)
+modeling, which we’ll explore in the next session.</p>
+<p>Let’s load the necessary packages. Instructions for <code>scDesigner</code> and <code>MIGsim</code>
+can be found in the pre-workshop announcement. <code>SummarizedExperiment</code> is on
+Bioconductor, and all other packages are on CRAN.</p>
+<p>Let’s train a simulator to fit the Atlas dataset. We’ll use two
+covariates. <code>bmi_group</code> is the main covariate of interest – we want to see how
+microbiome composition varies among people with different BMI. The <code>log_depth</code>
+term is used to adjust for differential sequencing depths. We found it helpful
+to fixed zero inflation across the population (<code>nu</code>), so we have set <code>nu = ~1</code>.
+Finally, since we want to eventually evaluate testing methods that are designed
+for count data, we have used the (Z)ero (I)nflated (N)egative (B)inomial
+location-shape-scale model.</p>
+<div class="sourceCode" id="cb26"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb26-1"><a href="2-simulating-differential-abundance.html#cb26-1" tabindex="-1"></a><span class="fu">data</span>(atlas)</span>
+<span id="cb26-2"><a href="2-simulating-differential-abundance.html#cb26-2" tabindex="-1"></a></span>
+<span id="cb26-3"><a href="2-simulating-differential-abundance.html#cb26-3" tabindex="-1"></a>fmla <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb26-4"><a href="2-simulating-differential-abundance.html#cb26-4" tabindex="-1"></a>  <span class="at">mu =</span> <span class="sc">~</span> bmi_group <span class="sc">+</span> log_depth,</span>
+<span id="cb26-5"><a href="2-simulating-differential-abundance.html#cb26-5" tabindex="-1"></a>  <span class="at">sigma =</span> <span class="sc">~</span> bmi_group <span class="sc">+</span> log_depth,</span>
+<span id="cb26-6"><a href="2-simulating-differential-abundance.html#cb26-6" tabindex="-1"></a>  <span class="at">nu =</span> <span class="sc">~</span><span class="dv">1</span></span>
+<span id="cb26-7"><a href="2-simulating-differential-abundance.html#cb26-7" tabindex="-1"></a>)</span>
+<span id="cb26-8"><a href="2-simulating-differential-abundance.html#cb26-8" tabindex="-1"></a>sim <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(atlas, fmla, <span class="sc">~</span> <span class="fu">ZINBLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb26-9"><a href="2-simulating-differential-abundance.html#cb26-9" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.01</span>, <span class="at">mstop =</span> <span class="dv">1000</span>)</span></code></pre></div>
+</div>
+<p style="text-align: center;">
+<a href="1.3-warm-up-a-gaussian-example.html"><button class="btn btn-default">Previous</button></a>
+<a href="2.1-critique.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

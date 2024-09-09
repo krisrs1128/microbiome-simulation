@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="4.3 Block Covariance | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>4.3 Block Covariance | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="block-covariance" class="section level2" number="4.3">
+<h2><span class="header-section-number">4.3</span> Block Covariance</h2>
+<p>Let’s replace the current copula correlation structure with one from a block
+diagonal matrix. In this example, the off-diagonal correlations are 0.6. We can
+use <code>mutate_correlation</code> to swap this new correlation matrix into our earlier
+simulator.</p>
+<div class="sourceCode" id="cb70"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb70-1"><a href="4.3-block-covariance.html#cb70-1" tabindex="-1"></a>rho <span class="ot">&lt;-</span> <span class="fu">c</span>(<span class="fl">0.4</span>, .<span class="dv">6</span>, <span class="fl">0.8</span>) <span class="sc">|&gt;</span></span>
+<span id="cb70-2"><a href="4.3-block-covariance.html#cb70-2" tabindex="-1"></a>  <span class="fu">map</span>(<span class="sc">~</span> <span class="fu">matrix</span>(., <span class="at">nrow =</span> <span class="dv">15</span>, <span class="at">ncol =</span> <span class="dv">15</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb70-3"><a href="4.3-block-covariance.html#cb70-3" tabindex="-1"></a>  Matrix<span class="sc">::</span><span class="fu">bdiag</span>() <span class="sc">|&gt;</span></span>
+<span id="cb70-4"><a href="4.3-block-covariance.html#cb70-4" tabindex="-1"></a>  <span class="fu">as.matrix</span>()</span>
+<span id="cb70-5"><a href="4.3-block-covariance.html#cb70-5" tabindex="-1"></a><span class="fu">diag</span>(rho) <span class="ot">&lt;-</span> <span class="dv">1</span></span>
+<span id="cb70-6"><a href="4.3-block-covariance.html#cb70-6" tabindex="-1"></a></span>
+<span id="cb70-7"><a href="4.3-block-covariance.html#cb70-7" tabindex="-1"></a>simulated <span class="ot">&lt;-</span> sim <span class="sc">|&gt;</span></span>
+<span id="cb70-8"><a href="4.3-block-covariance.html#cb70-8" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho) <span class="sc">|&gt;</span></span>
+<span id="cb70-9"><a href="4.3-block-covariance.html#cb70-9" tabindex="-1"></a>  <span class="fu">sample</span>()</span>
+<span id="cb70-10"><a href="4.3-block-covariance.html#cb70-10" tabindex="-1"></a></span>
+<span id="cb70-11"><a href="4.3-block-covariance.html#cb70-11" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">t</span>(<span class="fu">assay</span>(simulated))</span></code></pre></div>
+<p>Let’s first look at the <a href="https://github.com/zdk123/SpiecEasi"><code>SpiecEasi</code> covariance estimate</a>. This is a variant of the
+graphical lasso that is designed to be well-adapted to microbiome data. The good
+news is that it does warn that the default choices of <span class="math inline">\(\lambda\)</span> are too large,
+which is correct in this case. Unfortunately, it took a while to get this
+answer, and we had already been quite generous in allowing it to fit 10 choices
+of <span class="math inline">\(\lambda\)</span>.</p>
+<div class="sourceCode" id="cb71"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb71-1"><a href="4.3-block-covariance.html#cb71-1" tabindex="-1"></a>rho_se <span class="ot">&lt;-</span> <span class="fu">spiec.easi</span>(x, <span class="at">nlambda =</span> <span class="dv">10</span>, <span class="at">pulsar.params =</span> <span class="fu">list</span>(<span class="at">rep.num =</span> <span class="dv">1</span>)) <span class="sc">|&gt;</span></span>
+<span id="cb71-2"><a href="4.3-block-covariance.html#cb71-2" tabindex="-1"></a>  <span class="fu">getOptCov</span>() <span class="sc">|&gt;</span></span>
+<span id="cb71-3"><a href="4.3-block-covariance.html#cb71-3" tabindex="-1"></a>  <span class="fu">as.matrix</span>() <span class="sc">|&gt;</span></span>
+<span id="cb71-4"><a href="4.3-block-covariance.html#cb71-4" tabindex="-1"></a>  <span class="fu">cov2cor</span>()</span>
+<span id="cb71-5"><a href="4.3-block-covariance.html#cb71-5" tabindex="-1"></a><span class="fu">heatmap</span>(rho_se)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/spieceasi-1.png" width="672" /></p>
+<p>Let’s instead use the Ledoit-Wolf estimator on the log-transformed data. The
+results make much more sense.</p>
+<div class="sourceCode" id="cb72"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb72-1"><a href="4.3-block-covariance.html#cb72-1" tabindex="-1"></a>rho_lw <span class="ot">&lt;-</span> <span class="fu">CovEst.2003LW</span>(<span class="fu">log</span>(<span class="dv">1</span> <span class="sc">+</span> x))<span class="sc">$</span>S <span class="sc">|&gt;</span></span>
+<span id="cb72-2"><a href="4.3-block-covariance.html#cb72-2" tabindex="-1"></a>  <span class="fu">cov2cor</span>()</span>
+<span id="cb72-3"><a href="4.3-block-covariance.html#cb72-3" tabindex="-1"></a><span class="fu">heatmap</span>(rho_lw)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/lw-1.png" width="672" /></p>
+<p>Since color comparisons are difficult to evaluate precisely, we can also make a
+scatterplot comparing the different covariance estimators.</p>
+<div class="sourceCode" id="cb73"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb73-1"><a href="4.3-block-covariance.html#cb73-1" tabindex="-1"></a><span class="fu">data.frame</span>(<span class="at">truth =</span> <span class="fu">c</span>(rho), <span class="at">se =</span> <span class="fu">c</span>(rho_se), <span class="at">lw =</span> <span class="fu">c</span>(rho_lw)) <span class="sc">|&gt;</span></span>
+<span id="cb73-2"><a href="4.3-block-covariance.html#cb73-2" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>truth, <span class="at">values_to =</span> <span class="st">&quot;estimate&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb73-3"><a href="4.3-block-covariance.html#cb73-3" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb73-4"><a href="4.3-block-covariance.html#cb73-4" tabindex="-1"></a>  <span class="fu">geom_jitter</span>(<span class="fu">aes</span>(truth, estimate, <span class="at">col =</span> name), <span class="at">alpha =</span> <span class="fl">0.6</span>, <span class="at">size =</span> <span class="fl">0.4</span>) <span class="sc">+</span></span>
+<span id="cb73-5"><a href="4.3-block-covariance.html#cb73-5" tabindex="-1"></a>  <span class="fu">geom_abline</span>(<span class="at">slope =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb73-6"><a href="4.3-block-covariance.html#cb73-6" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>name)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/covariance_metrics-1.png" width="672" /></p>
+</div>
+<p style="text-align: center;">
+<a href="4.2-evaluation-1.html"><button class="btn btn-default">Previous</button></a>
+<a href="4.4-generalization.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>

@@ -1,0 +1,659 @@
+<!DOCTYPE html>
+<html lang="" xml:lang="">
+<head>
+
+<meta charset="utf-8" />
+<meta name="generator" content="pandoc" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<meta property="og:title" content="3.4 PLS-DA Power Analysis | Simulation for Microbiome Analysis" />
+<meta property="og:type" content="book" />
+
+<meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+<meta name="github-repo" content="rstudio/bookdown-demo" />
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao" />
+
+<meta name="date" content="2024-09-08" />
+
+<script type="text/x-mathjax-config">
+MathJax.Hub.Config({
+  TeX: { equationNumbers: { autoNumber: "AMS" } }
+});
+</script>
+  <script src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-chtml-full.js" type="text/javascript"></script>
+
+<meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:">
+
+<title>3.4 PLS-DA Power Analysis | Simulation for Microbiome Analysis</title>
+
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="libs/bootstrap-3.3.5/css/paper.min.css" rel="stylesheet" />
+<script src="libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<style>h1 {font-size: 34px;}
+       h1.title {font-size: 38px;}
+       h2 {font-size: 30px;}
+       h3 {font-size: 24px;}
+       h4 {font-size: 18px;}
+       h5 {font-size: 16px;}
+       h6 {font-size: 12px;}
+       code {color: inherit; background-color: rgba(0, 0, 0, 0.04);}
+       pre:not([class]) { background-color: white }</style>
+<script src="libs/navigation-1.1/tabsets.js"></script>
+
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    background-color: #2a211c;
+    color: #bdae9d;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #bdae9d;  padding-left: 4px; }
+div.sourceCode
+  { color: #bdae9d; background-color: #2a211c; }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ffff00; } /* Alert */
+code span.an { color: #0066ff; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { } /* Attribute */
+code span.bn { color: #44aa43; } /* BaseN */
+code span.bu { } /* BuiltIn */
+code span.cf { color: #43a8ed; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #049b0a; } /* Char */
+code span.cn { } /* Constant */
+code span.co { color: #0066ff; font-weight: bold; font-style: italic; } /* Comment */
+code span.do { color: #0066ff; font-style: italic; } /* Documentation */
+code span.dt { text-decoration: underline; } /* DataType */
+code span.dv { color: #44aa43; } /* DecVal */
+code span.er { color: #ffff00; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #44aa43; } /* Float */
+code span.fu { color: #ff9358; font-weight: bold; } /* Function */
+code span.im { } /* Import */
+code span.in { color: #0066ff; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #43a8ed; font-weight: bold; } /* Keyword */
+code span.op { } /* Operator */
+code span.pp { font-weight: bold; } /* Preprocessor */
+code span.sc { color: #049b0a; } /* SpecialChar */
+code span.ss { color: #049b0a; } /* SpecialString */
+code span.st { color: #049b0a; } /* String */
+code span.va { } /* Variable */
+code span.vs { color: #049b0a; } /* VerbatimString */
+code span.wa { color: #ffff00; font-weight: bold; } /* Warning */
+</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+
+
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+/* show arrow before summary tag as in bootstrap
+TODO: remove if bootstrap in updated in html_document (rmarkdown#1485) */
+details > summary {
+  display: list-item;
+  cursor: pointer;
+}
+</style>
+</head>
+
+<body>
+
+<div class="container-fluid main-container">
+
+
+<div class="row">
+<div class="col-sm-12">
+<!--bookdown:toc:end-->
+<!--bookdown:toc:start-->
+</div>
+</div>
+<div class="row">
+<div class="col-sm-12">
+<div id="pls-da-power-analysis" class="section level2" number="3.4">
+<h2><span class="header-section-number">3.4</span> PLS-DA Power Analysis</h2>
+<p>Now that we have a simulator, we can run a power analysis. In theory, we could
+look at how any summary from the PLS-DA output varies as the sample size
+increases. The most natural one, though, is simply to see how classifier
+performance improves as we gather more samples. Specifically, we’ll measure the
+holdout Area Under the Curve (auc), a measure of how well the trains PLS-DA
+classifier balance precision and recall on new samples.</p>
+<p>Moreover, we’ll study the effect of sparsity – what happens when many features
+have no relationship at all with the response? We’ll also simulate three
+hypothetical datasets for each sample size and sparsity level. All
+configurations of interest are stored in the <code>config</code> matrix below.</p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="3.4-pls-da-power-analysis.html#cb46-1" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb46-2"><a href="3.4-pls-da-power-analysis.html#cb46-2" tabindex="-1"></a>  <span class="at">sample_size =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">20</span>, <span class="dv">200</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
+<span id="cb46-3"><a href="3.4-pls-da-power-analysis.html#cb46-3" tabindex="-1"></a>  <span class="at">n_rep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,</span>
+<span id="cb46-4"><a href="3.4-pls-da-power-analysis.html#cb46-4" tabindex="-1"></a>  <span class="at">n_null =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">317</span>, <span class="dv">417</span>, <span class="at">length.out =</span> <span class="dv">4</span>)),</span>
+<span id="cb46-5"><a href="3.4-pls-da-power-analysis.html#cb46-5" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="cn">NA</span></span>
+<span id="cb46-6"><a href="3.4-pls-da-power-analysis.html#cb46-6" tabindex="-1"></a>)</span>
+<span id="cb46-7"><a href="3.4-pls-da-power-analysis.html#cb46-7" tabindex="-1"></a></span>
+<span id="cb46-8"><a href="3.4-pls-da-power-analysis.html#cb46-8" tabindex="-1"></a><span class="fu">data</span>(t1d_order)</span></code></pre></div>
+<p><strong>Exercise</strong>: Finally, we’re in a position to generate synthetic data and
+evaluate PLS-DA performance. Fill in the block below to update the simulator for
+each <code>i</code>. Remember that the original <code>simulator</code> defined above assumes that all
+proteins are associated with T1D. You can use <code>t1d_order</code> to prioritize the
+proteins with the strongest effects in the original data. As before, you should
+only need to modify the line marked with the comments (<code>#</code>).</p>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="3.4-pls-da-power-analysis.html#cb47-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
+<span id="cb47-2"><a href="3.4-pls-da-power-analysis.html#cb47-2" tabindex="-1"></a>  simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
+<span id="cb47-3"><a href="3.4-pls-da-power-analysis.html#cb47-3" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb47-4"><a href="3.4-pls-da-power-analysis.html#cb47-4" tabindex="-1"></a>      <span class="co"># fill this in</span></span>
+<span id="cb47-5"><a href="3.4-pls-da-power-analysis.html#cb47-5" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb47-6"><a href="3.4-pls-da-power-analysis.html#cb47-6" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb47-7"><a href="3.4-pls-da-power-analysis.html#cb47-7" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="3.4-pls-da-power-analysis.html#cb47-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
+<span id="cb47-9"><a href="3.4-pls-da-power-analysis.html#cb47-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
+<span id="cb47-10"><a href="3.4-pls-da-power-analysis.html#cb47-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
+<span id="cb47-11"><a href="3.4-pls-da-power-analysis.html#cb47-11" tabindex="-1"></a>}</span></code></pre></div>
+<p><strong>Solution</strong>: To define nulls, we mutate the weakest proteins so that there is no longer any
+association with T1D: <code>link = ~ 1</code> instead of <code>link = ~ outcome2</code>. To speed up
+the computation, we organized the <code>mutate</code> calls so that we don’t need to
+re-estimate proteins whose effects were removed in a previous iteration.</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="3.4-pls-da-power-analysis.html#cb48-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
+<span id="cb48-2"><a href="3.4-pls-da-power-analysis.html#cb48-2" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">==</span> <span class="dv">1</span> <span class="sc">||</span> config<span class="sc">$</span>n_null[i] <span class="sc">!=</span> config<span class="sc">$</span>n_null[i <span class="sc">-</span> <span class="dv">1</span>]) {</span>
+<span id="cb48-3"><a href="3.4-pls-da-power-analysis.html#cb48-3" tabindex="-1"></a>    simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
+<span id="cb48-4"><a href="3.4-pls-da-power-analysis.html#cb48-4" tabindex="-1"></a>      <span class="fu">mutate</span>(<span class="fu">any_of</span>(<span class="fu">rev</span>(t1d_order)[<span class="dv">1</span><span class="sc">:</span>config<span class="sc">$</span>n_null[i]]), <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb48-5"><a href="3.4-pls-da-power-analysis.html#cb48-5" tabindex="-1"></a>      <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb48-6"><a href="3.4-pls-da-power-analysis.html#cb48-6" tabindex="-1"></a>  }</span>
+<span id="cb48-7"><a href="3.4-pls-da-power-analysis.html#cb48-7" tabindex="-1"></a></span>
+<span id="cb48-8"><a href="3.4-pls-da-power-analysis.html#cb48-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
+<span id="cb48-9"><a href="3.4-pls-da-power-analysis.html#cb48-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
+<span id="cb48-10"><a href="3.4-pls-da-power-analysis.html#cb48-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
+<span id="cb48-11"><a href="3.4-pls-da-power-analysis.html#cb48-11" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## run 1/400
+## run 2/400
+## run 3/400
+## run 4/400
+## run 5/400
+## run 6/400
+## run 7/400
+## run 8/400
+## run 9/400
+## run 10/400
+## run 11/400
+## run 12/400
+## run 13/400
+## run 14/400
+## run 15/400
+## run 16/400
+## run 17/400
+## run 18/400
+## run 19/400
+## run 20/400
+## run 21/400
+## run 22/400
+## run 23/400
+## run 24/400
+## run 25/400
+## run 26/400
+## run 27/400
+## run 28/400
+## run 29/400
+## run 30/400
+## run 31/400
+## run 32/400
+## run 33/400
+## run 34/400
+## run 35/400
+## run 36/400
+## run 37/400
+## run 38/400
+## run 39/400
+## run 40/400
+## run 41/400
+## run 42/400
+## run 43/400
+## run 44/400
+## run 45/400
+## run 46/400
+## run 47/400
+## run 48/400
+## run 49/400
+## run 50/400
+## run 51/400
+## run 52/400
+## run 53/400
+## run 54/400
+## run 55/400
+## run 56/400
+## run 57/400
+## run 58/400
+## run 59/400
+## run 60/400
+## run 61/400
+## run 62/400
+## run 63/400
+## run 64/400
+## run 65/400
+## run 66/400
+## run 67/400
+## run 68/400
+## run 69/400
+## run 70/400
+## run 71/400
+## run 72/400
+## run 73/400
+## run 74/400
+## run 75/400
+## run 76/400
+## run 77/400
+## run 78/400
+## run 79/400
+## run 80/400
+## run 81/400
+## run 82/400
+## run 83/400
+## run 84/400
+## run 85/400
+## run 86/400
+## run 87/400
+## run 88/400
+## run 89/400
+## run 90/400
+## run 91/400
+## run 92/400
+## run 93/400
+## run 94/400
+## run 95/400
+## run 96/400
+## run 97/400
+## run 98/400
+## run 99/400
+## run 100/400
+## run 101/400
+## run 102/400
+## run 103/400
+## run 104/400
+## run 105/400
+## run 106/400
+## run 107/400
+## run 108/400
+## run 109/400
+## run 110/400
+## run 111/400
+## run 112/400
+## run 113/400
+## run 114/400
+## run 115/400
+## run 116/400
+## run 117/400
+## run 118/400
+## run 119/400
+## run 120/400
+## run 121/400
+## run 122/400
+## run 123/400
+## run 124/400
+## run 125/400
+## run 126/400
+## run 127/400
+## run 128/400
+## run 129/400
+## run 130/400
+## run 131/400
+## run 132/400
+## run 133/400
+## run 134/400
+## run 135/400
+## run 136/400
+## run 137/400
+## run 138/400
+## run 139/400
+## run 140/400
+## run 141/400
+## run 142/400
+## run 143/400
+## run 144/400
+## run 145/400
+## run 146/400
+## run 147/400
+## run 148/400
+## run 149/400
+## run 150/400
+## run 151/400
+## run 152/400
+## run 153/400
+## run 154/400
+## run 155/400
+## run 156/400
+## run 157/400
+## run 158/400
+## run 159/400
+## run 160/400
+## run 161/400
+## run 162/400
+## run 163/400
+## run 164/400
+## run 165/400
+## run 166/400
+## run 167/400
+## run 168/400
+## run 169/400
+## run 170/400
+## run 171/400
+## run 172/400
+## run 173/400
+## run 174/400
+## run 175/400
+## run 176/400
+## run 177/400
+## run 178/400
+## run 179/400
+## run 180/400
+## run 181/400
+## run 182/400
+## run 183/400
+## run 184/400
+## run 185/400
+## run 186/400
+## run 187/400
+## run 188/400
+## run 189/400
+## run 190/400
+## run 191/400
+## run 192/400
+## run 193/400
+## run 194/400
+## run 195/400
+## run 196/400
+## run 197/400
+## run 198/400
+## run 199/400
+## run 200/400
+## run 201/400
+## run 202/400
+## run 203/400
+## run 204/400
+## run 205/400
+## run 206/400
+## run 207/400
+## run 208/400
+## run 209/400
+## run 210/400
+## run 211/400
+## run 212/400
+## run 213/400
+## run 214/400
+## run 215/400
+## run 216/400
+## run 217/400
+## run 218/400
+## run 219/400
+## run 220/400
+## run 221/400
+## run 222/400
+## run 223/400
+## run 224/400
+## run 225/400
+## run 226/400
+## run 227/400
+## run 228/400
+## run 229/400
+## run 230/400
+## run 231/400
+## run 232/400
+## run 233/400
+## run 234/400
+## run 235/400
+## run 236/400
+## run 237/400
+## run 238/400
+## run 239/400
+## run 240/400
+## run 241/400
+## run 242/400
+## run 243/400
+## run 244/400
+## run 245/400
+## run 246/400
+## run 247/400
+## run 248/400
+## run 249/400
+## run 250/400
+## run 251/400
+## run 252/400
+## run 253/400
+## run 254/400
+## run 255/400
+## run 256/400
+## run 257/400
+## run 258/400
+## run 259/400
+## run 260/400
+## run 261/400
+## run 262/400
+## run 263/400
+## run 264/400
+## run 265/400
+## run 266/400
+## run 267/400
+## run 268/400
+## run 269/400
+## run 270/400
+## run 271/400
+## run 272/400
+## run 273/400
+## run 274/400
+## run 275/400
+## run 276/400
+## run 277/400
+## run 278/400
+## run 279/400
+## run 280/400
+## run 281/400
+## run 282/400
+## run 283/400
+## run 284/400
+## run 285/400
+## run 286/400
+## run 287/400
+## run 288/400
+## run 289/400
+## run 290/400
+## run 291/400
+## run 292/400
+## run 293/400
+## run 294/400
+## run 295/400
+## run 296/400
+## run 297/400
+## run 298/400
+## run 299/400
+## run 300/400
+## run 301/400
+## run 302/400
+## run 303/400
+## run 304/400
+## run 305/400
+## run 306/400
+## run 307/400
+## run 308/400
+## run 309/400
+## run 310/400
+## run 311/400
+## run 312/400
+## run 313/400
+## run 314/400
+## run 315/400
+## run 316/400
+## run 317/400
+## run 318/400
+## run 319/400
+## run 320/400
+## run 321/400
+## run 322/400
+## run 323/400
+## run 324/400
+## run 325/400
+## run 326/400
+## run 327/400
+## run 328/400
+## run 329/400
+## run 330/400
+## run 331/400
+## run 332/400
+## run 333/400
+## run 334/400
+## run 335/400
+## run 336/400
+## run 337/400
+## run 338/400
+## run 339/400
+## run 340/400
+## run 341/400
+## run 342/400
+## run 343/400
+## run 344/400
+## run 345/400
+## run 346/400
+## run 347/400
+## run 348/400
+## run 349/400
+## run 350/400
+## run 351/400
+## run 352/400
+## run 353/400
+## run 354/400
+## run 355/400
+## run 356/400
+## run 357/400
+## run 358/400
+## run 359/400
+## run 360/400
+## run 361/400
+## run 362/400
+## run 363/400
+## run 364/400
+## run 365/400
+## run 366/400
+## run 367/400
+## run 368/400
+## run 369/400
+## run 370/400
+## run 371/400
+## run 372/400
+## run 373/400
+## run 374/400
+## run 375/400
+## run 376/400
+## run 377/400
+## run 378/400
+## run 379/400
+## run 380/400
+## run 381/400
+## run 382/400
+## run 383/400
+## run 384/400
+## run 385/400
+## run 386/400
+## run 387/400
+## run 388/400
+## run 389/400
+## run 390/400
+## run 391/400
+## run 392/400
+## run 393/400
+## run 394/400
+## run 395/400
+## run 396/400
+## run 397/400
+## run 398/400
+## run 399/400
+## run 400/400</code></pre>
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="3.4-pls-da-power-analysis.html#cb50-1" tabindex="-1"></a><span class="co">#config &lt;- readRDS(url(&quot;https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds&quot;))</span></span></code></pre></div>
+<p>:::</p>
+<p>We can visualize variation in performance.</p>
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="3.4-pls-da-power-analysis.html#cb51-1" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(config, <span class="fu">aes</span>(<span class="fu">factor</span>(sample_size), metrics, <span class="at">col =</span> <span class="fu">factor</span>(n_null))) <span class="sc">+</span></span>
+<span id="cb51-2"><a href="3.4-pls-da-power-analysis.html#cb51-2" tabindex="-1"></a>  <span class="fu">stat_pointinterval</span>(<span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-3"><a href="3.4-pls-da-power-analysis.html#cb51-3" tabindex="-1"></a>  <span class="fu">scale_color_scico_d</span>(<span class="at">palette =</span> <span class="st">&quot;managua&quot;</span>) <span class="sc">+</span></span>
+<span id="cb51-4"><a href="3.4-pls-da-power-analysis.html#cb51-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Sample Size&quot;</span>, <span class="at">y =</span> <span class="st">&quot;AUC&quot;</span>, <span class="at">color =</span> <span class="st">&quot;# Nulls&quot;</span>, <span class="at">title =</span> <span class="st">&quot;C&quot;</span>)</span>
+<span id="cb51-5"><a href="3.4-pls-da-power-analysis.html#cb51-5" tabindex="-1"></a></span>
+<span id="cb51-6"><a href="3.4-pls-da-power-analysis.html#cb51-6" tabindex="-1"></a>(p1 <span class="sc">/</span> p2 <span class="sc">/</span> p3) <span class="sc">+</span></span>
+<span id="cb51-7"><a href="3.4-pls-da-power-analysis.html#cb51-7" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>, <span class="at">heights =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/visualize-power-1.png" width="672" /></p>
+<p><strong>Discussion</strong>: Interpret the visualization above. How do you think analysis
+like this could help you justify making some experimental investments over
+others?</p>
+<p><strong>Solution</strong>: Reading across facets from top left to bottom right, power decreases when the
+number of null proteins increases. It seems that sPLS-DA can benefit from having
+many weakly associated features. While power is sometimes high in low sample
+sizes, the variance can be quite large. In all settings, there is a noticeable
+decrease in variance in power as we go from 15 to 48 samples. If we can assume
+that a moderate fraction (&gt; 15%) of measured proteins are associated with T1D,
+then we may already achieve good power with ~ 100 samples. However, if we
+imagine our effect might be sparser in our future experiment, then this figure
+would give us good justification for arguing for a larger number of samples, in
+order to ensure we can discover a disease-associated proteomics signature.</p>
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="3.4-pls-da-power-analysis.html#cb52-1" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">colData</span>(t1d)<span class="sc">$</span>outcome2 <span class="sc">==</span> <span class="st">&quot;T1D&quot;</span></span>
+<span id="cb52-2"><a href="3.4-pls-da-power-analysis.html#cb52-2" tabindex="-1"></a>p_vals <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">assay</span>(t1d), <span class="dv">1</span>, \(x) <span class="fu">t.test</span>(x[ix], x[<span class="sc">-</span>ix])<span class="sc">$</span>p.value)</span>
+<span id="cb52-3"><a href="3.4-pls-da-power-analysis.html#cb52-3" tabindex="-1"></a><span class="fu">storey_pi0_est</span>(p_vals, <span class="fl">0.5</span>)<span class="sc">$</span>pi0</span></code></pre></div>
+<pre><code>## [1] 1.311475</code></pre>
+</div>
+<p style="text-align: center;">
+<a href="3.3-evaluation.html"><button class="btn btn-default">Previous</button></a>
+<a href="3.5-comparison-with-t-test-calculation.html"><button class="btn btn-default">Next</button></a>
+</p>
+</div>
+</div>
+
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+$(document).ready(function () {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+});
+
+</script>
+
+</body>
+</html>
