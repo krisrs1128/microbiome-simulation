@@ -1,13 +1,7 @@
-bookdown::gitbook:
+bookdown::bs4_book:
+  theme:
+    bootswatch: "materia"
   css: style.css
-  config:
-    toc:
-      before: |
-        <li><a href="./">Simulation for Microbiome Analysis</a></li>
-      after: |
-        <li><a href="https://github.com/rstudio/bookdown" target="blank">Published with bookdown</a></li>
-    edit: https://github.com/USERNAME/REPO/edit/BRANCH/%s
-    download: ["pdf", "epub"]
 bookdown::pdf_book:
   includes:
     in_header: preamble.tex

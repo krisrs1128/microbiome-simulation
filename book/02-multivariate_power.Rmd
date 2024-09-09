@@ -267,7 +267,7 @@ for (i in seq_len(nrow(config))) {
 association with T1D: `link = ~ 1` instead of `link = ~ outcome2`. To speed up
 the computation, we organized the `mutate` calls so that we don't need to
 re-estimate proteins whose effects were removed in a previous iteration.
-```{r power-analysis-loop-soln, eval = TRUE}
+```{r power-analysis-loop-soln, eval = FALSE}
 for (i in seq_len(nrow(config))) {
   if (i == 1 || config$n_null[i] != config$n_null[i - 1]) {
     simulator <- simulator |>
@@ -282,13 +282,13 @@ for (i in seq_len(nrow(config))) {
 ```
 
 ```{r load_config}
-#config <- readRDS(url("https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds"))
+config <- readRDS(url("https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds"))
 ```
 :::
 
 We can visualize variation in performance. 
 
-```{r visualize-power}
+```{r visualize-power, fig.width = 8, fig.height = 7.5}
 p3 <- ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
   stat_pointinterval(position = "dodge") +
   scale_color_scico_d(palette = "managua") +
