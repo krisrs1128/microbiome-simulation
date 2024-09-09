@@ -1,11 +1,9 @@
 --- 
 title: "Simulation for Microbiome Analysis"
-author: "Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao"
+author: "Kris Sankaran, Saritha Kodikara, Jingyi Jessica Li, and Kim-Anh Lê Cao"
 date: "`r Sys.Date()`"
-site: bookdown::bookdown_site
-documentclass: book
 bibliography: [book.bib, packages.bib]
-# url: your book url like https://bookdown.org/yihui/bookdown
+url: https://krisrs1128.github.io/microbiome-simulation/
 # cover-image: path to the social sharing image like images/cover.jpg
 description: |
   Examples illustrating the use of simulation for microbiome analysis, companion to the review article: 
@@ -16,7 +14,7 @@ github-repo: rstudio/bookdown-demo
 # Introduction
 
 This website accompanies the review 
-[Leveraging Simulation in Microbiome Data Analysis](). All examples discussed in
+[Semisynthetic Simulation for Microbiome Analysis](). All examples discussed in
 the case studies there can be reproduced by running the code below, and we have
 also included additional introductory material about some packages that simplify
 our analysis.
