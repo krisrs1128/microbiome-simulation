@@ -56,7 +56,7 @@ suppressPackageStartupMessages({
   library(purrr)
   library(scDesigner)
 })
-theme_set(theme_classic())
+theme_set(theme_classic() + theme(rect = element_rect(fill = "transparent")))
 ```
 
 ## Using `SummarizedExperiment`

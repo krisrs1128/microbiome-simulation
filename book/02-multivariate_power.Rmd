@@ -10,6 +10,7 @@ good sample size for a sparse partial least squares discriminant analysis
 ```{r, include = FALSE}
 knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
 set.seed(202406)
+library(tidyverse)
 ```
 
 First, we'll load the required packages. Relative to our first session, the only
@@ -299,7 +300,7 @@ p3 <- ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
 ```
 
 ```{r save_multivariate_curve, echo = FALSE}
-ggsave("multivariate_power_curve.svg", width = 10, height = 7.5)
+ggsave("multivariate_power_curve.svg", width = 10, height = 7.5, bg = "transparent")
 ```
 
 **Discussion**: Interpret the visualization above. How do you think analysis
