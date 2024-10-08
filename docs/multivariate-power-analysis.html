@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<<<<<<< HEAD
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,6 +24,132 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
 <link rel="stylesheet" href="style.css">
+=======
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis</title>
+  <meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 3 Multivariate Power Analysis | Simulation for Microbiome Analysis" />
+  
+  <meta name="twitter:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
+
+
+<meta name="date" content="2024-07-20" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="simulating-differential-abundance.html"/>
+<link rel="next" href="microbiome-networks.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+>>>>>>> dev_sk
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -81,12 +208,17 @@ T1D patients and 61 healthy controls. These data were originally gathered by
 the relationship between the pancreas and intestinal issues often experienced by
 T1D patients. They were especially curious about whether microbime-associated
 proteins might be related to increased risk for T1D development.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb34"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb38"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb38-1"><a href="multivariate-power-analysis.html#cb38-1" tabindex="-1"></a><span class="fu">data</span>(t1d)</span></code></pre></div>
+>>>>>>> dev_sk
 <p>The output that we care about are the PLD-DA scores and loadings. The wrapper
 below directly gives us this output without our having to explicitly set
 hyerparameters, though you can <a href="https://github.com/krisrs1128/intro-to-simulation/blob/main/MIGsim/R/methods.R">look here</a>
 to see how the function was defined.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb35"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/MIGsim/man/splsda_fit.html">splsda_fit</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/plotIndiv.html">plotIndiv</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">fit</span>, cex <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
@@ -94,6 +226,13 @@ to see how the function was defined.</p>
 <div class="sourceCode" id="cb36"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/plotVar.html">plotVar</a></span><span class="op">(</span><span class="va">result</span><span class="op">$</span><span class="va">fit</span>, cutoff <span class="op">=</span> <span class="fl">0.4</span>, cex <span class="op">=</span> <span class="fl">5</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/initial_t1d_analysis-2.png" width="672"></div>
+=======
+<div class="sourceCode" id="cb39"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb39-1"><a href="multivariate-power-analysis.html#cb39-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">splsda_fit</span>(t1d)</span>
+<span id="cb39-2"><a href="multivariate-power-analysis.html#cb39-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(result<span class="sc">$</span>fit, <span class="at">cex =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/initial_t1d_analysis-1.png" width="672" /></p>
+<div class="sourceCode" id="cb40"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb40-1"><a href="multivariate-power-analysis.html#cb40-1" tabindex="-1"></a><span class="fu">plotVar</span>(result<span class="sc">$</span>fit, <span class="at">cutoff =</span> <span class="fl">0.4</span>, <span class="at">cex =</span> <span class="dv">5</span>)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/initial_t1d_analysis-2.png" width="672" /></p>
+>>>>>>> dev_sk
 <p><strong>Exercise</strong>: Discuss the output of <code>plotIndiv</code>. How does <code>plotVar</code> shape
 your interpretation?</p>
 <p><strong>Solution</strong>: The first two dimensions of the sPLS-DA pick on distinctions between the T1D
@@ -116,9 +255,14 @@ controls.</p>
 <p>Let’s estimate a simulator where every protein is allowed ot vary across T1D
 type. Since the data have already been centered log-ratio transformed, it’s okay
 to treat these as Gaussian.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb37"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simulator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span><span class="va">t1d</span>, link_formula <span class="op">=</span> <span class="op">~</span><span class="va">outcome2</span>, family <span class="op">=</span> <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamboostLSS/man/families.html">GaussianLSS</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">estimate</span><span class="op">(</span>mstop <span class="op">=</span> <span class="fl">100</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb41"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb41-1"><a href="multivariate-power-analysis.html#cb41-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(t1d, <span class="at">link_formula =</span> <span class="sc">~</span>outcome2, <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb41-2"><a href="multivariate-power-analysis.html#cb41-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span></code></pre></div>
+>>>>>>> dev_sk
 </div>
 <div id="evaluation" class="section level2" number="3.3">
 <h2>
@@ -133,14 +277,21 @@ correlations.</p>
 correlations from both the real and the simulated datasets. We seem to be often
 overestimating the correlation strength. This is likely a consequence of the
 high-dimensionality of the problem.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb38"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">sim_exper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">simulator</span><span class="op">)</span></span>
 <span><span class="fu">correlation_hist</span><span class="op">(</span><span class="va">t1d</span>, <span class="va">sim_exper</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/multivariate_correlations-1.png" width="672"></div>
+=======
+<div class="sourceCode" id="cb42"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb42-1"><a href="multivariate-power-analysis.html#cb42-1" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
+<span id="cb42-2"><a href="multivariate-power-analysis.html#cb42-2" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/multivariate_correlations-1.png" width="672" /></p>
+>>>>>>> dev_sk
 <p><strong>Exercise</strong>: To address this, let’s try modifying the <code>copula_def</code> argument of
 <code>setup_simulator</code> to use a more suitable simulator. Generate new correlation
 histograms and comment on the changes you observe. You only need to modify the
 commented lines (<code>#</code>) lines in the block below.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb39"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simulator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span></span>
 <span>  <span class="va">t1d</span>,</span>
@@ -152,12 +303,25 @@ commented lines (<code>#</code>) lines in the block below.</p>
 <span></span>
 <span><span class="va">sim_exper</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="va">simulator</span><span class="op">)</span> <span class="co"># and then run these two lines</span></span>
 <span><span class="fu">correlation_hist</span><span class="op">(</span><span class="va">t1d</span>, <span class="va">sim_exper</span><span class="op">)</span> <span class="co">#</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb43"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb43-1"><a href="multivariate-power-analysis.html#cb43-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb43-2"><a href="multivariate-power-analysis.html#cb43-2" tabindex="-1"></a>  t1d,</span>
+<span id="cb43-3"><a href="multivariate-power-analysis.html#cb43-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
+<span id="cb43-4"><a href="multivariate-power-analysis.html#cb43-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb43-5"><a href="multivariate-power-analysis.html#cb43-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="co"># fill this code in</span></span>
+<span id="cb43-6"><a href="multivariate-power-analysis.html#cb43-6" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb43-7"><a href="multivariate-power-analysis.html#cb43-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb43-8"><a href="multivariate-power-analysis.html#cb43-8" tabindex="-1"></a></span>
+<span id="cb43-9"><a href="multivariate-power-analysis.html#cb43-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator) <span class="co"># and then run these two lines</span></span>
+<span id="cb43-10"><a href="multivariate-power-analysis.html#cb43-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper) <span class="co">#</span></span></code></pre></div>
+>>>>>>> dev_sk
 <p><strong>Solution</strong>: For our coupla, we can use a covariance estimator of <a href="https://www.tandfonline.com/doi/abs/10.1198/jasa.2011.tm10560">Cai and Liu
 (2011)</a>, that is
 suited for high dimensions. Larger values of <code>thr</code> will increase the stability
 of our estimates, but at the cost of potentially missing or weakening true
 correlations. In line with this point, our new simulated correlations are more
 concentrated.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb40"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simulator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span></span>
 <span>  <span class="va">t1d</span>,</span>
@@ -252,6 +416,95 @@ systematically using this loop:</p>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/facet_wrap.html">facet_wrap</a></span><span class="op">(</span><span class="op">~</span><span class="va">metric</span>, scales <span class="op">=</span> <span class="st">"free_y"</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://ggplot2.tidyverse.org/reference/labs.html">labs</a></span><span class="op">(</span>x <span class="op">=</span> <span class="st">"Threshold"</span>, y <span class="op">=</span> <span class="st">"Metric Value"</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/metrics_results-1.png" width="672"></div>
+=======
+<div class="sourceCode" id="cb44"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb44-1"><a href="multivariate-power-analysis.html#cb44-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb44-2"><a href="multivariate-power-analysis.html#cb44-2" tabindex="-1"></a>  t1d,</span>
+<span id="cb44-3"><a href="multivariate-power-analysis.html#cb44-3" tabindex="-1"></a>  <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
+<span id="cb44-4"><a href="multivariate-power-analysis.html#cb44-4" tabindex="-1"></a>  <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb44-5"><a href="multivariate-power-analysis.html#cb44-5" tabindex="-1"></a>  <span class="at">copula_def =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.1</span>)</span>
+<span id="cb44-6"><a href="multivariate-power-analysis.html#cb44-6" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb44-7"><a href="multivariate-power-analysis.html#cb44-7" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb44-8"><a href="multivariate-power-analysis.html#cb44-8" tabindex="-1"></a></span>
+<span id="cb44-9"><a href="multivariate-power-analysis.html#cb44-9" tabindex="-1"></a>sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)</span>
+<span id="cb44-10"><a href="multivariate-power-analysis.html#cb44-10" tabindex="-1"></a><span class="fu">correlation_hist</span>(t1d, sim_exper)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/estimate_t1d_simulator-1.png" width="672" />
+:::</p>
+<div class="sourceCode" id="cb45"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb45-1"><a href="multivariate-power-analysis.html#cb45-1" tabindex="-1"></a><span class="fu">contrast_boxplot</span>(t1d, sim_exper, <span class="sc">~</span>. <span class="sc">~</span> <span class="fu">reorder</span>(outcome2, value))</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/t1d_contrast_boxplot-1.png" width="672" /></p>
+<div class="sourceCode" id="cb46"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb46-1"><a href="multivariate-power-analysis.html#cb46-1" tabindex="-1"></a>rhos <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">sim =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(sim_exper))), <span class="at">real =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(t1d))))</span>
+<span id="cb46-2"><a href="multivariate-power-analysis.html#cb46-2" tabindex="-1"></a><span class="fu">diag</span>(rhos[[<span class="dv">1</span>]]) <span class="ot">&lt;-</span> <span class="cn">NA</span></span>
+<span id="cb46-3"><a href="multivariate-power-analysis.html#cb46-3" tabindex="-1"></a>top_cors <span class="ot">&lt;-</span> <span class="fu">which</span>(<span class="fu">abs</span>(rhos[[<span class="dv">1</span>]]) <span class="sc">&gt;</span> <span class="fu">quantile</span>(<span class="fu">abs</span>(rhos[[<span class="dv">1</span>]]), <span class="fl">0.999</span>, <span class="at">na.rm =</span> <span class="cn">TRUE</span>), <span class="at">arr.ind =</span> <span class="cn">TRUE</span>)</span>
+<span id="cb46-4"><a href="multivariate-power-analysis.html#cb46-4" tabindex="-1"></a></span>
+<span id="cb46-5"><a href="multivariate-power-analysis.html#cb46-5" tabindex="-1"></a>pairs_data <span class="ot">&lt;-</span> <span class="fu">list</span>(</span>
+<span id="cb46-6"><a href="multivariate-power-analysis.html#cb46-6" tabindex="-1"></a>  <span class="at">real =</span> <span class="fu">subset_correlated</span>(<span class="fu">assay</span>(t1d), top_cors),</span>
+<span id="cb46-7"><a href="multivariate-power-analysis.html#cb46-7" tabindex="-1"></a>  <span class="at">simulated =</span> <span class="fu">subset_correlated</span>(<span class="fu">assay</span>(sim_exper), top_cors)</span>
+<span id="cb46-8"><a href="multivariate-power-analysis.html#cb46-8" tabindex="-1"></a>) <span class="sc">|&gt;</span></span>
+<span id="cb46-9"><a href="multivariate-power-analysis.html#cb46-9" tabindex="-1"></a>  <span class="fu">bind_rows</span>(<span class="at">.id =</span> <span class="st">&quot;source&quot;</span>)</span>
+<span id="cb46-10"><a href="multivariate-power-analysis.html#cb46-10" tabindex="-1"></a></span>
+<span id="cb46-11"><a href="multivariate-power-analysis.html#cb46-11" tabindex="-1"></a>keep_pairs <span class="ot">&lt;-</span> pairs_data <span class="sc">|&gt;</span></span>
+<span id="cb46-12"><a href="multivariate-power-analysis.html#cb46-12" tabindex="-1"></a>  dplyr<span class="sc">::</span><span class="fu">select</span>(source, pair, correlation) <span class="sc">|&gt;</span></span>
+<span id="cb46-13"><a href="multivariate-power-analysis.html#cb46-13" tabindex="-1"></a>  <span class="fu">unique</span>() <span class="sc">|&gt;</span></span>
+<span id="cb46-14"><a href="multivariate-power-analysis.html#cb46-14" tabindex="-1"></a>  <span class="fu">filter</span>(source <span class="sc">==</span> <span class="st">&quot;real&quot;</span>, correlation <span class="sc">&gt;</span> <span class="fl">0.72</span>, correlation <span class="sc">&lt;</span> <span class="fl">0.8</span>) <span class="sc">|&gt;</span></span>
+<span id="cb46-15"><a href="multivariate-power-analysis.html#cb46-15" tabindex="-1"></a>  <span class="fu">pull</span>(pair)</span>
+<span id="cb46-16"><a href="multivariate-power-analysis.html#cb46-16" tabindex="-1"></a></span>
+<span id="cb46-17"><a href="multivariate-power-analysis.html#cb46-17" tabindex="-1"></a>p1 <span class="ot">&lt;-</span> pairs_data <span class="sc">|&gt;</span></span>
+<span id="cb46-18"><a href="multivariate-power-analysis.html#cb46-18" tabindex="-1"></a>  <span class="fu">filter</span>(pair <span class="sc">%in%</span> keep_pairs) <span class="sc">|&gt;</span></span>
+<span id="cb46-19"><a href="multivariate-power-analysis.html#cb46-19" tabindex="-1"></a>  <span class="fu">ggplot</span>() <span class="sc">+</span></span>
+<span id="cb46-20"><a href="multivariate-power-analysis.html#cb46-20" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(feature1, feature2, <span class="at">col =</span> source), <span class="at">alpha =</span> <span class="fl">0.5</span>, <span class="at">size =</span> <span class="dv">1</span>) <span class="sc">+</span></span>
+<span id="cb46-21"><a href="multivariate-power-analysis.html#cb46-21" tabindex="-1"></a>  <span class="fu">scale_color_manual</span>(<span class="at">values =</span> <span class="fu">c</span>(<span class="st">&quot;#038C8C&quot;</span>, <span class="st">&quot;#D93636&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb46-22"><a href="multivariate-power-analysis.html#cb46-22" tabindex="-1"></a>  <span class="fu">guides</span>(<span class="at">color =</span> <span class="fu">guide_legend</span>(<span class="at">override.aes =</span> <span class="fu">list</span>(<span class="at">alpha =</span> <span class="dv">1</span>, <span class="at">size =</span> <span class="dv">2</span>))) <span class="sc">+</span></span>
+<span id="cb46-23"><a href="multivariate-power-analysis.html#cb46-23" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;A&quot;</span>, <span class="at">col =</span> <span class="st">&quot;Source&quot;</span>, <span class="at">x =</span> <span class="fu">expression</span>(<span class="st">&quot;Feature&quot;</span> <span class="sc">~</span> j), <span class="at">y =</span> <span class="fu">expression</span>(<span class="st">&quot;Feature&quot;</span> <span class="sc">~</span> j<span class="sc">^</span><span class="st">&quot;&#39;&quot;</span>)) <span class="sc">+</span></span>
+<span id="cb46-24"><a href="multivariate-power-analysis.html#cb46-24" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span> <span class="fu">reorder</span>(pair, <span class="sc">-</span>correlation), <span class="at">ncol =</span> <span class="dv">6</span>, <span class="at">scales =</span> <span class="st">&quot;free&quot;</span>) <span class="sc">+</span></span>
+<span id="cb46-25"><a href="multivariate-power-analysis.html#cb46-25" tabindex="-1"></a>  <span class="fu">theme</span>(</span>
+<span id="cb46-26"><a href="multivariate-power-analysis.html#cb46-26" tabindex="-1"></a>    <span class="at">strip.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">7</span>),</span>
+<span id="cb46-27"><a href="multivariate-power-analysis.html#cb46-27" tabindex="-1"></a>    <span class="at">axis.text =</span> <span class="fu">element_text</span>(<span class="at">size =</span> <span class="dv">8</span>)</span>
+<span id="cb46-28"><a href="multivariate-power-analysis.html#cb46-28" tabindex="-1"></a>  )</span></code></pre></div>
+<div class="sourceCode" id="cb47"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb47-1"><a href="multivariate-power-analysis.html#cb47-1" tabindex="-1"></a>ft_order <span class="ot">&lt;-</span> <span class="fu">hclust</span>(<span class="fu">dist</span>(<span class="fu">assay</span>(t1d)))<span class="sc">$</span>order</span>
+<span id="cb47-2"><a href="multivariate-power-analysis.html#cb47-2" tabindex="-1"></a>p2 <span class="ot">&lt;-</span> <span class="fu">correlation_heatmap</span>(rhos<span class="sc">$</span>real, ft_order) <span class="sc">+</span></span>
+<span id="cb47-3"><a href="multivariate-power-analysis.html#cb47-3" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;B  Real&quot;</span>) <span class="sc">+</span></span>
+<span id="cb47-4"><a href="multivariate-power-analysis.html#cb47-4" tabindex="-1"></a>  (<span class="fu">correlation_heatmap</span>(rhos<span class="sc">$</span>sim, ft_order) <span class="sc">+</span></span>
+<span id="cb47-5"><a href="multivariate-power-analysis.html#cb47-5" tabindex="-1"></a>    <span class="fu">labs</span>(<span class="at">title =</span> <span class="st">&quot;Simulated&quot;</span>) <span class="sc">+</span></span>
+<span id="cb47-6"><a href="multivariate-power-analysis.html#cb47-6" tabindex="-1"></a>    <span class="fu">theme</span>(<span class="at">legend.position =</span> <span class="st">&quot;none&quot;</span>))</span>
+<span id="cb47-7"><a href="multivariate-power-analysis.html#cb47-7" tabindex="-1"></a></span>
+<span id="cb47-8"><a href="multivariate-power-analysis.html#cb47-8" tabindex="-1"></a>(p1 <span class="sc">/</span> p2) <span class="sc">+</span></span>
+<span id="cb47-9"><a href="multivariate-power-analysis.html#cb47-9" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>, <span class="at">heights =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="dv">2</span>))</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/collect_plots_multivariate-1.png" width="672" /></p>
+<p>How did we choose this threshold? You can compare the correlations more
+systematically using this loop:</p>
+<div class="sourceCode" id="cb48"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb48-1"><a href="multivariate-power-analysis.html#cb48-1" tabindex="-1"></a>bivariate_metrics <span class="ot">&lt;-</span> \(thr, <span class="at">n_rep =</span> <span class="dv">5</span>) {</span>
+<span id="cb48-2"><a href="multivariate-power-analysis.html#cb48-2" tabindex="-1"></a>  <span class="co"># refit the simulator with current threshold</span></span>
+<span id="cb48-3"><a href="multivariate-power-analysis.html#cb48-3" tabindex="-1"></a>  simulator <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(</span>
+<span id="cb48-4"><a href="multivariate-power-analysis.html#cb48-4" tabindex="-1"></a>    t1d,</span>
+<span id="cb48-5"><a href="multivariate-power-analysis.html#cb48-5" tabindex="-1"></a>    <span class="at">link_formula =</span> <span class="sc">~</span>outcome2,</span>
+<span id="cb48-6"><a href="multivariate-power-analysis.html#cb48-6" tabindex="-1"></a>    <span class="at">family =</span> <span class="sc">~</span> <span class="fu">GaussianLSS</span>(),</span>
+<span id="cb48-7"><a href="multivariate-power-analysis.html#cb48-7" tabindex="-1"></a>    <span class="at">copula_def =</span> <span class="fu">copula_adaptive</span>(<span class="at">thr =</span> thr)</span>
+<span id="cb48-8"><a href="multivariate-power-analysis.html#cb48-8" tabindex="-1"></a>  ) <span class="sc">|&gt;</span></span>
+<span id="cb48-9"><a href="multivariate-power-analysis.html#cb48-9" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb48-10"><a href="multivariate-power-analysis.html#cb48-10" tabindex="-1"></a></span>
+<span id="cb48-11"><a href="multivariate-power-analysis.html#cb48-11" tabindex="-1"></a>  <span class="co"># compute metrics on five samples</span></span>
+<span id="cb48-12"><a href="multivariate-power-analysis.html#cb48-12" tabindex="-1"></a>  err <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb48-13"><a href="multivariate-power-analysis.html#cb48-13" tabindex="-1"></a>  <span class="cf">for</span> (i <span class="cf">in</span> <span class="dv">1</span><span class="sc">:</span>n_rep) {</span>
+<span id="cb48-14"><a href="multivariate-power-analysis.html#cb48-14" tabindex="-1"></a>    sim_exper <span class="ot">&lt;-</span> <span class="fu">sample</span>(simulator)[<span class="fu">rownames</span>(t1d), ]</span>
+<span id="cb48-15"><a href="multivariate-power-analysis.html#cb48-15" tabindex="-1"></a>    rhos <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">sim =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(sim_exper))), <span class="at">real =</span> <span class="fu">cor</span>(<span class="fu">t</span>(<span class="fu">assay</span>(t1d))))</span>
+<span id="cb48-16"><a href="multivariate-power-analysis.html#cb48-16" tabindex="-1"></a>    err[[i]] <span class="ot">&lt;-</span> <span class="fu">data.frame</span>(</span>
+<span id="cb48-17"><a href="multivariate-power-analysis.html#cb48-17" tabindex="-1"></a>      <span class="at">frobenius =</span> <span class="fu">sqrt</span>(<span class="fu">mean</span>((rhos<span class="sc">$</span>sim <span class="sc">-</span> rhos<span class="sc">$</span>real)<span class="sc">^</span><span class="dv">2</span>)),</span>
+<span id="cb48-18"><a href="multivariate-power-analysis.html#cb48-18" tabindex="-1"></a>      <span class="at">ks =</span> <span class="fu">ks.test</span>(rhos<span class="sc">$</span>sim, rhos<span class="sc">$</span>real)<span class="sc">$</span>statistic,</span>
+<span id="cb48-19"><a href="multivariate-power-analysis.html#cb48-19" tabindex="-1"></a>      <span class="at">thr =</span> thr</span>
+<span id="cb48-20"><a href="multivariate-power-analysis.html#cb48-20" tabindex="-1"></a>    )</span>
+<span id="cb48-21"><a href="multivariate-power-analysis.html#cb48-21" tabindex="-1"></a>  }</span>
+<span id="cb48-22"><a href="multivariate-power-analysis.html#cb48-22" tabindex="-1"></a></span>
+<span id="cb48-23"><a href="multivariate-power-analysis.html#cb48-23" tabindex="-1"></a>  <span class="fu">do.call</span>(rbind, err)</span>
+<span id="cb48-24"><a href="multivariate-power-analysis.html#cb48-24" tabindex="-1"></a>}</span></code></pre></div>
+<div class="sourceCode" id="cb49"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb49-1"><a href="multivariate-power-analysis.html#cb49-1" tabindex="-1"></a>errors <span class="ot">&lt;-</span> <span class="fu">seq</span>(.<span class="dv">001</span>, <span class="fl">0.2</span>, <span class="at">length.out =</span> <span class="dv">10</span>) <span class="sc">|&gt;</span></span>
+<span id="cb49-2"><a href="multivariate-power-analysis.html#cb49-2" tabindex="-1"></a>  <span class="fu">map_dfr</span>(bivariate_metrics) <span class="sc">|&gt;</span></span>
+<span id="cb49-3"><a href="multivariate-power-analysis.html#cb49-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>thr, <span class="at">names_to =</span> <span class="st">&quot;metric&quot;</span>)</span>
+<span id="cb49-4"><a href="multivariate-power-analysis.html#cb49-4" tabindex="-1"></a></span>
+<span id="cb49-5"><a href="multivariate-power-analysis.html#cb49-5" tabindex="-1"></a><span class="fu">ggplot</span>(errors) <span class="sc">+</span></span>
+<span id="cb49-6"><a href="multivariate-power-analysis.html#cb49-6" tabindex="-1"></a>  <span class="fu">geom_point</span>(<span class="fu">aes</span>(thr, value)) <span class="sc">+</span></span>
+<span id="cb49-7"><a href="multivariate-power-analysis.html#cb49-7" tabindex="-1"></a>  <span class="fu">facet_wrap</span>(<span class="sc">~</span>metric, <span class="at">scales =</span> <span class="st">&quot;free_y&quot;</span>) <span class="sc">+</span></span>
+<span id="cb49-8"><a href="multivariate-power-analysis.html#cb49-8" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Threshold&quot;</span>, <span class="at">y =</span> <span class="st">&quot;Metric Value&quot;</span>)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/metrics_results-1.png" width="672" /></p>
+>>>>>>> dev_sk
 </div>
 <div id="pls-da-power-analysis" class="section level2" number="3.4">
 <h2>
@@ -267,6 +520,7 @@ classifier balance precision and recall on new samples.</p>
 have no relationship at all with the response? We’ll also simulate three
 hypothetical datasets for each sample size and sparsity level. All
 configurations of interest are stored in the <code>config</code> matrix below.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb46"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">config</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/expand.grid.html">expand.grid</a></span><span class="op">(</span></span>
 <span>  sample_size <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/Round.html">floor</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq</a></span><span class="op">(</span><span class="fl">20</span>, <span class="fl">200</span>, length.out <span class="op">=</span> <span class="fl">5</span><span class="op">)</span><span class="op">)</span>,</span>
@@ -276,12 +530,23 @@ configurations of interest are stored in the <code>config</code> matrix below.</
 <span><span class="op">)</span></span>
 <span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">t1d_order</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb50"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb50-1"><a href="multivariate-power-analysis.html#cb50-1" tabindex="-1"></a>config <span class="ot">&lt;-</span> <span class="fu">expand.grid</span>(</span>
+<span id="cb50-2"><a href="multivariate-power-analysis.html#cb50-2" tabindex="-1"></a>  <span class="at">sample_size =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">20</span>, <span class="dv">200</span>, <span class="at">length.out =</span> <span class="dv">5</span>)),</span>
+<span id="cb50-3"><a href="multivariate-power-analysis.html#cb50-3" tabindex="-1"></a>  <span class="at">n_rep =</span> <span class="dv">1</span><span class="sc">:</span><span class="dv">20</span>,</span>
+<span id="cb50-4"><a href="multivariate-power-analysis.html#cb50-4" tabindex="-1"></a>  <span class="at">n_null =</span> <span class="fu">floor</span>(<span class="fu">seq</span>(<span class="dv">317</span>, <span class="dv">417</span>, <span class="at">length.out =</span> <span class="dv">4</span>)),</span>
+<span id="cb50-5"><a href="multivariate-power-analysis.html#cb50-5" tabindex="-1"></a>  <span class="at">metrics =</span> <span class="cn">NA</span></span>
+<span id="cb50-6"><a href="multivariate-power-analysis.html#cb50-6" tabindex="-1"></a>)</span>
+<span id="cb50-7"><a href="multivariate-power-analysis.html#cb50-7" tabindex="-1"></a></span>
+<span id="cb50-8"><a href="multivariate-power-analysis.html#cb50-8" tabindex="-1"></a><span class="fu">data</span>(t1d_order)</span></code></pre></div>
+>>>>>>> dev_sk
 <p><strong>Exercise</strong>: Finally, we’re in a position to generate synthetic data and
 evaluate PLS-DA performance. Fill in the block below to update the simulator for
 each <code>i</code>. Remember that the original <code>simulator</code> defined above assumes that all
 proteins are associated with T1D. You can use <code>t1d_order</code> to prioritize the
 proteins with the strongest effects in the original data. As before, you should
 only need to modify the line marked with the comments (<code>#</code>).</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb47"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">config</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="va">simulator</span> <span class="op">&lt;-</span> <span class="va">simulator</span> <span class="op">|&gt;</span></span>
@@ -294,10 +559,24 @@ only need to modify the line marked with the comments (<code>#</code>).</p>
 <span>    <span class="fu"><a href="https://rdrr.io/pkg/MIGsim/man/splsda_fit.html">splsda_fit</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span><span class="op">[[</span><span class="st">"auc"</span><span class="op">]</span><span class="op">]</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/print.html">print</a></span><span class="op">(</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"run {i}/{nrow(config)}"</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb51"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb51-1"><a href="multivariate-power-analysis.html#cb51-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
+<span id="cb51-2"><a href="multivariate-power-analysis.html#cb51-2" tabindex="-1"></a>  simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
+<span id="cb51-3"><a href="multivariate-power-analysis.html#cb51-3" tabindex="-1"></a>    <span class="fu">mutate</span>(</span>
+<span id="cb51-4"><a href="multivariate-power-analysis.html#cb51-4" tabindex="-1"></a>      <span class="co"># fill this in</span></span>
+<span id="cb51-5"><a href="multivariate-power-analysis.html#cb51-5" tabindex="-1"></a>    ) <span class="sc">|&gt;</span></span>
+<span id="cb51-6"><a href="multivariate-power-analysis.html#cb51-6" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb51-7"><a href="multivariate-power-analysis.html#cb51-7" tabindex="-1"></a></span>
+<span id="cb51-8"><a href="multivariate-power-analysis.html#cb51-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
+<span id="cb51-9"><a href="multivariate-power-analysis.html#cb51-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
+<span id="cb51-10"><a href="multivariate-power-analysis.html#cb51-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
+<span id="cb51-11"><a href="multivariate-power-analysis.html#cb51-11" tabindex="-1"></a>}</span></code></pre></div>
+>>>>>>> dev_sk
 <p><strong>Solution</strong>: To define nulls, we mutate the weakest proteins so that there is no longer any
 association with T1D: <code>link = ~ 1</code> instead of <code>link = ~ outcome2</code>. To speed up
 the computation, we organized the <code>mutate</code> calls so that we don’t need to
 re-estimate proteins whose effects were removed in a previous iteration.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb48"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="kw">for</span> <span class="op">(</span><span class="va">i</span> <span class="kw">in</span> <span class="fu"><a href="https://rdrr.io/r/base/seq.html">seq_len</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">config</span><span class="op">)</span><span class="op">)</span><span class="op">)</span> <span class="op">{</span></span>
 <span>  <span class="kw">if</span> <span class="op">(</span><span class="va">i</span> <span class="op">==</span> <span class="fl">1</span> <span class="op">||</span> <span class="va">config</span><span class="op">$</span><span class="va">n_null</span><span class="op">[</span><span class="va">i</span><span class="op">]</span> <span class="op">!=</span> <span class="va">config</span><span class="op">$</span><span class="va">n_null</span><span class="op">[</span><span class="va">i</span> <span class="op">-</span> <span class="fl">1</span><span class="op">]</span><span class="op">)</span> <span class="op">{</span></span>
@@ -323,6 +602,430 @@ re-estimate proteins whose effects were removed in a previous iteration.</p>
 <span><span class="op">(</span><span class="va">p1</span> <span class="op">/</span> <span class="va">p2</span> <span class="op">/</span> <span class="va">p3</span><span class="op">)</span> <span class="op">+</span></span>
 <span>  <span class="fu"><a href="https://patchwork.data-imaginist.com/reference/plot_layout.html">plot_layout</a></span><span class="op">(</span>guides <span class="op">=</span> <span class="st">"collect"</span>, heights <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1.2</span>, <span class="fl">2</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/visualize-power-1.png" width="768"></div>
+=======
+<div class="sourceCode" id="cb52"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb52-1"><a href="multivariate-power-analysis.html#cb52-1" tabindex="-1"></a><span class="cf">for</span> (i <span class="cf">in</span> <span class="fu">seq_len</span>(<span class="fu">nrow</span>(config))) {</span>
+<span id="cb52-2"><a href="multivariate-power-analysis.html#cb52-2" tabindex="-1"></a>  <span class="cf">if</span> (i <span class="sc">==</span> <span class="dv">1</span> <span class="sc">||</span> config<span class="sc">$</span>n_null[i] <span class="sc">!=</span> config<span class="sc">$</span>n_null[i <span class="sc">-</span> <span class="dv">1</span>]) {</span>
+<span id="cb52-3"><a href="multivariate-power-analysis.html#cb52-3" tabindex="-1"></a>    simulator <span class="ot">&lt;-</span> simulator <span class="sc">|&gt;</span></span>
+<span id="cb52-4"><a href="multivariate-power-analysis.html#cb52-4" tabindex="-1"></a>      scDesigner<span class="sc">::</span><span class="fu">mutate</span>(<span class="fu">any_of</span>(<span class="fu">rev</span>(t1d_order)[<span class="dv">1</span><span class="sc">:</span>config<span class="sc">$</span>n_null[i]]), <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb52-5"><a href="multivariate-power-analysis.html#cb52-5" tabindex="-1"></a>      <span class="fu">estimate</span>(<span class="at">mstop =</span> <span class="dv">100</span>)</span>
+<span id="cb52-6"><a href="multivariate-power-analysis.html#cb52-6" tabindex="-1"></a>  }</span>
+<span id="cb52-7"><a href="multivariate-power-analysis.html#cb52-7" tabindex="-1"></a></span>
+<span id="cb52-8"><a href="multivariate-power-analysis.html#cb52-8" tabindex="-1"></a>  config<span class="sc">$</span>metrics[i] <span class="ot">&lt;-</span> (<span class="fu">sample_n</span>(simulator, config<span class="sc">$</span>sample_size[i]) <span class="sc">|&gt;</span></span>
+<span id="cb52-9"><a href="multivariate-power-analysis.html#cb52-9" tabindex="-1"></a>    <span class="fu">splsda_fit</span>())[[<span class="st">&quot;auc&quot;</span>]]</span>
+<span id="cb52-10"><a href="multivariate-power-analysis.html#cb52-10" tabindex="-1"></a>  <span class="fu">print</span>(<span class="fu">glue</span>(<span class="st">&quot;run {i}/{nrow(config)}&quot;</span>))</span>
+<span id="cb52-11"><a href="multivariate-power-analysis.html#cb52-11" tabindex="-1"></a>}</span></code></pre></div>
+<pre><code>## run 1/400
+## run 2/400
+## run 3/400
+## run 4/400
+## run 5/400
+## run 6/400
+## run 7/400
+## run 8/400
+## run 9/400
+## run 10/400
+## run 11/400
+## run 12/400
+## run 13/400
+## run 14/400
+## run 15/400
+## run 16/400
+## run 17/400
+## run 18/400
+## run 19/400
+## run 20/400
+## run 21/400
+## run 22/400
+## run 23/400
+## run 24/400
+## run 25/400
+## run 26/400
+## run 27/400
+## run 28/400
+## run 29/400
+## run 30/400
+## run 31/400
+## run 32/400
+## run 33/400
+## run 34/400
+## run 35/400
+## run 36/400
+## run 37/400
+## run 38/400
+## run 39/400
+## run 40/400
+## run 41/400
+## run 42/400
+## run 43/400
+## run 44/400
+## run 45/400
+## run 46/400
+## run 47/400
+## run 48/400
+## run 49/400
+## run 50/400
+## run 51/400
+## run 52/400
+## run 53/400
+## run 54/400
+## run 55/400
+## run 56/400
+## run 57/400
+## run 58/400
+## run 59/400
+## run 60/400
+## run 61/400
+## run 62/400
+## run 63/400
+## run 64/400
+## run 65/400
+## run 66/400
+## run 67/400
+## run 68/400
+## run 69/400
+## run 70/400
+## run 71/400
+## run 72/400
+## run 73/400
+## run 74/400
+## run 75/400
+## run 76/400
+## run 77/400
+## run 78/400
+## run 79/400
+## run 80/400
+## run 81/400
+## run 82/400
+## run 83/400
+## run 84/400
+## run 85/400
+## run 86/400
+## run 87/400
+## run 88/400
+## run 89/400
+## run 90/400
+## run 91/400
+## run 92/400
+## run 93/400
+## run 94/400
+## run 95/400
+## run 96/400
+## run 97/400
+## run 98/400
+## run 99/400
+## run 100/400
+## run 101/400
+## run 102/400
+## run 103/400
+## run 104/400
+## run 105/400
+## run 106/400
+## run 107/400
+## run 108/400
+## run 109/400
+## run 110/400
+## run 111/400
+## run 112/400
+## run 113/400
+## run 114/400
+## run 115/400
+## run 116/400
+## run 117/400
+## run 118/400
+## run 119/400
+## run 120/400
+## run 121/400
+## run 122/400
+## run 123/400
+## run 124/400
+## run 125/400
+## run 126/400
+## run 127/400
+## run 128/400
+## run 129/400
+## run 130/400
+## run 131/400
+## run 132/400
+## run 133/400
+## run 134/400
+## run 135/400
+## run 136/400
+## run 137/400
+## run 138/400
+## run 139/400
+## run 140/400
+## run 141/400
+## run 142/400
+## run 143/400
+## run 144/400
+## run 145/400
+## run 146/400
+## run 147/400
+## run 148/400
+## run 149/400
+## run 150/400
+## run 151/400
+## run 152/400
+## run 153/400
+## run 154/400
+## run 155/400
+## run 156/400
+## run 157/400
+## run 158/400
+## run 159/400
+## run 160/400
+## run 161/400
+## run 162/400
+## run 163/400
+## run 164/400
+## run 165/400
+## run 166/400
+## run 167/400
+## run 168/400
+## run 169/400
+## run 170/400
+## run 171/400
+## run 172/400
+## run 173/400
+## run 174/400
+## run 175/400
+## run 176/400
+## run 177/400
+## run 178/400
+## run 179/400
+## run 180/400
+## run 181/400
+## run 182/400
+## run 183/400
+## run 184/400
+## run 185/400
+## run 186/400
+## run 187/400
+## run 188/400
+## run 189/400
+## run 190/400
+## run 191/400
+## run 192/400
+## run 193/400
+## run 194/400
+## run 195/400
+## run 196/400
+## run 197/400
+## run 198/400
+## run 199/400
+## run 200/400
+## run 201/400
+## run 202/400
+## run 203/400
+## run 204/400
+## run 205/400
+## run 206/400
+## run 207/400
+## run 208/400
+## run 209/400
+## run 210/400
+## run 211/400
+## run 212/400
+## run 213/400
+## run 214/400
+## run 215/400
+## run 216/400
+## run 217/400
+## run 218/400
+## run 219/400
+## run 220/400
+## run 221/400
+## run 222/400
+## run 223/400
+## run 224/400
+## run 225/400
+## run 226/400
+## run 227/400
+## run 228/400
+## run 229/400
+## run 230/400
+## run 231/400
+## run 232/400
+## run 233/400
+## run 234/400
+## run 235/400
+## run 236/400
+## run 237/400
+## run 238/400
+## run 239/400
+## run 240/400
+## run 241/400
+## run 242/400
+## run 243/400
+## run 244/400
+## run 245/400
+## run 246/400
+## run 247/400
+## run 248/400
+## run 249/400
+## run 250/400
+## run 251/400
+## run 252/400
+## run 253/400
+## run 254/400
+## run 255/400
+## run 256/400
+## run 257/400
+## run 258/400
+## run 259/400
+## run 260/400
+## run 261/400
+## run 262/400
+## run 263/400
+## run 264/400
+## run 265/400
+## run 266/400
+## run 267/400
+## run 268/400
+## run 269/400
+## run 270/400
+## run 271/400
+## run 272/400
+## run 273/400
+## run 274/400
+## run 275/400
+## run 276/400
+## run 277/400
+## run 278/400
+## run 279/400
+## run 280/400
+## run 281/400
+## run 282/400
+## run 283/400
+## run 284/400
+## run 285/400
+## run 286/400
+## run 287/400
+## run 288/400
+## run 289/400
+## run 290/400
+## run 291/400
+## run 292/400
+## run 293/400
+## run 294/400
+## run 295/400
+## run 296/400
+## run 297/400
+## run 298/400
+## run 299/400
+## run 300/400
+## run 301/400
+## run 302/400
+## run 303/400
+## run 304/400
+## run 305/400
+## run 306/400
+## run 307/400
+## run 308/400
+## run 309/400
+## run 310/400
+## run 311/400
+## run 312/400
+## run 313/400
+## run 314/400
+## run 315/400
+## run 316/400
+## run 317/400
+## run 318/400
+## run 319/400
+## run 320/400
+## run 321/400
+## run 322/400
+## run 323/400
+## run 324/400
+## run 325/400
+## run 326/400
+## run 327/400
+## run 328/400
+## run 329/400
+## run 330/400
+## run 331/400
+## run 332/400
+## run 333/400
+## run 334/400
+## run 335/400
+## run 336/400
+## run 337/400
+## run 338/400
+## run 339/400
+## run 340/400
+## run 341/400
+## run 342/400
+## run 343/400
+## run 344/400
+## run 345/400
+## run 346/400
+## run 347/400
+## run 348/400
+## run 349/400
+## run 350/400
+## run 351/400
+## run 352/400
+## run 353/400
+## run 354/400
+## run 355/400
+## run 356/400
+## run 357/400
+## run 358/400
+## run 359/400
+## run 360/400
+## run 361/400
+## run 362/400
+## run 363/400
+## run 364/400
+## run 365/400
+## run 366/400
+## run 367/400
+## run 368/400
+## run 369/400
+## run 370/400
+## run 371/400
+## run 372/400
+## run 373/400
+## run 374/400
+## run 375/400
+## run 376/400
+## run 377/400
+## run 378/400
+## run 379/400
+## run 380/400
+## run 381/400
+## run 382/400
+## run 383/400
+## run 384/400
+## run 385/400
+## run 386/400
+## run 387/400
+## run 388/400
+## run 389/400
+## run 390/400
+## run 391/400
+## run 392/400
+## run 393/400
+## run 394/400
+## run 395/400
+## run 396/400
+## run 397/400
+## run 398/400
+## run 399/400
+## run 400/400</code></pre>
+<div class="sourceCode" id="cb54"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb54-1"><a href="multivariate-power-analysis.html#cb54-1" tabindex="-1"></a><span class="co">#config &lt;- readRDS(url(&quot;https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4y9itaev42dsnp5c.rds&quot;))</span></span></code></pre></div>
+<p>:::</p>
+<p>We can visualize variation in performance.</p>
+<div class="sourceCode" id="cb55"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb55-1"><a href="multivariate-power-analysis.html#cb55-1" tabindex="-1"></a>p3 <span class="ot">&lt;-</span> <span class="fu">ggplot</span>(config, <span class="fu">aes</span>(<span class="fu">factor</span>(sample_size), metrics, <span class="at">col =</span> <span class="fu">factor</span>(n_null))) <span class="sc">+</span></span>
+<span id="cb55-2"><a href="multivariate-power-analysis.html#cb55-2" tabindex="-1"></a>  <span class="fu">stat_pointinterval</span>(<span class="at">position =</span> <span class="st">&quot;dodge&quot;</span>) <span class="sc">+</span></span>
+<span id="cb55-3"><a href="multivariate-power-analysis.html#cb55-3" tabindex="-1"></a>  <span class="fu">scale_color_scico_d</span>(<span class="at">palette =</span> <span class="st">&quot;managua&quot;</span>) <span class="sc">+</span></span>
+<span id="cb55-4"><a href="multivariate-power-analysis.html#cb55-4" tabindex="-1"></a>  <span class="fu">labs</span>(<span class="at">x =</span> <span class="st">&quot;Sample Size&quot;</span>, <span class="at">y =</span> <span class="st">&quot;AUC&quot;</span>, <span class="at">color =</span> <span class="st">&quot;# Nulls&quot;</span>, <span class="at">title =</span> <span class="st">&quot;C&quot;</span>)</span>
+<span id="cb55-5"><a href="multivariate-power-analysis.html#cb55-5" tabindex="-1"></a></span>
+<span id="cb55-6"><a href="multivariate-power-analysis.html#cb55-6" tabindex="-1"></a>(p1 <span class="sc">/</span> p2 <span class="sc">/</span> p3) <span class="sc">+</span></span>
+<span id="cb55-7"><a href="multivariate-power-analysis.html#cb55-7" tabindex="-1"></a>  <span class="fu">plot_layout</span>(<span class="at">guides =</span> <span class="st">&quot;collect&quot;</span>, <span class="at">heights =</span> <span class="fu">c</span>(<span class="fl">1.2</span>, <span class="dv">2</span>, <span class="dv">1</span>))</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/visualize-power-1.png" width="672" /></p>
+>>>>>>> dev_sk
 <p><strong>Discussion</strong>: Interpret the visualization above. How do you think analysis
 like this could help you justify making some experimental investments over
 others?</p>
@@ -336,10 +1039,16 @@ then we may already achieve good power with ~ 100 samples. However, if we
 imagine our effect might be sparser in our future experiment, then this figure
 would give us good justification for arguing for a larger number of samples, in
 order to ensure we can discover a disease-associated proteomics signature.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb51"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">$</span><span class="va">outcome2</span> <span class="op">==</span> <span class="st">"T1D"</span></span>
 <span><span class="va">p_vals</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/apply.html">apply</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">assay</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span>, <span class="fl">1</span>, \<span class="op">(</span><span class="va">x</span><span class="op">)</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="va">ix</span><span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="op">-</span><span class="va">ix</span><span class="op">]</span><span class="op">)</span><span class="op">$</span><span class="va">p.value</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/mutoss/man/storey_pi0_est.html">storey_pi0_est</a></span><span class="op">(</span><span class="va">p_vals</span>, <span class="fl">0.5</span><span class="op">)</span><span class="op">$</span><span class="va">pi0</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb56"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb56-1"><a href="multivariate-power-analysis.html#cb56-1" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">colData</span>(t1d)<span class="sc">$</span>outcome2 <span class="sc">==</span> <span class="st">&quot;T1D&quot;</span></span>
+<span id="cb56-2"><a href="multivariate-power-analysis.html#cb56-2" tabindex="-1"></a>p_vals <span class="ot">&lt;-</span> <span class="fu">apply</span>(<span class="fu">assay</span>(t1d), <span class="dv">1</span>, \(x) <span class="fu">t.test</span>(x[ix], x[<span class="sc">-</span>ix])<span class="sc">$</span>p.value)</span>
+<span id="cb56-3"><a href="multivariate-power-analysis.html#cb56-3" tabindex="-1"></a><span class="fu">storey_pi0_est</span>(p_vals, <span class="fl">0.5</span>)<span class="sc">$</span>pi0</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>## [1] 1.311475</code></pre>
 </div>
 <div id="comparison-with-t-test-calculation" class="section level2" number="3.5">
@@ -353,6 +1062,7 @@ a two-sample <span class="math inline">\(t\)</span>-test with a Benjamini-Hochbe
 Suppose that we are in the sparse case, with only 10 nonnull taxa. As a
 hypothetical true signal strength, we use the observed signal strength of the
 tenth most significant taxon from the real data,</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb53"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">subset_size</span> <span class="op">&lt;-</span> <span class="fl">10</span></span>
 <span><span class="va">y</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/SummarizedExperiment/man/SummarizedExperiment-class.html">colData</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">$</span><span class="va">outcome2</span></span>
@@ -360,14 +1070,27 @@ tenth most significant taxon from the real data,</p>
 <span><span class="va">test_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/stats/t.test.html">t.test</a></span><span class="op">(</span><span class="va">x</span><span class="op">[</span><span class="va">y</span> <span class="op">==</span> <span class="st">"T1D"</span><span class="op">]</span>, <span class="va">x</span><span class="op">[</span><span class="va">y</span> <span class="op">==</span> <span class="st">"healthy"</span><span class="op">]</span><span class="op">)</span></span>
 <span><span class="va">signal_strength</span> <span class="op">&lt;-</span> <span class="va">test_result</span><span class="op">$</span><span class="va">statistic</span></span>
 <span><span class="va">signal_strength</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb58"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb58-1"><a href="multivariate-power-analysis.html#cb58-1" tabindex="-1"></a>subset_size <span class="ot">&lt;-</span> <span class="dv">10</span></span>
+<span id="cb58-2"><a href="multivariate-power-analysis.html#cb58-2" tabindex="-1"></a>y <span class="ot">&lt;-</span> <span class="fu">colData</span>(t1d)<span class="sc">$</span>outcome2</span>
+<span id="cb58-3"><a href="multivariate-power-analysis.html#cb58-3" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">assay</span>(t1d)[t1d_order[subset_size], ]</span>
+<span id="cb58-4"><a href="multivariate-power-analysis.html#cb58-4" tabindex="-1"></a>test_result <span class="ot">&lt;-</span> <span class="fu">t.test</span>(x[y <span class="sc">==</span> <span class="st">&quot;T1D&quot;</span>], x[y <span class="sc">==</span> <span class="st">&quot;healthy&quot;</span>])</span>
+<span id="cb58-5"><a href="multivariate-power-analysis.html#cb58-5" tabindex="-1"></a>signal_strength <span class="ot">&lt;-</span> test_result<span class="sc">$</span>statistic</span>
+<span id="cb58-6"><a href="multivariate-power-analysis.html#cb58-6" tabindex="-1"></a>signal_strength</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>##         t 
 ## -2.092196</code></pre>
 <p>How many samples would we need in order to achieve 80% power in this setting?
 Accounting for multiple testing, we would need this taxon to be significant at
 the level <span class="math inline">\(\frac{10 \alpha}{427}\)</span>, which gives us,</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb55"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/pwr/man/pwr.t.test.html">pwr.t.test</a></span><span class="op">(</span>power <span class="op">=</span> <span class="fl">0.8</span>, d <span class="op">=</span> <span class="va">signal_strength</span>, sig.level <span class="op">=</span> <span class="fl">0.05</span> <span class="op">*</span> <span class="va">subset_size</span> <span class="op">/</span> <span class="fu"><a href="https://rdrr.io/r/base/nrow.html">nrow</a></span><span class="op">(</span><span class="va">t1d</span><span class="op">)</span><span class="op">)</span></span>
 <span><span class="va">result</span><span class="op">$</span><span class="va">n</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb60"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb60-1"><a href="multivariate-power-analysis.html#cb60-1" tabindex="-1"></a>result <span class="ot">&lt;-</span> <span class="fu">pwr.t.test</span>(<span class="at">power =</span> <span class="fl">0.8</span>, <span class="at">d =</span> signal_strength, <span class="at">sig.level =</span> <span class="fl">0.05</span> <span class="sc">*</span> subset_size <span class="sc">/</span> <span class="fu">nrow</span>(t1d))</span>
+<span id="cb60-2"><a href="multivariate-power-analysis.html#cb60-2" tabindex="-1"></a>result<span class="sc">$</span>n</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>## [1] 10.36249</code></pre>
 <p>So, according to this power analysis, we only need 11 samples each for the
 healthy and disease groups. In comparison to our earlier analysis using sPLS-DA,
@@ -382,50 +1105,225 @@ requires some simplification, but the fact that a more realistic simulator
 points us towards noticeably larger sample sizes is an indication that we should
 not trust the <span class="math inline">\(t\)</span>-test calculation and instead suggest the larger sample sample
 from our sPLS-DA specific analysis.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb57"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
+=======
+<div class="sourceCode" id="cb62"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb62-1"><a href="multivariate-power-analysis.html#cb62-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.3.2 (2023-10-31)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Sonoma 14.5
+>>>>>>> dev_sk
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
-## time zone: America/Chicago
+## time zone: Australia/Melbourne
 ## tzcode source: internal
 ## 
 ## attached base packages:
-##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+##  [1] splines   parallel  stats4    stats     graphics  grDevices
+##  [7] utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1               XVector_0.44.0                  SingleCellExperiment_1.26.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
-##  [7] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                     pwr_1.3-0                       patchwork_1.2.0                
-## [13] mixOmics_6.28.0                 lattice_0.22-6                  MASS_7.3-60.2                   glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                   
-## [19] gamboostLSS_2.0-7               mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                     SummarizedExperiment_1.34.0    
-## [25] Biobase_2.64.0                  GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0            
-## [31] MatrixGenerics_1.16.0           matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
+##  [1] doRNG_1.8.6                    
+##  [2] rngtools_1.5.2                 
+##  [3] foreach_1.5.2                  
+##  [4] ggpubr_0.6.0                   
+##  [5] ggrepel_0.9.5                  
+##  [6] edgeR_4.0.16                   
+##  [7] limma_3.58.1                   
+##  [8] ANCOMBC_2.4.0                  
+##  [9] stringr_1.5.1                  
+## [10] ks_1.14.2                      
+## [11] tidySummarizedExperiment_1.12.0
+## [12] ttservice_0.4.1                
+## [13] SimBench_0.99.1                
+## [14] wesanderson_0.3.7              
+## [15] mia_1.10.0                     
+## [16] MultiAssayExperiment_1.28.0    
+## [17] TreeSummarizedExperiment_2.10.0
+## [18] Biostrings_2.70.3              
+## [19] XVector_0.42.0                 
+## [20] SingleCellExperiment_1.24.0    
+## [21] gamlss_5.4-22                  
+## [22] nlme_3.1-165                   
+## [23] gamlss.dist_6.1-1              
+## [24] gamlss.data_6.0-6              
+## [25] scDesigner_0.0.0.9000          
+## [26] purrr_1.0.2                    
+## [27] MIGsim_0.0.0.9000              
+## [28] tidyr_1.3.1                    
+## [29] tibble_3.2.1                   
+## [30] scico_1.5.0                    
+## [31] pwr_1.3-0                      
+## [32] patchwork_1.2.0                
+## [33] mutoss_0.1-13                  
+## [34] mvtnorm_1.2-5                  
+## [35] mixOmics_6.26.0                
+## [36] lattice_0.22-6                 
+## [37] MASS_7.3-60.0.1                
+## [38] glue_1.7.0                     
+## [39] ggplot2_3.5.1                  
+## [40] ggdist_3.3.2                   
+## [41] gamboostLSS_2.0-7              
+## [42] mboost_2.9-10                  
+## [43] stabs_0.6-4                    
+## [44] forcats_1.0.0                  
+## [45] dplyr_1.1.4                    
+## [46] SummarizedExperiment_1.32.0    
+## [47] Biobase_2.62.0                 
+## [48] GenomicRanges_1.54.1           
+## [49] GenomeInfoDb_1.38.8            
+## [50] IRanges_2.36.0                 
+## [51] S4Vectors_0.40.2               
+## [52] BiocGenerics_0.48.1            
+## [53] MatrixGenerics_1.14.0          
+## [54] matrixStats_1.3.0              
+## [55] SpiecEasi_1.1.3                
+## [56] CovTools_0.5.4                 
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] minpack.lm_1.2-4        rpart_4.1.23            lifecycle_1.0.4         Rdpack_2.6              edgeR_4.2.0             doParallel_1.0.17       insight_0.20.1          magrittr_2.0.3         
-##   [9] limma_3.60.2            sass_0.4.9              rmarkdown_2.27          jquerylib_0.1.4         yaml_2.3.8              RColorBrewer_1.1-3      ADGofTest_0.3           abind_1.4-5            
-##  [17] zlibbioc_1.50.0         expm_0.999-9            quadprog_1.5-8          pspline_1.0-20          kde1d_1.0.7             rgl_1.3.1               yulab.utils_0.1.4       pracma_2.4.4           
-##  [25] GenomeInfoDbData_1.2.12 ggrepel_0.9.5           tidytree_0.4.6          ellipse_0.5.0           RSpectra_0.16-1         svglite_2.1.3           codetools_0.2-20        DelayedArray_0.30.1    
-##  [33] shapes_1.2.7            tidyselect_1.2.1        shape_1.4.6.1           UCSC.utils_1.0.0        farver_2.1.2            randtoolbox_2.0.4       base64enc_0.1-3         jsonlite_1.8.8         
-##  [41] Formula_1.2-5           survival_3.7-0          iterators_1.0.14        systemfonts_1.1.0       foreach_1.5.2           tools_4.4.0             progress_1.2.3          treeio_1.28.0          
-##  [49] ragg_1.3.2              Rcpp_1.0.12             rARPACK_0.11-0          gridExtra_2.3           SparseArray_1.4.8       xfun_0.44               distributional_0.4.0    withr_3.0.0            
-##  [57] numDeriv_2016.8-1.1     fastmap_1.2.0           fansi_1.0.6             digest_0.6.35           R6_2.5.1                textshaping_0.4.0       colorspace_2.1-0        inum_1.0-5             
-##  [65] copula_1.1-3            flare_1.7.0.1           utf8_1.2.4              generics_0.1.3          corpcor_1.6.10          prettyunits_1.2.0       pulsar_0.3.11           httr_1.4.7             
-##  [73] htmlwidgets_1.6.4       S4Arrays_1.4.1          scatterplot3d_0.3-44    rngWELL_0.10-9          pkgconfig_2.0.3         geigen_2.3              gtable_0.3.5            pcaPP_2.0-4            
-##  [81] htmltools_0.5.8.1       bookdown_0.39.1         scales_1.3.0            SHT_0.1.8               knitr_1.47              rstudioapi_0.16.0       reshape2_1.4.4          nlme_3.1-164           
-##  [89] cachem_1.1.0            stringr_1.5.1           libcoin_1.0-10          pillar_1.9.0            grid_4.4.0              vctrs_0.6.5             VGAM_1.1-11             huge_1.3.5             
-##  [97] gamlss.dist_6.1-1       evaluate_0.23           mvtnorm_1.2-5           cli_3.6.3               locfit_1.5-9.9          compiler_4.4.0          rlang_1.1.4             crayon_1.5.3           
-## [105] labeling_0.4.3          plyr_1.8.9              fs_1.6.4                stringi_1.8.4           BiocParallel_1.38.0     nnls_1.5                assertthat_0.2.1        rvinecopulib_0.6.3.1.1 
-## [113] munsell_0.5.1           gsl_2.1-8               lazyeval_0.2.2          glmnet_4.1-8            Matrix_1.7-0            hms_1.1.3               stabledist_0.7-1        statmod_1.5.0          
-## [121] highr_0.11              rbibutils_2.2.16        partykit_1.2-20         igraph_2.0.3            memoise_2.0.1           bslib_0.7.0.9000        ape_5.8</code></pre>
+##   [1] igraph_2.0.3                ica_1.0-3                  
+##   [3] plotly_4.10.4               Formula_1.2-5              
+##   [5] scater_1.30.1               zlibbioc_1.48.2            
+##   [7] tidyselect_1.2.1            bit_4.0.5                  
+##   [9] doParallel_1.0.17           pspline_1.0-20             
+##  [11] blob_1.2.4                  S4Arrays_1.2.1             
+##  [13] png_0.1-8                   plotrix_3.8-4              
+##  [15] cli_3.6.3                   CVXR_1.0-14                
+##  [17] pulsar_0.3.11               arrayhelpers_1.1-0         
+##  [19] multtest_2.58.0             goftest_1.2-3              
+##  [21] textshaping_0.4.0           bluster_1.12.0             
+##  [23] BiocNeighbors_1.20.2        uwot_0.2.2                 
+##  [25] mime_0.12                   evaluate_0.24.0            
+##  [27] tidytree_0.4.6              leiden_0.4.3.1             
+##  [29] stringi_1.8.4               backports_1.5.0            
+##  [31] lmerTest_3.1-3              gsl_2.1-8                  
+##  [33] Exact_3.2                   httpuv_1.6.15              
+##  [35] AnnotationDbi_1.64.1        magrittr_2.0.3             
+##  [37] mclust_6.1.1                ADGofTest_0.3              
+##  [39] pcaPP_2.0-4                 sctransform_0.4.1          
+##  [41] rootSolve_1.8.2.4           ggbeeswarm_0.7.2           
+##  [43] DBI_1.2.3                   jquerylib_0.1.4            
+##  [45] withr_3.0.0                 corpcor_1.6.10             
+##  [47] systemfonts_1.1.0           class_7.3-22               
+##  [49] lmtest_0.9-40               compositions_2.0-8         
+##  [51] htmlwidgets_1.6.4           fs_1.6.4                   
+##  [53] labeling_0.4.3              SparseArray_1.2.4          
+##  [55] DEoptimR_1.1-3              DESeq2_1.42.1              
+##  [57] cellranger_1.1.0            tidybayes_3.0.6            
+##  [59] extrafont_0.19              flare_1.7.0.1              
+##  [61] lmom_3.0                    reticulate_1.37.0          
+##  [63] minpack.lm_1.2-4            geigen_2.3                 
+##  [65] zoo_1.8-12                  knitr_1.48                 
+##  [67] nnls_1.5                    svUnit_1.0.6               
+##  [69] SHT_0.1.8                   decontam_1.22.0            
+##  [71] fansi_1.0.6                 grid_4.3.2                 
+##  [73] rhdf5_2.46.1                data.table_1.15.4          
+##  [75] ruv_0.9.7.1                 vegan_2.6-6.1              
+##  [77] RSpectra_0.16-1             irlba_2.3.5.1              
+##  [79] extrafontdb_1.0             fastDummies_1.7.3          
+##  [81] DescTools_0.99.54           ellipsis_0.3.2             
+##  [83] ade4_1.7-22                 lazyeval_0.2.2             
+##  [85] yaml_2.3.9                  survival_3.7-0             
+##  [87] scattermore_1.2             crayon_1.5.3               
+##  [89] tensorA_0.36.2.1            phyloseq_1.46.0            
+##  [91] RcppAnnoy_0.0.22            RColorBrewer_1.1-3         
+##  [93] progressr_0.14.0            later_1.3.2                
+##  [95] ggridges_0.5.6              codetools_0.2-20           
+##  [97] base64enc_0.1-3             Seurat_5.1.0               
+##  [99] KEGGREST_1.42.0             Rtsne_0.17                 
+## [101] shape_1.4.6.1               randtoolbox_2.0.4          
+## [103] foreign_0.8-87              pkgconfig_2.0.3            
+## [105] scatterplot3d_0.3-44        spatstat.sparse_3.1-0      
+## [107] ape_5.8                     viridisLite_0.4.2          
+## [109] xtable_1.8-4                highr_0.11                 
+## [111] car_3.1-2                   fastcluster_1.2.6          
+## [113] plyr_1.8.9                  httr_1.4.7                 
+## [115] rbibutils_2.2.16            tools_4.3.2                
+## [117] globals_0.16.3              SeuratObject_5.0.2         
+## [119] kde1d_1.0.7                 beeswarm_0.4.0             
+## [121] htmlTable_2.4.2             broom_1.0.6                
+## [123] checkmate_2.3.1             lme4_1.1-35.5              
+## [125] rgl_1.3.1                   assertthat_0.2.1           
+## [127] rngWELL_0.10-9              digest_0.6.36              
+## [129] bayesm_3.1-6                permute_0.9-7              
+## [131] numDeriv_2016.8-1.1         bookdown_0.40              
+## [133] Matrix_1.6-5                farver_2.1.2               
+## [135] reshape2_1.4.4              yulab.utils_0.1.4          
+## [137] viridis_0.6.5               DirichletMultinomial_1.44.0
+## [139] rpart_4.1.23                cachem_1.1.0               
+## [141] polyclip_1.10-6             WGCNA_1.72-5               
+## [143] Hmisc_5.1-3                 generics_0.1.3             
+## [145] dynamicTreeCut_1.63-1       parallelly_1.37.1          
+## [147] biomformat_1.30.0           statmod_1.5.0              
+## [149] impute_1.76.0               huge_1.3.5                 
+## [151] ragg_1.3.2                  RcppHNSW_0.6.0             
+## [153] ScaledMatrix_1.10.0         minqa_1.2.7                
+## [155] carData_3.0-5               pbapply_1.7-2              
+## [157] glmnet_4.1-8                spam_2.10-0                
+## [159] utf8_1.2.4                  gtools_3.9.5               
+## [161] shapes_1.2.7                readxl_1.4.3               
+## [163] preprocessCore_1.64.0       inum_1.0-5                 
+## [165] ggsignif_0.6.4              energy_1.7-11              
+## [167] gridExtra_2.3               shiny_1.8.1.1              
+## [169] GenomeInfoDbData_1.2.11     rhdf5filters_1.14.1        
+## [171] RCurl_1.98-1.16             memoise_2.0.1              
+## [173] rmarkdown_2.27              scales_1.3.0               
+## [175] stabledist_0.7-1            partykit_1.2-20            
+## [177] gld_2.6.6                   svglite_2.1.3              
+## [179] future_1.33.2               RANN_2.6.1                 
+## [181] spatstat.data_3.1-2         rstudioapi_0.16.0          
+## [183] cluster_2.1.6               spatstat.utils_3.0-5       
+## [185] hms_1.1.3                   fitdistrplus_1.1-11        
+## [187] munsell_0.5.1               cowplot_1.1.3              
+## [189] colorspace_2.1-0            ellipse_0.5.0              
+## [191] rlang_1.1.4                 quadprog_1.5-8             
+## [193] copula_1.1-3                DelayedMatrixStats_1.24.0  
+## [195] sparseMatrixStats_1.14.0    dotCall64_1.1-1            
+## [197] scuttle_1.12.0              mgcv_1.9-1                 
+## [199] xfun_0.45                   coda_0.19-4.1              
+## [201] e1071_1.7-14                TH.data_1.1-2              
+## [203] posterior_1.5.0             iterators_1.0.14           
+## [205] rARPACK_0.11-0              abind_1.4-5                
+## [207] libcoin_1.0-10              treeio_1.26.0              
+## [209] gmp_0.7-4                   Rhdf5lib_1.24.2            
+## [211] DECIPHER_2.30.0             bitops_1.0-7               
+## [213] Rdpack_2.6                  promises_1.3.0             
+## [215] RSQLite_2.3.7               sandwich_3.1-0             
+## [217] DelayedArray_0.28.0         proxy_0.4-27               
+## [219] Rmpfr_0.9-5                 GO.db_3.18.0               
+## [221] compiler_4.3.2              prettyunits_1.2.0          
+## [223] boot_1.3-30                 distributional_0.4.0       
+## [225] beachmat_2.18.1             listenv_0.9.1              
+## [227] Rcpp_1.0.12                 Rttf2pt1_1.3.12            
+## [229] BiocSingular_1.18.0         tensor_1.5                 
+## [231] progress_1.2.3              BiocParallel_1.36.0        
+## [233] insight_0.20.1              spatstat.random_3.2-3      
+## [235] R6_2.5.1                    fastmap_1.2.0              
+## [237] multcomp_1.4-25             rstatix_0.7.2              
+## [239] vipor_0.4.7                 ROCR_1.0-11                
+## [241] rsvd_1.0.5                  nnet_7.3-19                
+## [243] gtable_0.3.5                KernSmooth_2.23-24         
+## [245] miniUI_0.1.1.1              deldir_2.0-4               
+## [247] htmltools_0.5.8.1           ggthemes_5.1.0             
+## [249] bit64_4.0.5                 spatstat.explore_3.2-7     
+## [251] lifecycle_1.0.4             nloptr_2.1.1               
+## [253] sass_0.4.9                  vctrs_0.6.5                
+## [255] robustbase_0.99-3           VGAM_1.1-11                
+## [257] spatstat.geom_3.2-9         sp_2.1-4                   
+## [259] future.apply_1.11.2         pracma_2.4.4               
+## [261] rvinecopulib_0.6.3.1.1      bslib_0.7.0                
+## [263] pillar_1.9.0                locfit_1.5-9.10            
+## [265] jsonlite_1.8.8              expm_0.999-9</code></pre>
 
 </div>
 </div>

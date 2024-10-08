@@ -55,6 +55,17 @@ suppressPackageStartupMessages({
   library(MIGsim)
   library(purrr)
   library(scDesigner)
+  library(gamlss)
+  library(mia)
+  library(wesanderson)
+  library(SimBench)
+  library(tidySummarizedExperiment)
+  library(ks)
+  library(stringr)
+  library(ANCOMBC)
+  library(edgeR)
+  library(ggrepel)
+  library(ggpubr)
 })
 theme_set(theme_classic() + theme(rect = element_rect(fill = "transparent")))
 ```
@@ -155,7 +166,7 @@ link function. To ensure that this only applies to the first two panels, we use
 features to apply the new formula to.
 ```{r}
 sim <- sim |>
-  mutate(1:2, link = ~ ns(time, df = 7)) |>
+  scDesigner::mutate(1:2, link = ~ ns(time, df = 7)) |>
   estimate(nu = 0.01, mstop = 1000)
 
 sample(sim) |>

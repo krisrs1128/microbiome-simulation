@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<<<<<<< HEAD
 <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
@@ -23,6 +24,132 @@
     div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
   </style>
 <link rel="stylesheet" href="style.css">
+=======
+
+  <meta charset="utf-8" />
+  <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+  <title>Chapter 6 Vertical Integration | Simulation for Microbiome Analysis</title>
+  <meta name="description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="generator" content="bookdown 0.40 and GitBook 2.6.7" />
+
+  <meta property="og:title" content="Chapter 6 Vertical Integration | Simulation for Microbiome Analysis" />
+  <meta property="og:type" content="book" />
+  
+  <meta property="og:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  <meta name="github-repo" content="rstudio/bookdown-demo" />
+
+  <meta name="twitter:card" content="summary" />
+  <meta name="twitter:title" content="Chapter 6 Vertical Integration | Simulation for Microbiome Analysis" />
+  
+  <meta name="twitter:description" content="Examples illustrating the use of simulation for microbiome analysis, companion to the review article:" />
+  
+
+<meta name="author" content="Kris Sankaran, Saritha Kodikara, and Kim-Anh Lê Cao" />
+
+
+<meta name="date" content="2024-07-20" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black" />
+  
+  
+<link rel="prev" href="batch-effect-correction.html"/>
+<link rel="next" href="references.html"/>
+<script src="libs/jquery-3.6.0/jquery-3.6.0.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/fuse.js@6.4.6/dist/fuse.min.js"></script>
+<link href="libs/gitbook-2.6.7/css/style.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-table.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-bookdown.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-highlight.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-search.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-fontsettings.css" rel="stylesheet" />
+<link href="libs/gitbook-2.6.7/css/plugin-clipboard.css" rel="stylesheet" />
+
+
+
+
+
+
+
+
+<link href="libs/anchor-sections-1.1.0/anchor-sections.css" rel="stylesheet" />
+<link href="libs/anchor-sections-1.1.0/anchor-sections-hash.css" rel="stylesheet" />
+<script src="libs/anchor-sections-1.1.0/anchor-sections.js"></script>
+
+
+<style type="text/css">
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { display: inline-block; text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+    color: #aaaaaa;
+  }
+pre.numberSource { margin-left: 3em; border-left: 1px solid #aaaaaa;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+code span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code span.at { color: #7d9029; } /* Attribute */
+code span.bn { color: #40a070; } /* BaseN */
+code span.bu { color: #008000; } /* BuiltIn */
+code span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code span.ch { color: #4070a0; } /* Char */
+code span.cn { color: #880000; } /* Constant */
+code span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code span.dt { color: #902000; } /* DataType */
+code span.dv { color: #40a070; } /* DecVal */
+code span.er { color: #ff0000; font-weight: bold; } /* Error */
+code span.ex { } /* Extension */
+code span.fl { color: #40a070; } /* Float */
+code span.fu { color: #06287e; } /* Function */
+code span.im { color: #008000; font-weight: bold; } /* Import */
+code span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+code span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code span.op { color: #666666; } /* Operator */
+code span.ot { color: #007020; } /* Other */
+code span.pp { color: #bc7a00; } /* Preprocessor */
+code span.sc { color: #4070a0; } /* SpecialChar */
+code span.ss { color: #bb6688; } /* SpecialString */
+code span.st { color: #4070a0; } /* String */
+code span.va { color: #19177c; } /* Variable */
+code span.vs { color: #4070a0; } /* VerbatimString */
+code span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+</style>
+
+<style type="text/css">
+  
+  div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+</style>
+
+<link rel="stylesheet" href="style.css" type="text/css" />
+>>>>>>> dev_sk
 </head>
 <body data-spy="scroll" data-target="#toc">
 
@@ -95,38 +222,79 @@ not. The question is how either sepsis, antibiotics, or their interaction
 affects the microbiome viewed through these three assays. The data are printed
 below, they have already been filtered and CLR transformed following the MOFA
 vignette.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb86"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/data.html">data</a></span><span class="op">(</span><span class="va">icu</span><span class="op">)</span></span>
 <span><span class="va">icu</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb92"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb92-1"><a href="vertical-integration.html#cb92-1" tabindex="-1"></a><span class="fu">data</span>(icu)</span>
+<span id="cb92-2"><a href="vertical-integration.html#cb92-2" tabindex="-1"></a>icu</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>## $Bacteria
-## class: SummarizedExperiment 
-## dim: 180 57 
-## metadata(0):
-## assays(1): clr
-## rownames(180): Acidaminococcus Actinomyces ... Veillonellaceae Weissella
-## rowData names(0):
-## colnames(57): TKI_F1 TKI_F10 ... TKI_F8 TKI_F9
-## colData names(16): Age Sexs ... Propionate Butyrate
+## # A SummarizedExperiment-tibble abstraction: 10,260 × 19
+## # [90mFeatures=180 | Samples=57 | Assays=clr[0m
+##    .feature        .sample    clr   Age Sexs   Diagnosis Category
+##    &lt;chr&gt;           &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;     &lt;chr&gt;   
+##  1 Acidaminococcus TKI_F1  -0.717    89 Female Sepsis, … Sepsis  
+##  2 Actinomyces     TKI_F1  -0.717    89 Female Sepsis, … Sepsis  
+##  3 Adlercreutzia   TKI_F1  -0.717    89 Female Sepsis, … Sepsis  
+##  4 Agathobacter    TKI_F1  -0.717    89 Female Sepsis, … Sepsis  
+##  5 Akkermansia     TKI_F1   1.68     89 Female Sepsis, … Sepsis  
+##  6 Alistipes       TKI_F1  10.9      89 Female Sepsis, … Sepsis  
+##  7 Allisonella     TKI_F1  -0.717    89 Female Sepsis, … Sepsis  
+##  8 Alloprevotella  TKI_F1  -0.717    89 Female Sepsis, … Sepsis  
+##  9 Anaerofilum     TKI_F1  -0.717    89 Female Sepsis, … Sepsis  
+## 10 Anaerofustis    TKI_F1  -0.717    89 Female Sepsis, … Sepsis  
+## # ℹ 40 more rows
+## # ℹ 12 more variables: Penicillins &lt;lgl&gt;, Cephalosporins &lt;lgl&gt;,
+## #   Carbapenems &lt;lgl&gt;, Macrolides &lt;lgl&gt;, Aminoglycosides &lt;lgl&gt;,
+## #   Quinolones &lt;lgl&gt;, Co_trimoxazole &lt;lgl&gt;, Metronidazole &lt;lgl&gt;,
+## #   Vancomycin &lt;lgl&gt;, Acetate &lt;dbl&gt;, Propionate &lt;dbl&gt;,
+## #   Butyrate &lt;dbl&gt;
 ## 
 ## $Fungi
-## class: SummarizedExperiment 
-## dim: 18 57 
-## metadata(0):
-## assays(1): clr
-## rownames(18): Agaricus Aspergillus ... Sclerotiniaceae Vishniacozyma
-## rowData names(0):
-## colnames(57): TKI_F1 TKI_F10 ... TKI_F8 TKI_F9
-## colData names(16): Age Sexs ... Propionate Butyrate
+## # A SummarizedExperiment-tibble abstraction: 1,026 × 19
+## # [90mFeatures=18 | Samples=57 | Assays=clr[0m
+##    .feature      .sample    clr   Age Sexs   Diagnosis   Category
+##    &lt;chr&gt;         &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;chr&gt;  &lt;chr&gt;       &lt;chr&gt;   
+##  1 Agaricus      TKI_F1  -1.21     89 Female Sepsis, pu… Sepsis  
+##  2 Aspergillus   TKI_F1   6.63     89 Female Sepsis, pu… Sepsis  
+##  3 Aureobasidium TKI_F1  -4.25     89 Female Sepsis, pu… Sepsis  
+##  4 Candida       TKI_F1   8.16     89 Female Sepsis, pu… Sepsis  
+##  5 Cladosporium  TKI_F1   1.05     89 Female Sepsis, pu… Sepsis  
+##  6 Debaryomyces  TKI_F1  -0.540    89 Female Sepsis, pu… Sepsis  
+##  7 Dipodascus    TKI_F1  -1.86     89 Female Sepsis, pu… Sepsis  
+##  8 Filobasidium  TKI_F1  -1.21     89 Female Sepsis, pu… Sepsis  
+##  9 Issatchenkia  TKI_F1   0.141    89 Female Sepsis, pu… Sepsis  
+## 10 Malassezia    TKI_F1   0.764    89 Female Sepsis, pu… Sepsis  
+## # ℹ 350 more rows
+## # ℹ 12 more variables: Penicillins &lt;lgl&gt;, Cephalosporins &lt;lgl&gt;,
+## #   Carbapenems &lt;lgl&gt;, Macrolides &lt;lgl&gt;, Aminoglycosides &lt;lgl&gt;,
+## #   Quinolones &lt;lgl&gt;, Co_trimoxazole &lt;lgl&gt;, Metronidazole &lt;lgl&gt;,
+## #   Vancomycin &lt;lgl&gt;, Acetate &lt;dbl&gt;, Propionate &lt;dbl&gt;,
+## #   Butyrate &lt;dbl&gt;
 ## 
 ## $Viruses
-## class: SummarizedExperiment 
-## dim: 42 57 
-## metadata(0):
-## assays(1): clr
-## rownames(42): Acidovorax phage Acinetobacter phage ... Streptomyces phage Vibrio phage
-## rowData names(0):
-## colnames(57): TKI_F1 TKI_F10 ... TKI_F8 TKI_F9
-## colData names(16): Age Sexs ... Propionate Butyrate</code></pre>
+## # A SummarizedExperiment-tibble abstraction: 2,394 × 19
+## # [90mFeatures=42 | Samples=57 | Assays=clr[0m
+##    .feature         .sample    clr   Age Sexs  Diagnosis Category
+##    &lt;chr&gt;            &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;chr&gt; &lt;chr&gt;     &lt;chr&gt;   
+##  1 Acidovorax phage TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+##  2 Acinetobacter p… TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+##  3 Aeromonas phage  TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+##  4 Anellovirus      TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+##  5 Arthrobacter ph… TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+##  6 Bacillus phage   TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+##  7 Bacteroides pha… TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+##  8 Bacteroidetes p… TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+##  9 Brochothrix pha… TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+## 10 Burkholderia ph… TKI_F1  -0.602    89 Fema… Sepsis, … Sepsis  
+## # ℹ 32 more rows
+## # ℹ 12 more variables: Penicillins &lt;lgl&gt;, Cephalosporins &lt;lgl&gt;,
+## #   Carbapenems &lt;lgl&gt;, Macrolides &lt;lgl&gt;, Aminoglycosides &lt;lgl&gt;,
+## #   Quinolones &lt;lgl&gt;, Co_trimoxazole &lt;lgl&gt;, Metronidazole &lt;lgl&gt;,
+## #   Vancomycin &lt;lgl&gt;, Acetate &lt;dbl&gt;, Propionate &lt;dbl&gt;,
+## #   Butyrate &lt;dbl&gt;</code></pre>
 <p>We can simultaneously analyze these data sources using block sPLS-DA. This is
 the multi-assay version of the analysis that we saw in the previous session.
 <code>exper_splsda</code> is a very light wrapper of a mixOmics function call, which you
@@ -135,12 +303,19 @@ can read
 The output plot below shows that each assay differs across groups, and this is
 quantitatively summarized by the high estimated weights between each category
 and the estimated PLS directions.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb88"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span> <span class="op">&lt;-</span> <span class="fu">exper_splsda</span><span class="op">(</span><span class="va">icu</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/plotIndiv.html">plotIndiv</a></span><span class="op">(</span><span class="va">fit</span><span class="op">)</span></span></code></pre></div>
 <div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-28-1.png" width="672"></div>
 <div class="sourceCode" id="cb89"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">weights</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb94"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb94-1"><a href="vertical-integration.html#cb94-1" tabindex="-1"></a>fit <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu)</span>
+<span id="cb94-2"><a href="vertical-integration.html#cb94-2" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<div class="sourceCode" id="cb95"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb95-1"><a href="vertical-integration.html#cb95-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>##              comp1     comp2
 ## Bacteria 0.8580402 0.8191458
 ## Fungi    0.6513668 0.4845247
@@ -155,8 +330,12 @@ purrr package. This function gives a one-line replacement for simple for-loops;
 it is analogous to list comprehensions in python. It can be useful many places
 besides the topic of this tutorial. For example, if we want to convert the
 vector <code>c(1, 2, 3)</code> into <code>c(1, 4, 9)</code>, we can use this map:</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb91"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/map.html">map</a></span><span class="op">(</span><span class="fl">1</span><span class="op">:</span><span class="fl">3</span>, <span class="op">~</span> <span class="va">.</span><span class="op">^</span><span class="fl">2</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb97"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb97-1"><a href="vertical-integration.html#cb97-1" tabindex="-1"></a><span class="fu">map</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">3</span>, <span class="sc">~</span> .<span class="sc">^</span><span class="dv">2</span>)</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>## [[1]]
 ## [1] 1
 ## 
@@ -168,8 +347,12 @@ vector <code>c(1, 2, 3)</code> into <code>c(1, 4, 9)</code>, we can use this map
 <p>The <code>~</code> notation is shorthand for defining a function, and the <code>.</code> represents
 the current vector element. More generally, we can apply map to lists. This
 line will update the list so that 1 is added to each element.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb93"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/map.html">map</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fl">1</span>, b <span class="op">=</span> <span class="fl">2</span>, c <span class="op">=</span> <span class="fl">3</span><span class="op">)</span>, <span class="op">~</span> <span class="va">.</span> <span class="op">+</span> <span class="fl">1</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb99"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb99-1"><a href="vertical-integration.html#cb99-1" tabindex="-1"></a><span class="fu">map</span>(<span class="fu">list</span>(<span class="at">a =</span> <span class="dv">1</span>, <span class="at">b =</span> <span class="dv">2</span>, <span class="at">c =</span> <span class="dv">3</span>), <span class="sc">~</span> . <span class="sc">+</span> <span class="dv">1</span>)</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>## $a
 ## [1] 2
 ## 
@@ -181,6 +364,7 @@ line will update the list so that 1 is added to each element.</p>
 <p><strong>Exercise</strong>: To test your understanding, can you write a map that computes the
 *mean for each
 vector in the list <code>x</code> below? What about the mean of the 10 smallest elements?</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb95"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">x</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span>a <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span><span class="op">)</span>, b <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/stats/Normal.html">rnorm</a></span><span class="op">(</span><span class="fl">100</span>, <span class="fl">1</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
 <button onclick="myFunction('q-map')">
@@ -189,13 +373,25 @@ Show solution
 <div id="q-map" style="display:none">
 <div class="sourceCode" id="cb96"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/map.html">map</a></span><span class="op">(</span><span class="va">x</span>, <span class="va">mean</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb101"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb101-1"><a href="vertical-integration.html#cb101-1" tabindex="-1"></a>x <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="at">a =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>), <span class="at">b =</span> <span class="fu">rnorm</span>(<span class="dv">100</span>, <span class="dv">1</span>))</span></code></pre></div>
+<button onclick="myFunction(&#39;q-map&#39;)">
+Show solution
+</button>
+<div id="q-map" style="display:none">
+<div class="sourceCode" id="cb102"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb102-1"><a href="vertical-integration.html#cb102-1" tabindex="-1"></a><span class="fu">map</span>(x, mean)</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>## $a
 ## [1] 0.1177328
 ## 
 ## $b
 ## [1] 1.128995</code></pre>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb98"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/map.html">map</a></span><span class="op">(</span><span class="va">x</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/r/base/mean.html">mean</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/sort.html">sort</a></span><span class="op">(</span><span class="va">.</span><span class="op">)</span><span class="op">[</span><span class="fl">1</span><span class="op">:</span><span class="fl">10</span><span class="op">]</span><span class="op">)</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb104"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb104-1"><a href="vertical-integration.html#cb104-1" tabindex="-1"></a><span class="fu">map</span>(x, <span class="sc">~</span> <span class="fu">mean</span>(<span class="fu">sort</span>(.)[<span class="dv">1</span><span class="sc">:</span><span class="dv">10</span>]))</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>## $a
 ## [1] -1.920247
 ## 
@@ -217,6 +413,7 @@ setes of parameters for each of the four observed groups. This is not as nuanced
 as learning separate effects for sepsis and antibiotics, but it will be enough
 for illustration. We have used <code>map</code> to estimate a simulator for each assay in
 the <code>icu</code> list.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb100"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">simulator</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/map.html">map</a></span><span class="op">(</span></span>
 <span>  <span class="va">icu</span>,</span>
@@ -236,6 +433,24 @@ comparable to that from the original study.</p>
 <div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-34-1.png" width="672"></div>
 <div class="sourceCode" id="cb102"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit</span><span class="op">$</span><span class="va">weights</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb106"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb106-1"><a href="vertical-integration.html#cb106-1" tabindex="-1"></a>simulator <span class="ot">&lt;-</span> <span class="fu">map</span>(</span>
+<span id="cb106-2"><a href="vertical-integration.html#cb106-2" tabindex="-1"></a>  icu,</span>
+<span id="cb106-3"><a href="vertical-integration.html#cb106-3" tabindex="-1"></a>  <span class="sc">~</span> <span class="fu">setup_simulator</span>(., <span class="sc">~</span>Category, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb106-4"><a href="vertical-integration.html#cb106-4" tabindex="-1"></a>    <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span>
+<span id="cb106-5"><a href="vertical-integration.html#cb106-5" tabindex="-1"></a>)</span></code></pre></div>
+<p>So far, we haven’t tried removing any relationships present in the 16S assay,
+and indeed our integrative analysis output on the simulated data looks
+comparable to that from the original study.</p>
+<div class="sourceCode" id="cb107"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb107-1"><a href="vertical-integration.html#cb107-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb107-2"><a href="vertical-integration.html#cb107-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb107-3"><a href="vertical-integration.html#cb107-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
+<span id="cb107-4"><a href="vertical-integration.html#cb107-4" tabindex="-1"></a></span>
+<span id="cb107-5"><a href="vertical-integration.html#cb107-5" tabindex="-1"></a>fit_sim <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
+<span id="cb107-6"><a href="vertical-integration.html#cb107-6" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit_sim)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-39-1.png" width="672" /></p>
+<div class="sourceCode" id="cb108"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb108-1"><a href="vertical-integration.html#cb108-1" tabindex="-1"></a>fit<span class="sc">$</span>weights</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>##              comp1     comp2
 ## Bacteria 0.8580402 0.8191458
 ## Fungi    0.6513668 0.4845247
@@ -243,6 +458,7 @@ comparable to that from the original study.</p>
 <p><strong>Exercise</strong>: Modify the simulator above so that the 16S group no longer depends
 on disease cateogry. This will allow us to study how the integrative analysis
 output changes when the data are not alignable.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb104"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_simulator</span> <span class="op">&lt;-</span> <span class="va">simulator</span></span>
 <span><span class="co"># fill this in</span></span>
@@ -258,6 +474,20 @@ new simulator from scratch.</p>
 <div class="sourceCode" id="cb106"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">null_simulator</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/setup_simulator.html">setup_simulator</a></span><span class="op">(</span><span class="va">icu</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span>, <span class="op">~</span><span class="fl">1</span>, <span class="op">~</span> <span class="fu"><a href="https://rdrr.io/pkg/gamboostLSS/man/families.html">GaussianLSS</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu">estimate</span><span class="op">(</span>nu <span class="op">=</span> <span class="fl">0.05</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb110"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb110-1"><a href="vertical-integration.html#cb110-1" tabindex="-1"></a>null_simulator <span class="ot">&lt;-</span> simulator</span>
+<span id="cb110-2"><a href="vertical-integration.html#cb110-2" tabindex="-1"></a><span class="co"># fill this in</span></span>
+<span id="cb110-3"><a href="vertical-integration.html#cb110-3" tabindex="-1"></a><span class="co"># null_simulator[[1]] &lt;- ???</span></span></code></pre></div>
+<p><strong>Solution</strong>: We need to define a new link that no longer depends on <code>Category</code>. One solution
+is to modify the existing simulator in place using <code>mutate</code>.</p>
+<div class="sourceCode" id="cb111"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb111-1"><a href="vertical-integration.html#cb111-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> simulator[[<span class="dv">1</span>]] <span class="sc">|&gt;</span></span>
+<span id="cb111-2"><a href="vertical-integration.html#cb111-2" tabindex="-1"></a>  <span class="fu">mutate</span>(<span class="dv">1</span><span class="sc">:</span><span class="dv">180</span>, <span class="at">link =</span> <span class="sc">~</span><span class="dv">1</span>) <span class="sc">|&gt;</span></span>
+<span id="cb111-3"><a href="vertical-integration.html#cb111-3" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+<p>Since we are modifying all taxa, a simpler solution is to just define a
+new simulator from scratch.</p>
+<div class="sourceCode" id="cb112"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb112-1"><a href="vertical-integration.html#cb112-1" tabindex="-1"></a>null_simulator[[<span class="dv">1</span>]] <span class="ot">&lt;-</span> <span class="fu">setup_simulator</span>(icu[[<span class="dv">1</span>]], <span class="sc">~</span><span class="dv">1</span>, <span class="sc">~</span> <span class="fu">GaussianLSS</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb112-2"><a href="vertical-integration.html#cb112-2" tabindex="-1"></a>  <span class="fu">estimate</span>(<span class="at">nu =</span> <span class="fl">0.05</span>)</span></code></pre></div>
+>>>>>>> dev_sk
 </div>
 <div id="simulation-results" class="section level2" number="6.4">
 <h2>
@@ -279,6 +509,7 @@ power by focusing only on class-associated assays. Nonetheless, the block
 sPLS-DA also seems relatively robust – considering the dramatic change in the
 microbiome table, the output for the remaining tables still surfaces interesting
 relationships.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb107"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">icu_sim</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/join_copula.html">join_copula</a></span><span class="op">(</span><span class="va">null_simulator</span>, <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/copula_adaptive.html">copula_adaptive</a></span><span class="op">(</span><span class="op">)</span><span class="op">)</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/sample.html">sample</a></span><span class="op">(</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -288,11 +519,24 @@ relationships.</p>
 <div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-38-1.png" width="672"></div>
 <div class="sourceCode" id="cb108"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">fit_null</span><span class="op">$</span><span class="va">weights</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb113"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb113-1"><a href="vertical-integration.html#cb113-1" tabindex="-1"></a>icu_sim <span class="ot">&lt;-</span> <span class="fu">join_copula</span>(null_simulator, <span class="fu">copula_adaptive</span>()) <span class="sc">|&gt;</span></span>
+<span id="cb113-2"><a href="vertical-integration.html#cb113-2" tabindex="-1"></a>  <span class="fu">sample</span>() <span class="sc">|&gt;</span></span>
+<span id="cb113-3"><a href="vertical-integration.html#cb113-3" tabindex="-1"></a>  <span class="fu">split_assays</span>()</span>
+<span id="cb113-4"><a href="vertical-integration.html#cb113-4" tabindex="-1"></a>fit_null <span class="ot">&lt;-</span> <span class="fu">exper_splsda</span>(icu_sim)</span>
+<span id="cb113-5"><a href="vertical-integration.html#cb113-5" tabindex="-1"></a><span class="fu">plotIndiv</span>(fit)</span></code></pre></div>
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-43-1.png" width="672" /></p>
+<div class="sourceCode" id="cb114"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb114-1"><a href="vertical-integration.html#cb114-1" tabindex="-1"></a>fit_null<span class="sc">$</span>weights</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>##              comp1     comp2
 ## Bacteria 0.6658170 0.6571177
 ## Fungi    0.7479665 0.6797712
 ## Viruses  0.7015960 0.7929047</code></pre>
+<<<<<<< HEAD
 <p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-39-1.png" width="672"><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-39-2.png" width="672"><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-39-3.png" width="672"><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-39-4.png" width="672"></p>
+=======
+<p><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-44-1.png" width="672" /><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-44-2.png" width="672" /><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-44-3.png" width="672" /><img src="simulation_for_microbiome_files/figure-html/unnamed-chunk-44-4.png" width="672" /></p>
+>>>>>>> dev_sk
 </div>
 <div id="alignability" class="section level2" number="6.5">
 <h2>
@@ -301,6 +545,7 @@ relationships.</p>
 <p>How do the canonical correlations compare between the real data and a reference
 null? First, we can compute the CCA canonical correlations using the real
 Bacteria and Virus data.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb110"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">merged</span> <span class="op">&lt;-</span> <span class="va">simulator</span><span class="op">[</span><span class="fu"><a href="https://rdrr.io/r/base/c.html">c</a></span><span class="op">(</span><span class="fl">1</span>, <span class="fl">3</span><span class="op">)</span><span class="op">]</span> <span class="op">|&gt;</span></span>
 <span>  <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/join_copula.html">join_copula</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/copula_adaptive.html">copula_adaptive</a></span><span class="op">(</span>thr <span class="op">=</span> <span class="fl">0.01</span><span class="op">)</span><span class="op">)</span></span>
@@ -310,10 +555,21 @@ Bacteria and Virus data.</p>
 <span>  <span class="fu"><a href="https://rdrr.io/r/base/t.html">t</a></span><span class="op">(</span><span class="op">)</span></span>
 <span><span class="va">ix</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/map.html">map</a></span><span class="op">(</span><span class="va">icu</span>, <span class="va">rownames</span><span class="op">)</span></span>
 <span><span class="va">cca_result</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/rcc.html">rcc</a></span><span class="op">(</span><span class="va">xy</span><span class="op">[</span>, <span class="va">ix</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>, <span class="va">xy</span><span class="op">[</span>, <span class="va">ix</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>, method <span class="op">=</span> <span class="st">"shrinkage"</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb116"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb116-1"><a href="vertical-integration.html#cb116-1" tabindex="-1"></a>merged <span class="ot">&lt;-</span> simulator[<span class="fu">c</span>(<span class="dv">1</span>, <span class="dv">3</span>)] <span class="sc">|&gt;</span></span>
+<span id="cb116-2"><a href="vertical-integration.html#cb116-2" tabindex="-1"></a>  <span class="fu">join_copula</span>(<span class="fu">copula_adaptive</span>(<span class="at">thr =</span> <span class="fl">0.01</span>))</span>
+<span id="cb116-3"><a href="vertical-integration.html#cb116-3" tabindex="-1"></a></span>
+<span id="cb116-4"><a href="vertical-integration.html#cb116-4" tabindex="-1"></a>xy <span class="ot">&lt;-</span> <span class="fu">sample</span>(merged) <span class="sc">|&gt;</span></span>
+<span id="cb116-5"><a href="vertical-integration.html#cb116-5" tabindex="-1"></a>  <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb116-6"><a href="vertical-integration.html#cb116-6" tabindex="-1"></a>  <span class="fu">t</span>()</span>
+<span id="cb116-7"><a href="vertical-integration.html#cb116-7" tabindex="-1"></a>ix <span class="ot">&lt;-</span> <span class="fu">map</span>(icu, rownames)</span>
+<span id="cb116-8"><a href="vertical-integration.html#cb116-8" tabindex="-1"></a>cca_result <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy[, ix[[<span class="dv">1</span>]]], xy[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)</span></code></pre></div>
+>>>>>>> dev_sk
 <p>Next, we define a reference null and compute canonical correlations on ten
 replicates from this null. To define the reference null, we zero out any
 correlations across tables. We then draw 100 samples from the resulting
 distribution and compute canonical correlations for each.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb111"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">rho_null</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/scDesigner/man/copula_parameters.html">copula_parameters</a></span><span class="op">(</span><span class="va">merged</span><span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/base/dimnames.html">dimnames</a></span><span class="op">(</span><span class="va">rho_null</span><span class="op">)</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/r/base/list.html">list</a></span><span class="op">(</span><span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span>, <span class="fu"><a href="https://rdrr.io/r/base/colnames.html">colnames</a></span><span class="op">(</span><span class="va">xy</span><span class="op">)</span><span class="op">)</span></span>
@@ -332,10 +588,30 @@ distribution and compute canonical correlations for each.</p>
 <span></span>
 <span>  <span class="va">cancors</span><span class="op">[[</span><span class="fu"><a href="https://glue.tidyverse.org/reference/glue.html">glue</a></span><span class="op">(</span><span class="st">"sim_{b}"</span><span class="op">)</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://rdrr.io/pkg/mixOmics/man/rcc.html">rcc</a></span><span class="op">(</span><span class="va">xy_null</span><span class="op">[</span>, <span class="va">ix</span><span class="op">[[</span><span class="fl">1</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>, <span class="va">xy_null</span><span class="op">[</span>, <span class="va">ix</span><span class="op">[[</span><span class="fl">3</span><span class="op">]</span><span class="op">]</span><span class="op">]</span>, method <span class="op">=</span> <span class="st">"shrinkage"</span><span class="op">)</span><span class="op">$</span><span class="va">cor</span></span>
 <span><span class="op">}</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb117"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb117-1"><a href="vertical-integration.html#cb117-1" tabindex="-1"></a>rho_null <span class="ot">&lt;-</span> <span class="fu">copula_parameters</span>(merged)</span>
+<span id="cb117-2"><a href="vertical-integration.html#cb117-2" tabindex="-1"></a><span class="fu">dimnames</span>(rho_null) <span class="ot">&lt;-</span> <span class="fu">list</span>(<span class="fu">colnames</span>(xy), <span class="fu">colnames</span>(xy))</span>
+<span id="cb117-3"><a href="vertical-integration.html#cb117-3" tabindex="-1"></a>rho_null[ix[[<span class="dv">1</span>]], ix[[<span class="dv">3</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb117-4"><a href="vertical-integration.html#cb117-4" tabindex="-1"></a>rho_null[ix[[<span class="dv">3</span>]], ix[[<span class="dv">1</span>]]] <span class="ot">&lt;-</span> <span class="dv">0</span></span>
+<span id="cb117-5"><a href="vertical-integration.html#cb117-5" tabindex="-1"></a></span>
+<span id="cb117-6"><a href="vertical-integration.html#cb117-6" tabindex="-1"></a>null_cancor <span class="ot">&lt;-</span> merged <span class="sc">|&gt;</span></span>
+<span id="cb117-7"><a href="vertical-integration.html#cb117-7" tabindex="-1"></a>  <span class="fu">mutate_correlation</span>(rho_null)</span>
+<span id="cb117-8"><a href="vertical-integration.html#cb117-8" tabindex="-1"></a></span>
+<span id="cb117-9"><a href="vertical-integration.html#cb117-9" tabindex="-1"></a>B <span class="ot">&lt;-</span> <span class="dv">100</span></span>
+<span id="cb117-10"><a href="vertical-integration.html#cb117-10" tabindex="-1"></a>cancors <span class="ot">&lt;-</span> <span class="fu">list</span>()</span>
+<span id="cb117-11"><a href="vertical-integration.html#cb117-11" tabindex="-1"></a><span class="cf">for</span> (b <span class="cf">in</span> <span class="fu">seq_len</span>(B)) {</span>
+<span id="cb117-12"><a href="vertical-integration.html#cb117-12" tabindex="-1"></a>  xy_null <span class="ot">&lt;-</span> <span class="fu">sample</span>(null_cancor) <span class="sc">|&gt;</span></span>
+<span id="cb117-13"><a href="vertical-integration.html#cb117-13" tabindex="-1"></a>    <span class="fu">assay</span>() <span class="sc">|&gt;</span></span>
+<span id="cb117-14"><a href="vertical-integration.html#cb117-14" tabindex="-1"></a>    <span class="fu">t</span>()</span>
+<span id="cb117-15"><a href="vertical-integration.html#cb117-15" tabindex="-1"></a></span>
+<span id="cb117-16"><a href="vertical-integration.html#cb117-16" tabindex="-1"></a>  cancors[[<span class="fu">glue</span>(<span class="st">&quot;sim_{b}&quot;</span>)]] <span class="ot">&lt;-</span> <span class="fu">rcc</span>(xy_null[, ix[[<span class="dv">1</span>]]], xy_null[, ix[[<span class="dv">3</span>]]], <span class="at">method =</span> <span class="st">&quot;shrinkage&quot;</span>)<span class="sc">$</span>cor</span>
+<span id="cb117-17"><a href="vertical-integration.html#cb117-17" tabindex="-1"></a>}</span></code></pre></div>
+>>>>>>> dev_sk
 <p>To help with later visualization, we combine both the real and reference
 canonical correlations into a tidy data.frame. These are visualized in a hidden
 chunk below – if you want to see the source code, you can review it
 <a href="https://github.com/krisrs1128/microbiome-simulation/blob/main/book/04-integration.Rmd">here</a>.</p>
+<<<<<<< HEAD
 <div class="sourceCode" id="cb112"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="va">cancors</span><span class="op">[[</span><span class="st">"true"</span><span class="op">]</span><span class="op">]</span> <span class="op">&lt;-</span> <span class="va">cca_result</span><span class="op">$</span><span class="va">cor</span></span>
 <span><span class="va">contrast_data</span> <span class="op">&lt;-</span> <span class="fu"><a href="https://dplyr.tidyverse.org/reference/bind_rows.html">bind_rows</a></span><span class="op">(</span><span class="va">cancors</span>, .id <span class="op">=</span> <span class="st">"rep"</span><span class="op">)</span> <span class="op">|&gt;</span></span>
@@ -345,6 +621,16 @@ chunk below – if you want to see the source code, you can review it
 <span>    loading <span class="op">=</span> <span class="fu"><a href="https://rdrr.io/r/base/integer.html">as.integer</a></span><span class="op">(</span><span class="va">loading</span><span class="op">)</span></span>
 <span>  <span class="op">)</span></span>
 <span><span class="fu"><a href="https://rdrr.io/r/utils/head.html">head</a></span><span class="op">(</span><span class="va">contrast_data</span><span class="op">)</span></span></code></pre></div>
+=======
+<div class="sourceCode" id="cb118"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb118-1"><a href="vertical-integration.html#cb118-1" tabindex="-1"></a>cancors[[<span class="st">&quot;true&quot;</span>]] <span class="ot">&lt;-</span> cca_result<span class="sc">$</span>cor</span>
+<span id="cb118-2"><a href="vertical-integration.html#cb118-2" tabindex="-1"></a>contrast_data <span class="ot">&lt;-</span> <span class="fu">bind_rows</span>(cancors, <span class="at">.id =</span> <span class="st">&quot;rep&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb118-3"><a href="vertical-integration.html#cb118-3" tabindex="-1"></a>  <span class="fu">pivot_longer</span>(<span class="sc">-</span>rep, <span class="at">names_to =</span> <span class="st">&quot;loading&quot;</span>) <span class="sc">|&gt;</span></span>
+<span id="cb118-4"><a href="vertical-integration.html#cb118-4" tabindex="-1"></a>  <span class="fu">mutate</span>(</span>
+<span id="cb118-5"><a href="vertical-integration.html#cb118-5" tabindex="-1"></a>    <span class="at">source =</span> <span class="fu">grepl</span>(<span class="st">&quot;true&quot;</span>, rep),</span>
+<span id="cb118-6"><a href="vertical-integration.html#cb118-6" tabindex="-1"></a>    <span class="at">loading =</span> <span class="fu">as.integer</span>(loading)</span>
+<span id="cb118-7"><a href="vertical-integration.html#cb118-7" tabindex="-1"></a>  )</span>
+<span id="cb118-8"><a href="vertical-integration.html#cb118-8" tabindex="-1"></a><span class="fu">head</span>(contrast_data)</span></code></pre></div>
+>>>>>>> dev_sk
 <pre><code>## # A tibble: 6 × 4
 ##   rep   loading value source
 ##   &lt;chr&gt;   &lt;int&gt; &lt;dbl&gt; &lt;lgl&gt; 
@@ -354,56 +640,230 @@ chunk below – if you want to see the source code, you can review it
 ## 4 sim_1       4 0.826 FALSE 
 ## 5 sim_1       5 0.815 FALSE 
 ## 6 sim_1       6 0.797 FALSE</code></pre>
+<<<<<<< HEAD
 <div class="inline-figure"><img src="simulation_for_microbiome_files/figure-html/contrast-vis-1.png" width="672"></div>
 <div class="sourceCode" id="cb114"><pre class="downlit sourceCode r">
 <code class="sourceCode R"><span><span class="fu"><a href="https://rdrr.io/r/utils/sessionInfo.html">sessionInfo</a></span><span class="op">(</span><span class="op">)</span></span></code></pre></div>
 <pre><code>## R version 4.4.0 (2024-04-24)
 ## Platform: aarch64-apple-darwin20
 ## Running under: macOS Ventura 13.4
+=======
+<p><img src="simulation_for_microbiome_files/figure-html/contrast-vis-1.png" width="672" /></p>
+<div class="sourceCode" id="cb120"><pre class="sourceCode r"><code class="sourceCode r"><span id="cb120-1"><a href="vertical-integration.html#cb120-1" tabindex="-1"></a><span class="fu">sessionInfo</span>()</span></code></pre></div>
+<pre><code>## R version 4.3.2 (2023-10-31)
+## Platform: aarch64-apple-darwin20 (64-bit)
+## Running under: macOS Sonoma 14.5
+>>>>>>> dev_sk
 ## 
 ## Matrix products: default
-## BLAS:   /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRblas.0.dylib 
-## LAPACK: /Library/Frameworks/R.framework/Versions/4.4-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.12.0
+## BLAS:   /System/Library/Frameworks/Accelerate.framework/Versions/A/Frameworks/vecLib.framework/Versions/A/libBLAS.dylib 
+## LAPACK: /Library/Frameworks/R.framework/Versions/4.3-arm64/Resources/lib/libRlapack.dylib;  LAPACK version 3.11.0
 ## 
 ## locale:
 ## [1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
 ## 
-## time zone: America/Chicago
+## time zone: Australia/Melbourne
 ## tzcode source: internal
 ## 
 ## attached base packages:
-##  [1] splines   parallel  stats4    stats     graphics  grDevices utils     datasets  methods   base     
+##  [1] splines   parallel  stats4    stats     graphics  grDevices
+##  [7] utils     datasets  methods   base     
 ## 
 ## other attached packages:
-##  [1] TreeSummarizedExperiment_2.12.0 Biostrings_2.72.1               XVector_0.44.0                  SingleCellExperiment_1.26.0     scDesigner_0.0.0.9000           purrr_1.0.2                    
-##  [7] MIGsim_0.0.0.9000               tidyr_1.3.1                     tibble_3.2.1                    scico_1.5.0                     pwr_1.3-0                       patchwork_1.2.0                
-## [13] mixOmics_6.28.0                 lattice_0.22-6                  MASS_7.3-60.2                   glue_1.7.0                      ggplot2_3.5.1                   ggdist_3.3.2                   
-## [19] gamboostLSS_2.0-7               mboost_2.9-10                   stabs_0.6-4                     forcats_1.0.0                   dplyr_1.1.4                     SummarizedExperiment_1.34.0    
-## [25] Biobase_2.64.0                  GenomicRanges_1.56.0            GenomeInfoDb_1.40.0             IRanges_2.38.0                  S4Vectors_0.42.0                BiocGenerics_0.50.0            
-## [31] MatrixGenerics_1.16.0           matrixStats_1.3.0               SpiecEasi_1.1.3                 CovTools_0.5.4                 
+##  [1] doRNG_1.8.6                    
+##  [2] rngtools_1.5.2                 
+##  [3] foreach_1.5.2                  
+##  [4] ggpubr_0.6.0                   
+##  [5] ggrepel_0.9.5                  
+##  [6] edgeR_4.0.16                   
+##  [7] limma_3.58.1                   
+##  [8] ANCOMBC_2.4.0                  
+##  [9] stringr_1.5.1                  
+## [10] ks_1.14.2                      
+## [11] tidySummarizedExperiment_1.12.0
+## [12] ttservice_0.4.1                
+## [13] SimBench_0.99.1                
+## [14] wesanderson_0.3.7              
+## [15] mia_1.10.0                     
+## [16] MultiAssayExperiment_1.28.0    
+## [17] TreeSummarizedExperiment_2.10.0
+## [18] Biostrings_2.70.3              
+## [19] XVector_0.42.0                 
+## [20] SingleCellExperiment_1.24.0    
+## [21] gamlss_5.4-22                  
+## [22] nlme_3.1-165                   
+## [23] gamlss.dist_6.1-1              
+## [24] gamlss.data_6.0-6              
+## [25] scDesigner_0.0.0.9000          
+## [26] purrr_1.0.2                    
+## [27] MIGsim_0.0.0.9000              
+## [28] tidyr_1.3.1                    
+## [29] tibble_3.2.1                   
+## [30] scico_1.5.0                    
+## [31] pwr_1.3-0                      
+## [32] patchwork_1.2.0                
+## [33] mutoss_0.1-13                  
+## [34] mvtnorm_1.2-5                  
+## [35] mixOmics_6.26.0                
+## [36] lattice_0.22-6                 
+## [37] MASS_7.3-60.0.1                
+## [38] glue_1.7.0                     
+## [39] ggplot2_3.5.1                  
+## [40] ggdist_3.3.2                   
+## [41] gamboostLSS_2.0-7              
+## [42] mboost_2.9-10                  
+## [43] stabs_0.6-4                    
+## [44] forcats_1.0.0                  
+## [45] dplyr_1.1.4                    
+## [46] SummarizedExperiment_1.32.0    
+## [47] Biobase_2.62.0                 
+## [48] GenomicRanges_1.54.1           
+## [49] GenomeInfoDb_1.38.8            
+## [50] IRanges_2.36.0                 
+## [51] S4Vectors_0.40.2               
+## [52] BiocGenerics_0.48.1            
+## [53] MatrixGenerics_1.14.0          
+## [54] matrixStats_1.3.0              
+## [55] SpiecEasi_1.1.3                
+## [56] CovTools_0.5.4                 
 ## 
 ## loaded via a namespace (and not attached):
-##   [1] minpack.lm_1.2-4            XML_3.99-0.16.1             rpart_4.1.23                lifecycle_1.0.4             Rdpack_2.6                  edgeR_4.2.0                 doParallel_1.0.17          
-##   [8] MultiAssayExperiment_1.30.2 insight_0.20.1              magrittr_2.0.3              limma_3.60.2                sass_0.4.9                  rmarkdown_2.27              jquerylib_0.1.4            
-##  [15] yaml_2.3.8                  DBI_1.2.3                   RColorBrewer_1.1-3          ADGofTest_0.3               abind_1.4-5                 zlibbioc_1.50.0             expm_0.999-9               
-##  [22] quadprog_1.5-8              pspline_1.0-20              kde1d_1.0.7                 rgl_1.3.1                   yulab.utils_0.1.4           pracma_2.4.4                sva_3.50.0                 
-##  [29] GenomeInfoDbData_1.2.12     ggrepel_0.9.5               tidytree_0.4.6              genefilter_1.86.0           ellipse_0.5.0               RSpectra_0.16-1             annotate_1.82.0            
-##  [36] svglite_2.1.3               codetools_0.2-20            DelayedArray_0.30.1         shapes_1.2.7                tidyselect_1.2.1            shape_1.4.6.1               UCSC.utils_1.0.0           
-##  [43] farver_2.1.2                randtoolbox_2.0.4           base64enc_0.1-3             jsonlite_1.8.8              Formula_1.2-5               survival_3.7-0              iterators_1.0.14           
-##  [50] systemfonts_1.1.0           foreach_1.5.2               tools_4.4.0                 progress_1.2.3              treeio_1.28.0               ragg_1.3.2                  Rcpp_1.0.12                
-##  [57] rARPACK_0.11-0              BiocBaseUtils_1.6.0         gridExtra_2.3               SparseArray_1.4.8           mgcv_1.9-1                  xfun_0.44                   distributional_0.4.0       
-##  [64] withr_3.0.0                 numDeriv_2016.8-1.1         fastmap_1.2.0               fansi_1.0.6                 digest_0.6.35               R6_2.5.1                    textshaping_0.4.0          
-##  [71] colorspace_2.1-0            RSQLite_2.3.7               inum_1.0-5                  copula_1.1-3                flare_1.7.0.1               utf8_1.2.4                  generics_0.1.3             
-##  [78] corpcor_1.6.10              prettyunits_1.2.0           pulsar_0.3.11               httr_1.4.7                  htmlwidgets_1.6.4           S4Arrays_1.4.1              scatterplot3d_0.3-44       
-##  [85] rngWELL_0.10-9              pkgconfig_2.0.3             geigen_2.3                  gtable_0.3.5                blob_1.2.4                  pcaPP_2.0-4                 htmltools_0.5.8.1          
-##  [92] bookdown_0.39.1             ruv_0.9.7.1                 scales_1.3.0                SHT_0.1.8                   png_0.1-8                   knitr_1.47                  rstudioapi_0.16.0          
-##  [99] reshape2_1.4.4              nlme_3.1-164                cachem_1.1.0                stringr_1.5.1               libcoin_1.0-10              AnnotationDbi_1.66.0        pillar_1.9.0               
-## [106] grid_4.4.0                  vctrs_0.6.5                 VGAM_1.1-11                 huge_1.3.5                  xtable_1.8-4                gamlss.dist_6.1-1           evaluate_0.23              
-## [113] mvtnorm_1.2-5               cli_3.6.3                   locfit_1.5-9.9              compiler_4.4.0              rlang_1.1.4                 crayon_1.5.3                labeling_0.4.3             
-## [120] plyr_1.8.9                  fs_1.6.4                    stringi_1.8.4               BiocParallel_1.38.0         nnls_1.5                    assertthat_0.2.1            rvinecopulib_0.6.3.1.1     
-## [127] munsell_0.5.1               gsl_2.1-8                   lazyeval_0.2.2              glmnet_4.1-8                Matrix_1.7-0                hms_1.1.3                   stabledist_0.7-1           
-## [134] bit64_4.0.5                 KEGGREST_1.44.0             statmod_1.5.0               highr_0.11                  rbibutils_2.2.16            partykit_1.2-20             igraph_2.0.3               
-## [141] memoise_2.0.1               bslib_0.7.0.9000            bit_4.0.5                   ape_5.8</code></pre>
+##   [1] igraph_2.0.3                ica_1.0-3                  
+##   [3] plotly_4.10.4               Formula_1.2-5              
+##   [5] scater_1.30.1               BiocBaseUtils_1.4.0        
+##   [7] zlibbioc_1.48.2             tidyselect_1.2.1           
+##   [9] bit_4.0.5                   doParallel_1.0.17          
+##  [11] pspline_1.0-20              blob_1.2.4                 
+##  [13] S4Arrays_1.2.1              png_0.1-8                  
+##  [15] plotrix_3.8-4               cli_3.6.3                  
+##  [17] CVXR_1.0-14                 pulsar_0.3.11              
+##  [19] arrayhelpers_1.1-0          multtest_2.58.0            
+##  [21] goftest_1.2-3               textshaping_0.4.0          
+##  [23] bluster_1.12.0              BiocNeighbors_1.20.2       
+##  [25] uwot_0.2.2                  mime_0.12                  
+##  [27] evaluate_0.24.0             tidytree_0.4.6             
+##  [29] leiden_0.4.3.1              stringi_1.8.4              
+##  [31] backports_1.5.0             XML_3.99-0.17              
+##  [33] lmerTest_3.1-3              gsl_2.1-8                  
+##  [35] Exact_3.2                   httpuv_1.6.15              
+##  [37] AnnotationDbi_1.64.1        magrittr_2.0.3             
+##  [39] mclust_6.1.1                ADGofTest_0.3              
+##  [41] pcaPP_2.0-4                 sctransform_0.4.1          
+##  [43] rootSolve_1.8.2.4           ggbeeswarm_0.7.2           
+##  [45] DBI_1.2.3                   genefilter_1.84.0          
+##  [47] jquerylib_0.1.4             withr_3.0.0                
+##  [49] corpcor_1.6.10              systemfonts_1.1.0          
+##  [51] class_7.3-22                lmtest_0.9-40              
+##  [53] sva_3.50.0                  compositions_2.0-8         
+##  [55] htmlwidgets_1.6.4           fs_1.6.4                   
+##  [57] labeling_0.4.3              SparseArray_1.2.4          
+##  [59] DEoptimR_1.1-3              DESeq2_1.42.1              
+##  [61] cellranger_1.1.0            tidybayes_3.0.6            
+##  [63] extrafont_0.19              annotate_1.80.0            
+##  [65] flare_1.7.0.1               lmom_3.0                   
+##  [67] reticulate_1.37.0           minpack.lm_1.2-4           
+##  [69] geigen_2.3                  zoo_1.8-12                 
+##  [71] knitr_1.48                  nnls_1.5                   
+##  [73] svUnit_1.0.6                SHT_0.1.8                  
+##  [75] decontam_1.22.0             fansi_1.0.6                
+##  [77] grid_4.3.2                  rhdf5_2.46.1               
+##  [79] data.table_1.15.4           ruv_0.9.7.1                
+##  [81] vegan_2.6-6.1               RSpectra_0.16-1            
+##  [83] irlba_2.3.5.1               extrafontdb_1.0            
+##  [85] fastDummies_1.7.3           DescTools_0.99.54          
+##  [87] ellipsis_0.3.2              ade4_1.7-22                
+##  [89] lazyeval_0.2.2              yaml_2.3.9                 
+##  [91] survival_3.7-0              scattermore_1.2            
+##  [93] crayon_1.5.3                tensorA_0.36.2.1           
+##  [95] phyloseq_1.46.0             RcppAnnoy_0.0.22           
+##  [97] RColorBrewer_1.1-3          progressr_0.14.0           
+##  [99] later_1.3.2                 ggridges_0.5.6             
+## [101] codetools_0.2-20            base64enc_0.1-3            
+## [103] Seurat_5.1.0                KEGGREST_1.42.0            
+## [105] Rtsne_0.17                  shape_1.4.6.1              
+## [107] randtoolbox_2.0.4           foreign_0.8-87             
+## [109] pkgconfig_2.0.3             scatterplot3d_0.3-44       
+## [111] spatstat.sparse_3.1-0       ape_5.8                    
+## [113] viridisLite_0.4.2           xtable_1.8-4               
+## [115] highr_0.11                  car_3.1-2                  
+## [117] fastcluster_1.2.6           plyr_1.8.9                 
+## [119] httr_1.4.7                  rbibutils_2.2.16           
+## [121] tools_4.3.2                 globals_0.16.3             
+## [123] SeuratObject_5.0.2          kde1d_1.0.7                
+## [125] beeswarm_0.4.0              htmlTable_2.4.2            
+## [127] broom_1.0.6                 checkmate_2.3.1            
+## [129] lme4_1.1-35.5               rgl_1.3.1                  
+## [131] assertthat_0.2.1            rngWELL_0.10-9             
+## [133] digest_0.6.36               bayesm_3.1-6               
+## [135] permute_0.9-7               numDeriv_2016.8-1.1        
+## [137] bookdown_0.40               Matrix_1.6-5               
+## [139] farver_2.1.2                reshape2_1.4.4             
+## [141] yulab.utils_0.1.4           viridis_0.6.5              
+## [143] DirichletMultinomial_1.44.0 rpart_4.1.23               
+## [145] cachem_1.1.0                polyclip_1.10-6            
+## [147] WGCNA_1.72-5                Hmisc_5.1-3                
+## [149] generics_0.1.3              dynamicTreeCut_1.63-1      
+## [151] parallelly_1.37.1           biomformat_1.30.0          
+## [153] statmod_1.5.0               impute_1.76.0              
+## [155] huge_1.3.5                  ragg_1.3.2                 
+## [157] RcppHNSW_0.6.0              ScaledMatrix_1.10.0        
+## [159] minqa_1.2.7                 carData_3.0-5              
+## [161] pbapply_1.7-2               glmnet_4.1-8               
+## [163] spam_2.10-0                 utf8_1.2.4                 
+## [165] gtools_3.9.5                shapes_1.2.7               
+## [167] readxl_1.4.3                preprocessCore_1.64.0      
+## [169] inum_1.0-5                  ggsignif_0.6.4             
+## [171] energy_1.7-11               gridExtra_2.3              
+## [173] shiny_1.8.1.1               GenomeInfoDbData_1.2.11    
+## [175] rhdf5filters_1.14.1         RCurl_1.98-1.16            
+## [177] memoise_2.0.1               rmarkdown_2.27             
+## [179] scales_1.3.0                stabledist_0.7-1           
+## [181] partykit_1.2-20             gld_2.6.6                  
+## [183] svglite_2.1.3               future_1.33.2              
+## [185] RANN_2.6.1                  spatstat.data_3.1-2        
+## [187] rstudioapi_0.16.0           cluster_2.1.6              
+## [189] spatstat.utils_3.0-5        hms_1.1.3                  
+## [191] fitdistrplus_1.1-11         munsell_0.5.1              
+## [193] cowplot_1.1.3               colorspace_2.1-0           
+## [195] ellipse_0.5.0               rlang_1.1.4                
+## [197] quadprog_1.5-8              copula_1.1-3               
+## [199] DelayedMatrixStats_1.24.0   sparseMatrixStats_1.14.0   
+## [201] dotCall64_1.1-1             scuttle_1.12.0             
+## [203] mgcv_1.9-1                  xfun_0.45                  
+## [205] coda_0.19-4.1               e1071_1.7-14               
+## [207] TH.data_1.1-2               posterior_1.5.0            
+## [209] iterators_1.0.14            rARPACK_0.11-0             
+## [211] abind_1.4-5                 libcoin_1.0-10             
+## [213] treeio_1.26.0               gmp_0.7-4                  
+## [215] Rhdf5lib_1.24.2             DECIPHER_2.30.0            
+## [217] bitops_1.0-7                Rdpack_2.6                 
+## [219] promises_1.3.0              RSQLite_2.3.7              
+## [221] sandwich_3.1-0              DelayedArray_0.28.0        
+## [223] proxy_0.4-27                Rmpfr_0.9-5                
+## [225] GO.db_3.18.0                compiler_4.3.2             
+## [227] prettyunits_1.2.0           boot_1.3-30                
+## [229] distributional_0.4.0        beachmat_2.18.1            
+## [231] listenv_0.9.1               Rcpp_1.0.12                
+## [233] Rttf2pt1_1.3.12             BiocSingular_1.18.0        
+## [235] tensor_1.5                  progress_1.2.3             
+## [237] BiocParallel_1.36.0         insight_0.20.1             
+## [239] spatstat.random_3.2-3       R6_2.5.1                   
+## [241] fastmap_1.2.0               multcomp_1.4-25            
+## [243] rstatix_0.7.2               vipor_0.4.7                
+## [245] ROCR_1.0-11                 rsvd_1.0.5                 
+## [247] nnet_7.3-19                 gtable_0.3.5               
+## [249] KernSmooth_2.23-24          miniUI_0.1.1.1             
+## [251] deldir_2.0-4                htmltools_0.5.8.1          
+## [253] ggthemes_5.1.0              bit64_4.0.5                
+## [255] spatstat.explore_3.2-7      lifecycle_1.0.4            
+## [257] nloptr_2.1.1                sass_0.4.9                 
+## [259] vctrs_0.6.5                 robustbase_0.99-3          
+## [261] VGAM_1.1-11                 spatstat.geom_3.2-9        
+## [263] sp_2.1-4                    future.apply_1.11.2        
+## [265] pracma_2.4.4                rvinecopulib_0.6.3.1.1     
+## [267] bslib_0.7.0                 pillar_1.9.0               
+## [269] locfit_1.5-9.10             jsonlite_1.8.8             
+## [271] expm_0.999-9</code></pre>
 
 </div>
 </div>

@@ -272,7 +272,7 @@ re-estimate proteins whose effects were removed in a previous iteration.
 for (i in seq_len(nrow(config))) {
   if (i == 1 || config$n_null[i] != config$n_null[i - 1]) {
     simulator <- simulator |>
-      mutate(any_of(rev(t1d_order)[1:config$n_null[i]]), link = ~1) |>
+      scDesigner::mutate(any_of(rev(t1d_order)[1:config$n_null[i]]), link = ~1) |>
       estimate(mstop = 100)
   }
 

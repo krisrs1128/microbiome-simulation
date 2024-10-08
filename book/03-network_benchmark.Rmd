@@ -21,8 +21,7 @@ set.seed(202406)
 ## Estimation
 
 Let's use simulation to benchmark network estimation methods using data from
-rounds 1 and 2 of the [American Gut
-Project](https://journals.asm.org/doi/10.1128/msystems.00031-18). We will
+rounds 1 and 2 of the [American Gut Project](https://journals.asm.org/doi/10.1128/msystems.00031-18). We will
 simulate data with known correlation structure and taxa-level marginals
 estimated from the study data. The block below reads in the data.
 

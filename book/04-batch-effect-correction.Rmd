@@ -114,6 +114,24 @@ later batch effect integration methods must be able to distinguish.
 ```{r}
 pca_batch(anaerobic_sim)
 ```
+
+In addition to visual evaluation, we can also perform a narrow evaluation using the parameter estimations from RUV. The idea here is that the parameter estimation from RUV should be similar for simulation data and real 
+data. In the RUV model, we estimate the treatment effect for each feature in simulation and real data sets and are plotted in the scatter plot along with the correlation value between the two. As seen in the figure there is good agreement with the parameter estimations from the two datasets with a correlation value of 0.66.
+
+```{r}
+fit_sim <- ruv::RUV4(t(assay(anaerobic_sim)), colData(anaerobic_sim)$treatment, k = 0)
+fit_org <- ruv::RUV4(t(assay(anaerobic)), colData(anaerobic)$treatment, k = 0)
+
+
+bind_cols(org = c(fit_org$betahat), sim = c(fit_sim$betahat)) |>
+  ggplot(aes(org, sim)) +
+  geom_abline(color = "blue", lwd = 1.5, lty = 2) +
+  geom_point(size = 2, shape = 16) +
+  theme_classic() +
+  ylab("Estimated beta values from simulated data") +
+  xlab("Estimated beta values from real data") +
+  stat_cor(method = "pearson", label.x = -1.4, label.y = 0.7)
+```
 :::
 
 To study the risk for overintegration, let's imagine that there were a third
