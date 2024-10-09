@@ -105,7 +105,7 @@ sim_exper <- sample(simulator) # and then run these two lines
 correlation_hist(t1d, sim_exper) #
 ```
 
-**Solution**: For our coupla, we can use a covariance estimator of [Cai and Liu
+**Solution**: For our copula, we can use a covariance estimator of [Cai and Liu
 (2011)](https://www.tandfonline.com/doi/abs/10.1198/jasa.2011.tm10560), that is
 suited for high dimensions. Larger values of `thr` will increase the stability
 of our estimates, but at the cost of potentially missing or weakening true
@@ -135,6 +135,7 @@ rhos <- list(sim = cor(t(assay(sim_exper))), real = cor(t(assay(t1d))))
 diag(rhos[[1]]) <- NA
 top_cors <- which(abs(rhos[[1]]) > quantile(abs(rhos[[1]]), 0.999, na.rm = TRUE), arr.ind = TRUE)
 
+# generate data for the pairwise scatterplots
 pairs_data <- list(
   real = subset_correlated(assay(t1d), top_cors),
   simulated = subset_correlated(assay(sim_exper), top_cors)
@@ -147,6 +148,7 @@ keep_pairs <- pairs_data |>
   filter(source == "real", correlation > 0.72, correlation < 0.8) |>
   pull(pair)
 
+# visualize the pairwise scatterplots
 p1 <- pairs_data |>
   filter(pair %in% keep_pairs) |>
   ggplot() +
@@ -162,6 +164,7 @@ p1 <- pairs_data |>
 ```
 
 ```{r collect_plots_multivariate}
+# create the heatmap
 ft_order <- hclust(dist(assay(t1d)))$order
 p2 <- correlation_heatmap(rhos$real, ft_order) +
   labs(title = "B  Real") +
@@ -289,7 +292,14 @@ config <- readRDS(url("https://uwmadison.box.com/shared/static/tf1xyo7a2n2rd2ms4
 
 We can visualize variation in performance. 
 
-```{r visualize-power, fig.width = 8, fig.height = 7.5}
+```{r visualize-power}
+ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
+  stat_pointinterval(position = "dodge") +
+  scale_color_scico_d(palette = "managua") +
+  labs(x = "Sample Size", y = "AUC", color = "# Nulls", title = "C")
+```
+
+```{r visualize-power-paper, fig.width = 8, fig.height = 7.5, include=FALSE, echo = FALSE, eval = FALSE}
 p3 <- ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
   stat_pointinterval(position = "dodge") +
   scale_color_scico_d(palette = "managua") +
@@ -297,9 +307,6 @@ p3 <- ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
 
 (p1 / p2 / p3) +
   plot_layout(guides = "collect", heights = c(1.2, 2, 1))
-```
-
-```{r save_multivariate_curve, echo = FALSE}
 ggsave("multivariate_power_curve.svg", width = 10, height = 7.5, bg = "transparent")
 ```
 
