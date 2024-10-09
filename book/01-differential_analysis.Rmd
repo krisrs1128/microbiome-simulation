@@ -29,13 +29,11 @@ location-shape-scale model.
 
 ```{r}
 data(atlas1006, package = "microbiome")
-atlas <- makeTreeSEFromPhyloseq(atlas1006) |>
+atlas <- convertFromPhyloseq(atlas1006) |>
   filter(time == 0) |>
   dplyr::mutate(
     bmi_group = case_when(
-      bmi_group == "severeobese" ~ "obese",
-      bmi_group == "morbidobese" ~ "obese",
-      bmi_group == "obese" ~ "obese",
+      str_detect(bmi_group, "obese") ~ "obese",
       bmi_group == "lean" ~ "lean",
       bmi_group == "overweight" ~ "overweight",
     )
@@ -97,7 +95,6 @@ sim <- setup_simulator(
   ~ ZINBF()
 )
 
-
 sim <- estimate(sim, control = gamlss.control(
   n.cyc = 20,
   mu.step = 0.1
@@ -142,13 +139,12 @@ ggplot(top_combined) +
 kdetest.group <- function(data) {
   x <- data |> filter(source == "real")
   y <- data |> filter(source == "simulated")
-  res <- kde.test(x1 = x$value, x2 = y$value)$pvalue
-  res
+  kde.test(x1 = x$value, x2 = y$value)$pvalue
 }
 
 prop.accepted.H0 <- sapply(
   c("lean", "overweight", "obese"),
-  function(group) {
+  \(group) {
     group_filter <- map(
       unique(combined$feature),
       ~ combined |>
@@ -156,17 +152,15 @@ prop.accepted.H0 <- sapply(
           bmi_group == group)
     )
     adjpvalue <- sapply(
-      1:length(select_i),
-      function(i) {
+      seq_along(select_i),
+      \(i) {
         tryCatch(
           {
             kdetest.group(
               group_filter[[i]]
             )
           },
-          error = function(e) {
-            NA
-          }
+          error = \(e) NA
         )
       }
     ) |>
@@ -219,30 +213,19 @@ DESeq2 for differential analysis. We consider sample sizes ranging from 50 to
 
 ```{r, run-loop, eval = TRUE}
 config <- expand.grid(
-  sample_size = floor(seq(50, 1200, length.out = 5)),
-  n_rep = 1:20
+ # sample_size = floor(seq(50, 1200, length.out = 5)),
+  sample_size = floor(seq(50, 1200, length.out = 2)),
+#  n_rep = 1:20
+  n_rep = 1:2
 ) |>
   mutate(run = as.character(row_number()))
-
-sample_n_ <- function(sim_object, sample_size) {
-  n_original <- ncol(sim_object@template)
-  rep_ix <- rep(seq_len(n_original), each = ceiling(sample_size / n_original))
-  new_data <- colData(sim_object@template)[rep_ix[1:sample_size], ] |>
-    as_tibble() |>
-    mutate(
-      newdata_index = row_number()
-    )
-
-  sim_return <- sample(sim_object, new_data = new_data)
-  return(sim_return)
-}
 
 results <- list()
 for (i in seq_len(nrow(config))) {
   atlas_ <- sample_n_(sim, config$sample_size[i])
-  colnames(atlas_) <- paste0("Sample-", 1:config$sample_size[i])
+  colnames(atlas_) <- paste0("Sample-", seq_len(config$sample_size[i]))
   results[[i]] <- sapply(c("LIMMA_voom", "ANCOMBC", "DESeq2"),
-    function(m) {
+    \(m) {
       differential_analysis(atlas_, m) |>
         da_metrics(nulls)
     },
@@ -276,6 +259,7 @@ ggplot(power_fdr) +
   tidybayes::stat_pointinterval(aes(factor(sample_size), value, group = method, colour = method),
     position = position_dodge(width = 0.8)
   ) +
+  geom_hline() +
   facet_wrap(~metric) +
   xlab("Sample size") +
   ylab("") +
