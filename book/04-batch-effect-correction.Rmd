@@ -187,6 +187,9 @@ map_dfr(p, ~ .$data, .id = "source") |>
   scale_color_manual(values = c("#191C59", "#f20732", "#04B2D9")) +
   labs(col = "Treatment") +
   facet_grid(source ~ reorder(batch, PC1))
+```
+
+```{r, save-batch, eval = FALSE, include = FALSE}
 ggsave("batch_corrected.svg", width = 8, height = 3)
 ```
 

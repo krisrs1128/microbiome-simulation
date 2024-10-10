@@ -253,10 +253,10 @@ p2 <- map_dfr(example_rho, ~ {
 
 (p2 / p1) +
   plot_layout(heights = c(1, 2))
-
+```
+```{r, eval = FALSE, include = FALSE, echo = FALSE}
 ggsave("network_comparison.svg", height = 4, width = 9)
 ```
-
 
 This example shows that, when we start with real template data, it's not too
 hard to setup a benchmarking experiment. It's generally easier to reconfigure

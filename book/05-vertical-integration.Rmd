@@ -83,15 +83,11 @@ vector in the list `x` below? What about the mean of the 10 smallest elements?
 ```{r}
 x <- list(a = rnorm(100), b = rnorm(100, 1))
 ```
-<button onclick="myFunction(&#39;q-map&#39;)">
-Show solution
-</button>
-::: {#q-map style="display:none"}
+
 ```{r}
 map(x, mean)
 map(x, ~ mean(sort(.)[1:10]))
 ```
-:::
 
 ## Simulation Question
 
@@ -202,6 +198,9 @@ bind_rows(
     legend.position = "bottom",
     strip.text.y = element_text(angle = 0)
   )
+```
+
+```{r, include = FALSE, echo = FALSE, eval = FALSE}
 ggsave("multiblock_calibration.svg", width = 6, height = 4)
 ```
 
@@ -289,8 +288,12 @@ ggplot(contrast_data, aes(loading, value)) +
     axis.text.y = element_text(size = 9),
     axis.title = element_text(size = 12)
   )
-ggsave("~/Downloads/cancor_comparison.png", width = 4, height = 4)
 ```
+
+```{r, include = FALSE, echo = FALSE, eval = FALSE}
+ggsave("cancor_comparison.png", width = 4, height = 4)
+```
+
 
 ```{r}
 sessionInfo()

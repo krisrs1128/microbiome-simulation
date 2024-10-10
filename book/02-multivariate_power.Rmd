@@ -176,7 +176,7 @@ p2 <- correlation_heatmap(rhos$real, ft_order) +
   plot_layout(guides = "collect", heights = c(1.2, 2))
 ```
 
-```{r save_multivariate, echo = FALSE}
+```{r save_multivariate, echo = FALSE, include = FALSE}
 ggsave("multivariate_evaluation_qualitative.svg", width = 10, height = 8)
 ```
 
@@ -307,6 +307,9 @@ p3 <- ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
 
 (p1 / p2 / p3) +
   plot_layout(guides = "collect", heights = c(1.2, 2, 1))
+```
+
+```{r multivariate_save, include = FALSE, eval = FALSE}
 ggsave("multivariate_power_curve.svg", width = 10, height = 7.5, bg = "transparent")
 ```
 
