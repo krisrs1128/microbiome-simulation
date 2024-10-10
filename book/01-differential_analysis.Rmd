@@ -43,11 +43,7 @@ atlas <- convertFromPhyloseq(atlas1006) |>
     bmi_group = factor(bmi_group, levels = c("obese", "overweight", "lean"))
   )
 
-fmla <- list(
-  mu = ~bmi_group,
-  sigma = ~bmi_group,
-  nu = ~1
-)
+fmla <- list(mu = ~bmi_group, sigma = ~bmi_group, nu = ~1)
 ```
 
 We'll remove the genera which are never observed in this dataset. 
@@ -63,21 +59,16 @@ Next we will select features that could work with ZINBF() estimation.
 select_i <- c(1:2)
 colData(atlas) <- colData(atlas)[, c("bmi_group", "sample")]
 
-for (i in 3:dim(atlas)[1]) {
-  # print(select_i)
-  # print(glue::glue("{i}/{dim(atlas)[1]}"))
+for (i in 3:nrow(atlas)) {
+  print(glue("{i}/{dim(atlas)[1]}"))
   exper_tmp <- atlas[c(select_i, i), ]
-  sim <- setup_simulator(
-    exper_tmp,
-    fmla,
-    ~ ZINBF()
-  )
+  sim <- setup_simulator(exper_tmp, fmla, ~ ZINBF())
 
-  error_warning <- estimate(sim, control = gamlss.control(
-    n.cyc = 20,
-    mu.step = 0.1
-  )) |>
-    tryCatch(warning = function(w) w, error = function(e) e)
+  error_warning <- estimate(
+    sim,
+    control = gamlss.control(n.cyc = 20, mu.step = 0.1)
+  ) |>
+    tryCatch(warning = \(w) w, error = \(e) e)
 
   if (is.na(class(error_warning)[2])) {
     select_i <- c(select_i, i)
@@ -87,18 +78,10 @@ for (i in 3:dim(atlas)[1]) {
 
 ```{r, atlas-estimation}
 colData(atlas) <- colData(atlas)[, c("bmi_group", "sample")]
-atlas_filteres <- atlas[select_i, ]
+atlas_filtered <- atlas[select_i, ]
 
-sim <- setup_simulator(
-  atlas_filteres,
-  fmla,
-  ~ ZINBF()
-)
-
-sim <- estimate(sim, control = gamlss.control(
-  n.cyc = 20,
-  mu.step = 0.1
-))
+sim <- setup_simulator(atlas_filtered, fmla, ~ ZINBF()) |>
+  estimate(control = gamlss.control(n.cyc = 20, mu.step = 0.1))
 ```
 ## Critique
 
@@ -107,31 +90,26 @@ visualizes their difference both graphically and quantitatively. With your
 neighbors, discuss how well the simulator approximates the original template.
 
 ```{r, contrast-simulators}
-real <- atlas_filteres
-simulated <- sample(sim)
 combined <- bind_rows(
-  real = pivot_experiment(real), # real data
-  simulated = pivot_experiment(simulated), # simulated
+  real = pivot_experiment(atlas_filtered), # real data
+  simulated = pivot_experiment(sample(sim)), # simulated
   .id = "source"
 )
 
-top_features <- assay(atlas_filteres) |>
+top_features <- assay(atlas_filtered) |>
   rowMeans() |>
   sort() |>
   tail(10) |>
   names()
 
-top_combined <- combined |>
-  filter(feature %in% top_features)
-
-ggplot(top_combined) +
+combined |>
+  filter(feature %in% top_features) |>
+  ggplot() +
   geom_boxplot(
     aes(sqrt(value), reorder(feature, value, median), fill = bmi_group)
   ) +
   facet_grid(. ~ source) +
-  xlab("Square root transformed counts") +
-  ylab("") +
-  labs(fill = "BMI group") +
+  labs(x = "Square root transformed counts", y = "", fill = "BMI group") +
   theme(legend.position = "right") +
   scale_fill_manual(values = rev(c("#9491D9", "#3F8C61", "#F24405")))
 ```
@@ -139,7 +117,7 @@ ggplot(top_combined) +
 kdetest.group <- function(data) {
   x <- data |> filter(source == "real")
   y <- data |> filter(source == "simulated")
-  kde.test(x1 = x$value, x2 = y$value)$pvalue
+  kde.test(x$value, y$value)$pvalue
 }
 
 prop.accepted.H0 <- sapply(
@@ -148,25 +126,14 @@ prop.accepted.H0 <- sapply(
     group_filter <- map(
       unique(combined$feature),
       ~ combined |>
-        filter(feature == . &
-          bmi_group == group)
+        filter(feature == . & bmi_group == group)
     )
     adjpvalue <- sapply(
       seq_along(select_i),
-      \(i) {
-        tryCatch(
-          {
-            kdetest.group(
-              group_filter[[i]]
-            )
-          },
-          error = \(e) NA
-        )
-      }
+      \(i) tryCatch(kdetest.group(group_filter[[i]]), error = \(e) NA)
     ) |>
       p.adjust(method = "BH")
-    sum(adjpvalue > 0.05, na.rm = TRUE) /
-      sum(!is.na(adjpvalue))
+    mean(adjpvalue > 0.05, na.rm = TRUE)
   }
 )
 prop.accepted.H0
@@ -174,12 +141,12 @@ prop.accepted.H0
 
 **Solution**: The simulated data are generally similar to the original data. 
 However, for some genera with positively skewed distributions and a high number 
-of outliers, such as *Prevotella melaninogenica et rel*, 
-the simulation reached its limits, explaining why the kernel density-based 
-two-sample test returned significant differences between the real and simulated 
-data for some genera. Nonetheless, the ordering of abundances
-between the groups typically agrees between the real and simulated data. The
-interquartile ranges for each taxon also seem to roughly match.
+of outliers, such as *Prevotella melaninogenica et rel*, the simulation reached
+its limits, explaining why the KS two-sample test returned significant
+differences between the real and simulated data for some genera. Nonetheless,
+the ordering of abundances between the groups typically agrees between the real
+and simulated data. The interquartile ranges for each taxon also seem to roughly
+match.
 
 ## Power Analysis Loop
 
@@ -196,15 +163,11 @@ directly; at this point, though, we can only indirectly modify parameters by
 re-estimating them with new formulas.
 
 ```{r, define-null}
-wilcox_res <- differential_analysis(atlas_filteres, "wilcox-clr")
-nulls <- wilcox_res[wilcox_res$q_value.bmi_group. > 0.1, ] |>
-  rownames()
+wilcox_res <- differential_analysis(atlas_filtered, "wilcox-clr")
+nulls <- rownames(wilcox_res[wilcox_res$q_value.bmi_group. > 0.1, ])
 
 sim <- sim |> scDesigner::mutate(any_of(nulls), link = ~1)
-sim <- estimate(sim, control = gamlss.control(
-  n.cyc = 20,
-  mu.step = 0.1
-))
+sim <- estimate(sim, control = gamlss.control(n.cyc = 20, mu.step = 0.1))
 ```
 
 Now that we have ground truth associations, we'll evaluate LIMMA-voom, ANCOMBC, 
@@ -213,17 +176,15 @@ DESeq2 for differential analysis. We consider sample sizes ranging from 50 to
 
 ```{r, run-loop, eval = TRUE}
 config <- expand.grid(
- # sample_size = floor(seq(50, 1200, length.out = 5)),
-  sample_size = floor(seq(50, 1200, length.out = 2)),
-#  n_rep = 1:20
-  n_rep = 1:2
+  sample_size = floor(seq(50, 1200, length.out = 5)),
+  n_rep = 1:20
 ) |>
   mutate(run = as.character(row_number()))
 
 results <- list()
 for (i in seq_len(nrow(config))) {
   atlas_ <- sample_n_(sim, config$sample_size[i])
-  colnames(atlas_) <- paste0("Sample-", seq_len(config$sample_size[i]))
+  colnames(atlas_) <- glue("Sample-{seq_len(config$sample_size[i])}")
   results[[i]] <- sapply(c("LIMMA_voom", "ANCOMBC", "DESeq2"),
     \(m) {
       differential_analysis(atlas_, m) |>
@@ -231,7 +192,7 @@ for (i in seq_len(nrow(config))) {
     },
     simplify = FALSE
   )
-  # print(glue::glue("{i}/{nrow(config)}"))
+  print(glue("{i}/{nrow(config)}"))
 }
 ```
 
@@ -247,25 +208,23 @@ we would have quite good power with $n \geq 625$ samples, but the worst case
 scenarios can be quite poor for anything with fewer samples.
 
 ```{r, visualize-da-power, eval = TRUE}
-power_fdr <- sapply(1:100, function(i) {
-  bind_rows(results[[i]], .id = "method")
-},
-simplify = FALSE
-) |>
-  bind_rows(.id = "run") |>
+power_fdr <- map_dfr(results, ~ bind_rows(., .id = "method"), .id = "run") |>
   dplyr::mutate(sample_size = rep(config$sample_size, each = 6))
 
 ggplot(power_fdr) +
   tidybayes::stat_pointinterval(aes(factor(sample_size), value, group = method, colour = method),
     position = position_dodge(width = 0.8)
   ) +
-  geom_hline() +
+  geom_hline(aes(yintercept = 0.1, alpha = metric), linetype = 2) +
   facet_wrap(~metric) +
-  xlab("Sample size") +
-  ylab("") +
+  labs(x = "Sample size", y = "", color = "Method") +
   scale_color_manual(values = wes_palette("Moonrise2", n = 3)) +
-  labs(color = "Method") +
+  scale_alpha_discrete(guide = "none", range = c(1, 0)) +
   theme(legend.position = "right")
+```
+
+```{r power_plot, include = FALSE, echo = FALSE}
+ggsave("~/Downloads/power_plot.png", width = 8, height = 4)
 ```
 
 ```{r}
