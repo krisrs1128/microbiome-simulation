@@ -6,10 +6,9 @@
 #' @export
 #' @importFrom edgeR DGEList calcNormFactors
 differential_analysis <- function(exper, DA_method) {
-  
   raw_data <- assay(exper)
   meta_data <- colData(exper)
-  
+
   if (DA_method == "ANCOMBC") {
     tseObj <- TreeSummarizedExperiment(SimpleList(counts = raw_data),
       colData = meta_data
@@ -26,7 +25,7 @@ differential_analysis <- function(exper, DA_method) {
     out <- run_limma(
       dge = dgeObj,
       metaD = meta_data,
-      formula = ~ bmi_group,
+      formula = ~bmi_group,
       p_adj_method = "BH"
     )
   } else if (DA_method == "DESeq2") {
@@ -36,8 +35,8 @@ differential_analysis <- function(exper, DA_method) {
       design = ~bmi_group
     )
     out <- run_DESeq(dds)
-  }else if (DA_method == "wilcox-clr") {
-    out <- run_wilcox(raw_data, clr = TRUE,  meta_data$bmi_group , pAdjustMethod = "BH")
+  } else if (DA_method == "wilcox-clr") {
+    out <- run_wilcox(raw_data, clr = TRUE, meta_data$bmi_group, pAdjustMethod = "BH")
   }
   out
 }
@@ -160,39 +159,38 @@ run_DESeq <- function(dds, sftype = "poscounts", tidy = TRUE, format = "DataFram
 #'
 #' his function run Wilcoxon Rank Sum test on otu table.
 #'
-#' @param rawData  a numeric matrix containing raw counts 
+#' @param rawData  a numeric matrix containing raw counts
 #' @param clr 	 whether to perform clr transformation. Default=F
 #' @param group_labels character vector of the same length as the columns of 'raw_data'. the labels of each subject.
 #' @param pAdjustMethod the multiple correction procedure to be used.
-#' @return a data frame with log fold changes, p_values, q_valuesh.
+#' @return a data frame with log fold changes, p_values, q_values.
 #'
 #'
-run_wilcox <- function(rawData, clr = FALSE, group_labels , pAdjustMethod = "BH") {
-  
-  if(clr){
+run_wilcox <- function(rawData, clr = FALSE, group_labels, pAdjustMethod = "BH") {
+  if (clr) {
     rawData[rawData == 0] <- 1e-6
     clr_counts <- apply(rawData, 1, compositions::clr)
-    counts <- t(clr_counts)  
-  }else{
+    counts <- t(clr_counts)
+  } else {
     counts <- rawData
   }
-  
+
   p_values <- numeric(nrow(counts))
-  
+
   # Perform Kruskal-Wallis test for each row
   for (i in 1:nrow(counts)) {
     test_result <- kruskal.test(counts[i, ] ~ group_labels)
     p_values[i] <- test_result$p.value
   }
-  q_value <- p.adjust(p_values, method=pAdjustMethod)
-  
-  
+  q_value <- p.adjust(p_values, method = pAdjustMethod)
+
+
   out_df <- data.frame(
     "p_value(bmi_group)" = p_values,
     "q_value(bmi_group)" = q_value,
     row.names = rownames(rawData)
   )
-  
+
   return(out_df)
 }
 
@@ -204,7 +202,7 @@ run_wilcox <- function(rawData, clr = FALSE, group_labels , pAdjustMethod = "BH"
 da_metrics <- function(results, null, level = 0.1, focus_col = ncol(results)) {
   flagged <- results[results[[focus_col]] < level, ] |>
     rownames()
-  
+
   nonnull <- setdiff(rownames(results), null)
   data.frame(
     metric = c("FDR", "power"),
