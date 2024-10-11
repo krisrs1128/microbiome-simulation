@@ -1,7 +1,7 @@
 # Simulating Differential Abundance
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
 set.seed(2123)
 source("DA_wrapper.R")
 ```
@@ -60,7 +60,7 @@ select_i <- c(1:2)
 colData(atlas) <- colData(atlas)[, c("bmi_group", "sample")]
 
 for (i in 3:nrow(atlas)) {
-  print(glue("{i}/{dim(atlas)[1]}"))
+  #print(glue("{i}/{dim(atlas)[1]}"))
   exper_tmp <- atlas[c(select_i, i), ]
   sim <- setup_simulator(exper_tmp, fmla, ~ ZINBF())
 
@@ -192,7 +192,7 @@ for (i in seq_len(nrow(config))) {
     },
     simplify = FALSE
   )
-  print(glue("{i}/{nrow(config)}"))
+  #print(glue("{i}/{nrow(config)}"))
 }
 ```
 
@@ -220,7 +220,7 @@ ggplot(power_fdr) +
   labs(x = "Sample size", y = "", color = "Method") +
   scale_color_manual(values = wes_palette("Moonrise2", n = 3)) +
   scale_alpha_discrete(guide = "none", range = c(1, 0)) +
-  theme(legend.position = "right")
+  theme(legend.position = "right", legend.box.background = element_rect(colour = "black"))
 ```
 
 ```{r power_plot, include = FALSE, echo = FALSE}

@@ -8,7 +8,7 @@ good sample size for a sparse partial least squares discriminant analysis
 (sPLS-DA) of the Type I Diabetes (T1D) gut microbiome.
 
 ```{r, include = FALSE}
-knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = TRUE)
+knitr::opts_chunk$set(message = FALSE, warning = FALSE, cache = FALSE)
 set.seed(202406)
 library(tidyverse)
 ```
