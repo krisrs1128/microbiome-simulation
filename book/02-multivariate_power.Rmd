@@ -151,6 +151,13 @@ keep_pairs <- pairs_data |>
 # visualize the pairwise scatterplots
 p1 <- pairs_data |>
   filter(pair %in% keep_pairs) |>
+  separate(pair, c("pair1", "pair2"), remove = FALSE, sep = "-") |>
+  mutate(pair1 = abbreviate(pair1, 8, dot = TRUE), pair2 = abbreviate(pair2, 8, dot = TRUE)) |>
+  mutate(
+    pair1 = ifelse(str_detect(pair1, "\\."), glue("{pair1}.."), pair1),
+    pair2 = ifelse(str_detect(pair2, "\\."), glue("{pair2}.."), pair2),
+    pair = glue("{pair1}-{pair2}")
+  ) |>
   ggplot() +
   geom_point(aes(feature1, feature2, col = source), alpha = 0.5, size = 1) +
   scale_color_manual(values = c("#038C8C", "#D93636")) +
@@ -158,7 +165,7 @@ p1 <- pairs_data |>
   labs(title = "A", col = "Source", x = expression("Feature" ~ j), y = expression("Feature" ~ j^"'")) +
   facet_wrap(~ reorder(pair, -correlation), ncol = 6, scales = "free") +
   theme(
-    strip.text = element_text(size = 7),
+    strip.text = element_text(size = 6),
     axis.text = element_text(size = 8)
   )
 ```
@@ -310,7 +317,7 @@ p3 <- ggplot(config, aes(factor(sample_size), metrics, col = factor(n_null))) +
 ```
 
 ```{r multivariate_save, include = FALSE, eval = FALSE}
-ggsave("multivariate_power_curve.svg", width = 10, height = 7.5, bg = "transparent")
+ggsave("~/Downloads/multivariate_power_curve.tiff", width = 10, height = 7.5, bg = "transparent", dpi = 600)
 ```
 
 **Discussion**: Interpret the visualization above. How do you think analysis

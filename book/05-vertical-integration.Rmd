@@ -291,9 +291,8 @@ ggplot(contrast_data, aes(loading, value)) +
 ```
 
 ```{r, include = FALSE, echo = FALSE, eval = FALSE}
-ggsave("cancor_comparison.png", width = 4, height = 4)
+ggsave("cancor_comparison.tiff", width = 4, height = 4, dpi=900)
 ```
-
 
 ```{r}
 sessionInfo()

@@ -30,7 +30,7 @@ location-shape-scale model.
 ```{r}
 data(atlas1006, package = "microbiome")
 atlas <- convertFromPhyloseq(atlas1006) |>
-  filter(time == 0) |>
+  colData() |>
   dplyr::mutate(
     bmi_group = case_when(
       str_detect(bmi_group, "obese") ~ "obese",
